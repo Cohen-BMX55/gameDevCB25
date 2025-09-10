@@ -1,6 +1,7 @@
 <script>
-  let myIn01 = parseFloat(document.getElementById('myNum01').value)
-  function myFib(in1){
+  //let Console = document.getElementById('console').innerHTML
+  function myFib(){
+    let in1 = parseFloat(document.getElementById('myNum01').value)
     let fib1 = 1;
     let fib2 = 1;
     let temp = 0;
@@ -8,17 +9,18 @@
       temp = fib1;
       fib1 = fib1 + fib2;
       fib2 = temp;
-      
+      //document.getElementById('console').innerHTML = fib1
     }
-    return fib1;
-  }
-  document.getElementById('mySpan01').innerHTML = ' ' + myFib(myIn01)
+    document.getElementById('mySpan01').innerHTML = ' ' +  fib1
 </script>
 
-<h2 align=center>t1a02-video-flac-cohen.html</h2>
+<h2 align=center>Fibonnaci Seqencer</h2>
 
 Input: <input id="myNum01" type=number value="4" ><br>
 
-Event: <input type=button value="myEvent squares" onclick="{myFib}"><br>
+Event: <input type=button value="myEvent squares" onclick="{myFib()}"><br>
 
 Output: <span id="mySpan01">...</span>
+
+
+Console: <span id="console">Debug</span>
