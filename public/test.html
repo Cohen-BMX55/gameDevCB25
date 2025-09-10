@@ -1,26 +1,48 @@
-<script>
-  //let Console = document.getElementById('console').innerHTML
-  function myFib(){
-    let in1 = parseFloat(document.getElementById('myNum01').value);
-    let fib1 = 1;
-    let fib2 = 1;
-    let temp = 0;
-    for (let i = 0; i < in1; i++){
-      temp = fib1;
-      fib1 = fib1 + fib2;
-      fib2 = temp;
-      //document.getElementById('console').innerHTML = fib1
-    };
-    document.getElementById('mySpan01').innerHTML = ' ' +  fib1;
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fibonacci Sequencer</title>
+</head>
+<body>
 
-<h2 align=center>Fibonnaci Seqencer</h2>
+  <h2 align="center">Fibonacci Sequencer</h2>
 
-Input: <input id="myNum01" type=number value="4" ><br>
+  Input: <input id="myNum01" type="number" value="4"><br><br>
 
-Event: <input type=button value="myEvent squares" onclick="{myFib()}"><br>
+  Event: <input type="button" value="Get Fibonacci" onclick="myFib()"><br><br>
 
-Output: <span id="mySpan01">...</span>
+  Output: <span id="mySpan01">...</span><br><br>
 
+  Console: <span id="console">Debug</span>
 
-Console: <span id="console">Debug</span>
+  <script>
+    function myFib() {
+      let in1 = parseInt(document.getElementById('myNum01').value);
+
+      if (isNaN(in1) || in1 < 0) {
+        document.getElementById('mySpan01').innerHTML = ' Please enter a non-negative integer.';
+        return;
+      }
+
+      let fib1 = 0, fib2 = 1;
+
+      if (in1 === 0) {
+        document.getElementById('mySpan01').innerHTML = ' 0';
+        return;
+      }
+
+      for (let i = 2; i <= in1; i++) {
+        let temp = fib1 + fib2;
+        fib1 = fib2;
+        fib2 = temp;
+      }
+
+      document.getElementById('mySpan01').innerHTML = ' ' + fib2;
+
+      // Optional: log to console area
+      document.getElementById('console').innerHTML = `Fib(${in1}) = ${fib2}`;
+    }
+  </script>
+
+</body>
+</html>
