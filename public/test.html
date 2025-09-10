@@ -1,0 +1,24 @@
+<script>
+  let myIn01 = parseFloat(document.getElementById('myNum01').value)
+  function myFib(in1){
+    let fib1 = 1;
+    let fib2 = 1;
+    let temp = 0;
+    for (let i = 0; i < in1; i++){
+      temp = fib1;
+      fib1 = fib1 + fib2;
+      fib2 = temp;
+      
+    }
+    return fib1;
+  }
+  document.getElementById('mySpan01').innerHTML = ' ' + myFib(myIn01)
+</script>
+
+<h2 align=center>t1a02-video-flac-cohen.html</h2>
+
+Input: <input id="myNum01" type=number value="4" ><br>
+
+Event: <input type=button value="myEvent squares" onclick="{myFib}"><br>
+
+Output: <span id="mySpan01">...</span>
