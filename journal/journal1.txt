@@ -1,1 +1,8 @@
-Today i
+Journal sep 11 25
+
+Vibecode, video flac
+
+Varibles IO disicions events objects
+functions loops arrays classes
+
+made new task tracker website
