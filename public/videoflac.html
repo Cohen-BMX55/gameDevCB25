@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Tracker</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+    #taskList { margin-top: 20px; }
+    .task { padding: 10px; margin: 5px 0; background: #fff; border-left: 5px solid #4CAF50; }
+  </style>
+</head>
+<body>
+
+  <h1>Task Tracker</h1>
+  <input type="text" id="taskInput" placeholder="Enter a task" />
+  <button id="addBtn">Add Task</button>
+
+  <div id="taskList"></div>
+
+  <script>
+    // ===== CLASS =====
+    class Task {
+      constructor(name) {
+        this.name = name;
+        this.completed = false;
+      }
+
+      toggleComplete() {
+        this.completed = !this.completed;
+      }
+
+      toHTML(index) {
+        return `
+          <div class="task">
+            <strong>${index + 1}.</strong> 
+            ${this.completed ? "<s>" + this.name + "</s>" : this.name}
+            <button onclick="toggleTask(${index})">
+              ${this.completed ? "Undo" : "Complete"}
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    // ===== VARIABLES & ARRAYS =====
+    let taskList = [];
+
+    // ===== FUNCTIONS =====
+    function addTask() {
+      let taskName = document.getElementById("taskInput").value.trim();
+
+      // ===== IF STATEMENT =====
+      if (taskName === "") {
+        alert("Please enter a task!");
+        return;
+      }
+
+      // ===== OBJECT CREATION =====
+      let newTask = new Task(taskName);
+
+      taskList.push(newTask);
+      document.getElementById("taskInput").value = "";
+      renderTasks();
+    }
+
+    function toggleTask(index) {
+      taskList[index].toggleComplete();
+      renderTasks();
+    }
+
+    function renderTasks() {
+      let taskContainer = document.getElementById("taskList");
+      taskContainer.innerHTML = "";
+
+      // ===== LOOP =====
+      taskList.forEach((task, index) => {
+        taskContainer.innerHTML += task.toHTML(index);
+      });
+    }
+
+    // ===== EVENTS =====
+    document.getElementById("addBtn").addEventListener("click", addTask);
+    document.getElementById("taskInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") addTask();
+    });
+
+  </script>
+
+</body>
+</html>
