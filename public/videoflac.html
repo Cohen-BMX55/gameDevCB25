@@ -19,26 +19,26 @@
 
   <script>
     // ===== CLASS =====
-    class Task {
+    class Task {           //Format For task
       constructor(name) {
-        this.name = name;
+        this.name = name;        
         this.completed = false;
       }
 
-      toggleComplete() {
+      toggleComplete() {          //function to toggle class completedness
         this.completed = !this.completed;
       }
 
-      toHTML(index) {
+      toHTML(index) {               //html for each task
         return `
           <div class="task">
             <strong>${index + 1}.</strong> 
-            ${this.completed ? "<s>" + this.name + "</s>" : this.name}
+            ${this.completed ? "<s>" + this.name + "</s>" : this.name}  
             <button onclick="toggleTask(${index})">
               ${this.completed ? "Undo" : "Complete"}
             </button>
           </div>
-        `;
+        `;// if completed strike name else name
       }
     }
 
@@ -61,7 +61,7 @@
       taskList.push(newTask);
       document.getElementById("taskInput").value = "";
       renderTasks();
-    }
+    } //function to create a new object "task"
 
     function toggleTask(index) {
       taskList[index].toggleComplete();
@@ -79,8 +79,8 @@
     }
 
     // ===== EVENTS =====
-    document.getElementById("addBtn").addEventListener("click", addTask);
-    document.getElementById("taskInput").addEventListener("keypress", function(e) {
+    document.getElementById("addBtn").addEventListener("click", addTask);   // listens for button press
+    document.getElementById("taskInput").addEventListener("keypress", function(e) {    //listens for enter press
       if (e.key === "Enter") addTask();
     });
 
