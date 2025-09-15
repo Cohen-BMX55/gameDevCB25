@@ -1,0 +1,20 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Tasks</title>
+<style>
+body { font-family:sans-serif; padding:20px; background:#f0f0f0; }
+.task { padding:5px; margin:5px 0; background:#fff; border-left:5px solid #4CAF50; }
+</style></head><body>
+<h2>Tasks</h2>
+<input id="taskInput" placeholder="New task"><button onclick="add()">Add</button>
+<div id="list"></div>
+<script>
+let tasks=[]; class Task{constructor(n){this.n=n;this.c=0}
+toggle(){this.c^=1}
+html(i){return `<div class="task"><b>${i+1}.</b> ${this.c?`<s>${this.n}</s>`:this.n} <button onclick="toggle(${i})">${this.c?"Undo":"Done"}</button></div>`}}
+function add(){
+let v=taskInput.value.trim(); if(!v)return alert("Enter a task");
+tasks.push(new Task(v)); taskInput.value=""; render();
+}
+function toggle(i){tasks[i].toggle(); render()}
+function render(){list.innerHTML=tasks.map((t,i)=>t.html(i)).join("")}
+taskInput.onkeypress=e=>e.key=="Enter"&&add();
+</script></body></html>
