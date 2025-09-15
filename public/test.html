@@ -5,44 +5,17 @@
 </head>
 <body>
 
-  <h2 align="center">Fibonacci Sequencer</h2>
-
-  Input: <input id="myNum01" type="number" value="4"><br><br>
-
-  Event: <input type="button" value="Get Fibonacci" onclick="myFib()"><br><br>
-
-  Output: <span id="mySpan01">...</span><br><br>
-
-  Console: <span id="console">Debug</span>
+  <h2 align="center">One Million</h2><br>
+  <button id="button" onclick="count(100000)">Count</button>
 
   <script>
-    function myFib() {
-      let in1 = parseInt(document.getElementById('myNum01').value);
-
-      if (isNaN(in1) || in1 < 0) {
-        document.getElementById('mySpan01').innerHTML = ' Please enter a non-negative integer.';
-        return;
+    function count(num)
+      for(let x = 0;x > num; x++){
+        console.log(x)
       }
 
-      let fib1 = 0, fib2 = 1;
-
-      if (in1 === 0) {
-        document.getElementById('mySpan01').innerHTML = ' 0';
-        return;
-      }
-
-      for (let i = 2; i <= in1; i++) {
-        let temp = fib1 + fib2;
-        fib1 = fib2;
-        fib2 = temp;
-      }
-
-      document.getElementById('mySpan01').innerHTML = ' ' + fib2;
-
-      // Optional: log to console area
-      document.getElementById('console').innerHTML = `Fib(${in1}) = ${fib2}`;
-    }
   </script>
+  
 
 </body>
 </html>
