@@ -1,6 +1,7 @@
 <details open><summary>September 2025 Journal Entries</summary>
 
 <details><summary>Monday, September 1, 2025</summary></details>
+Today I learned peoples names and made a github account
 <details><summary>Tuesday, September 2, 2025</summary></details>
 <details><summary>Wednesday, September 3, 2025</summary></details>
 <details><summary>Thursday, September 4, 2025</summary></details>
