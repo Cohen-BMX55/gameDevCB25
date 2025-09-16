@@ -1,20 +1,32 @@
 <details open><summary>September 2025 Journal Entries</summary>
 
-<details><summary>Monday, September 1, 2025</summary></details>
-Today I learned peoples names and made a github account
-<details><summary>Tuesday, September 2, 2025</summary></details>
-<details><summary>Wednesday, September 3, 2025</summary></details>
 <details><summary>Thursday, September 4, 2025</summary></details>
+Today I learned peoples names and made a github account
+
 <details><summary>Friday, September 5, 2025</summary></details>
+Today I made a basic website with images links and text
 
 <details><summary>Monday, September 8, 2025</summary></details>
+Today i messed around with chatgpt to see what it could do
+
 <details><summary>Tuesday, September 9, 2025</summary></details>
+Today i learned about videoflac and made another basic website with it
+
 <details><summary>Wednesday, September 10, 2025</summary></details>
+Today i added/changed my videoflac website with chatgpt
+
 <details><summary>Thursday, September 11, 2025</summary></details>
+Today i made my code for my videoflac website simpler and easier to read
+
 <details><summary>Friday, September 12, 2025</summary></details>
+Today i studied videoflac for the test
 
 <details><summary>Monday, September 15, 2025</summary></details>
+
+
 <details><summary>Tuesday, September 16, 2025</summary></details>
+Today we talked about how LLMs make you stupid, and we did a videoflac test
+
 <details><summary>Wednesday, September 17, 2025</summary></details>
 <details><summary>Thursday, September 18, 2025</summary></details>
 <details><summary>Friday, September 19, 2025</summary></details>
