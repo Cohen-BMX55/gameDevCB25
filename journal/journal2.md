@@ -28,6 +28,7 @@
 <details><summary>Tuesday, September 30, 2025</summary></details>
 
 </details>
+</details>
 
 <details open><summary>October 2025 Journal Entries</summary>
 
@@ -60,6 +61,7 @@
 <details><summary>Friday, October 31, 2025</summary></details>
 
 </details>
+</details>
 
 <details open><summary>November 2025 Journal Entries</summary>
 
@@ -87,6 +89,7 @@
 <details><summary>Thursday, November 27, 2025</summary></details>
 <details><summary>Friday, November 28, 2025</summary></details>
 
+</details>
 </details>
 
 <details open><summary>December 2025 Journal Entries</summary>
@@ -120,6 +123,7 @@
 <details><summary>Wednesday, December 31, 2025</summary></details>
 
 </details>
+</details>
 
 <details open><summary>January 2026 Journal Entries</summary>
 
@@ -150,6 +154,7 @@
 <details><summary>Thursday, January 29, 2026</summary></details>
 <details><summary>Friday, January 30, 2026</summary></details>
 
+</details>
 </details>
 
 <details open><summary>February 2026 Journal Entries</summary>
