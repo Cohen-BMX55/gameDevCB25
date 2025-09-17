@@ -27,7 +27,10 @@ Today i studied videoflac for the test
 <details><summary>Tuesday, September 16, 2025</summary>
 Today we talked about how LLMs make you stupid, and we did a videoflac test
 </details>
-<details><summary>Wednesday, September 17, 2025</summary></details>
+<details><summary>Wednesday, September 17, 2025</summary>
+Today we talked about website certificates and vibe code cleaning.
+
+</details>
 <details><summary>Thursday, September 18, 2025</summary></details>
 <details><summary>Friday, September 19, 2025</summary></details>
 
