@@ -4,6 +4,7 @@
       position: relative; /* Required to use .style.left */
       left: 0px;
       top: 0px;
+      transition: left 0.2s, top 0.2s;
     }
   </style>
 </head>
@@ -107,7 +108,14 @@
 Load an image and get it to move 10 pixels to the left using the button below<br><br>
 
 <image id="myImage01" src="https://pictures.abebooks.com/inventory/30785176935.jpg" style="position:relative; left:0; top:0; width:50; height:50; "><br>
-
+    
+<input type="button" value="Home" onclick="
+  var img = document.getElementById('myImage01');
+  img.style.left = '0px';
+  img.style.top = '0px';
+  document.getElementById('myDiv01').innerHTML = 'Reset to home position';
+">
+    
 <!-- Move Left -->
 <input type="button" value="Left" onclick="
   var img = document.getElementById('myImage01');
@@ -140,6 +148,7 @@ Load an image and get it to move 10 pixels to the left using the button below<br
   document.getElementById('myDiv01').innerHTML = 'Moved down to ' + img.style.top;
 "><br><br>
 <div id="myDiv01">...</div>
+    
 
 <h2>Try using your arrow keys:)</h2>
 
