@@ -3,6 +3,7 @@
     #myImage01 {
       position: relative; /* Required to use .style.left */
       left: 0px;
+      top: 0px;
     }
   </style>
 </head>
@@ -107,25 +108,36 @@ Load an image and get it to move 10 pixels to the left using the button below<br
 
 <image id="myImage01" src="https://iso.500px.com/wp-content/uploads/2018/05/Blog-marketplace-getty500px-48429366-nologo-3000x2000.png" style="position:relative; left:0; top:0; width:50; height:50; "><br>
 
-<input type="button" value="Go left" onclick="
+<!-- Move Left -->
+<input type="button" value="Left" onclick="
   var img = document.getElementById('myImage01');
   var currentLeft = parseInt(img.style.left) || 0;
   img.style.left = (currentLeft - 10) + 'px';
-  document.getElementById('myDiv01').innerHTML = 'It went left to ' + img.style.left;
-"><br>
+  document.getElementById('myDiv01').innerHTML = 'Moved left to ' + img.style.left;
+">
 
+<!-- Move Right -->
+<input type="button" value="Right" onclick="
+  var img = document.getElementById('myImage01');
+  var currentLeft = parseInt(img.style.left) || 0;
+  img.style.left = (currentLeft + 10) + 'px';
+  document.getElementById('myDiv01').innerHTML = 'Moved right to ' + img.style.left;
+">
 
-<input type=button value="Go Right" onclick="{
-  document.getElementById('myImage01').style.right = '10px'
-  document.getElementById('myDiv01').innerHTML = 'It went right'
-  }">
-<input type=button value="Go Up" onclick="{
-  document.getElementById('myImage01').style.up = '10px'
-  document.getElementById('myDiv01').innerHTML = 'It went up'
-  }">
-<input type=button value="Go Down" onclick="{
-  document.getElementById('myImage01').style.down = '10px'
-  document.getElementById('myDiv01').innerHTML = 'It went down'
-  }">
+<!-- Move Up -->
+<input type="button" value="Up" onclick="
+  var img = document.getElementById('myImage01');
+  var currentTop = parseInt(img.style.top) || 0;
+  img.style.top = (currentTop - 10) + 'px';
+  document.getElementById('myDiv01').innerHTML = 'Moved up to ' + img.style.top;
+">
+
+<!-- Move Down -->
+<input type="button" value="Down" onclick="
+  var img = document.getElementById('myImage01');
+  var currentTop = parseInt(img.style.top) || 0;
+  img.style.top = (currentTop + 10) + 'px';
+  document.getElementById('myDiv01').innerHTML = 'Moved down to ' + img.style.top;
+"><br><br>
 <div id="myDiv01">...</div>
 </body>
