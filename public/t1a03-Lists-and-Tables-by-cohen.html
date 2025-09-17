@@ -1,3 +1,13 @@
+<head>
+    <style>
+    #myImage01 {
+      position: relative; /* Required to use .style.left */
+      left: 0px;
+    }
+  </style>
+</head>
+<body>
+
 <h5>Version 0.02</h5>
 
 <h1 align=center>T1a03-Lists-and-Tables-by-Cohen</h1>
@@ -97,12 +107,14 @@ Load an image and get it to move 10 pixels to the left using the button below<br
 
 <image id="myImage01" src="https://iso.500px.com/wp-content/uploads/2018/05/Blog-marketplace-getty500px-48429366-nologo-3000x2000.png" style="position:relative; left:0; top:0; width:50; height:50; "><br>
 
-<input type=button value="Go left" onclick="{
-  document.getElementById('myImage01').style.left = '10px'
-  document.getElementById('myDiv01').innerHTML = 'It went left'
-  }">
+<input type="button" value="Go left" onclick="
+  var img = document.getElementById('myImage01');
+  var currentLeft = parseInt(img.style.left) || 0;
+  img.style.left = (currentLeft - 10) + 'px';
+  document.getElementById('myDiv01').innerHTML = 'It went left to ' + img.style.left;
+"><br>
 
-  <div id="myDiv01">...</div>
+
 <input type=button value="Go Right" onclick="{
   document.getElementById('myImage01').style.right = '10px'
   document.getElementById('myDiv01').innerHTML = 'It went right'
@@ -115,3 +127,5 @@ Load an image and get it to move 10 pixels to the left using the button below<br
   document.getElementById('myImage01').style.down = '10px'
   document.getElementById('myDiv01').innerHTML = 'It went down'
   }">
+<div id="myDiv01">...</div>
+</body>
