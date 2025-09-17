@@ -94,11 +94,11 @@
 <table border="0">
   <tr>
     <td><a href="https://www.google.com" target="_blank">Visit Google</a></td>
-    <td><img src="https://img.favpng.com/2/20/9/google-logo-google-search-search-engine-optimization-google-images-png-favpng-mrjKbWHacks0WiKXmVVZugyri.jpg" alt="Placeholder Image"></td>
+    <td><img src="https://img.favpng.com/2/20/9/google-logo-google-search-search-engine-optimization-google-images-png-favpng-mrjKbWHacks0WiKXmVVZugyri.jpg" width="100" height="100" alt="Placeholder Image"></td>
   </tr>
   <tr>
     <td><a href="https://www.wikipedia.org" target="_blank">Visit Wikipedia</a></td>
-    <td><img src="https://www.citypng.com/public/uploads/preview/the-free-encyclopedia-wikipedia-logo-free-png-701751694709293fzbadnfjl1.png" alt="Wikipedia Image"></td>
+    <td><img src="https://www.citypng.com/public/uploads/preview/the-free-encyclopedia-wikipedia-logo-free-png-701751694709293fzbadnfjl1.png" width="100" height="100" alt="Wikipedia Image"></td>
   </tr>
 </table><br><br>
 
@@ -106,7 +106,7 @@
 
 Load an image and get it to move 10 pixels to the left using the button below<br><br>
 
-<image id="myImage01" src="https://iso.500px.com/wp-content/uploads/2018/05/Blog-marketplace-getty500px-48429366-nologo-3000x2000.png" style="position:relative; left:0; top:0; width:50; height:50; "><br>
+<image id="myImage01" src="https://pictures.abebooks.com/inventory/30785176935.jpg" style="position:relative; left:0; top:0; width:50; height:50; "><br>
 
 <!-- Move Left -->
 <input type="button" value="Left" onclick="
@@ -140,4 +140,42 @@ Load an image and get it to move 10 pixels to the left using the button below<br
   document.getElementById('myDiv01').innerHTML = 'Moved down to ' + img.style.top;
 "><br><br>
 <div id="myDiv01">...</div>
+
+<h2>Try using your arrow keys:)</h2>
+
+
+    
+<script>
+  document.addEventListener('keydown', function(event) {
+    const img = document.getElementById('myImage01');
+    const display = document.getElementById('myDiv01');
+
+    // Get current position
+    let left = parseInt(img.style.left) || 0;
+    let top = parseInt(img.style.top) || 0;
+
+    switch(event.key) {
+      case 'ArrowLeft':
+        left -= 10;
+        img.style.left = left + 'px';
+        display.innerHTML = 'Moved left to ' + img.style.left;
+        break;
+      case 'ArrowRight':
+        left += 10;
+        img.style.left = left + 'px';
+        display.innerHTML = 'Moved right to ' + img.style.left;
+        break;
+      case 'ArrowUp':
+        top -= 10;
+        img.style.top = top + 'px';
+        display.innerHTML = 'Moved up to ' + img.style.top;
+        break;
+      case 'ArrowDown':
+        top += 10;
+        img.style.top = top + 'px';
+        display.innerHTML = 'Moved down to ' + img.style.top;
+        break;
+    }
+  });
+</script>
 </body>
