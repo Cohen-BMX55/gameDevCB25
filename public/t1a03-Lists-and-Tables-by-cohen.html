@@ -146,36 +146,39 @@ Load an image and get it to move 10 pixels to the left using the button below<br
 
     
 <script>
-  document.addEventListener('keydown', function(event) {
-    const img = document.getElementById('myImage01');
-    const display = document.getElementById('myDiv01');
-
-    // Get current position
-    let left = parseInt(img.style.left) || 0;
-    let top = parseInt(img.style.top) || 0;
-
-    switch(event.key) {
-      case 'ArrowLeft':
-        left -= 10;
-        img.style.left = left + 'px';
-        display.innerHTML = 'Moved left to ' + img.style.left;
-        break;
-      case 'ArrowRight':
-        left += 10;
-        img.style.left = left + 'px';
-        display.innerHTML = 'Moved right to ' + img.style.left;
-        break;
-      case 'ArrowUp':
-        top -= 10;
-        img.style.top = top + 'px';
-        display.innerHTML = 'Moved up to ' + img.style.top;
-        break;
-      case 'ArrowDown':
-        top += 10;
-        img.style.top = top + 'px';
-        display.innerHTML = 'Moved down to ' + img.style.top;
-        break;
-    }
-  });
+    document.addEventListener('keydown', function(event) {
+      const img = document.getElementById('myImage01');
+      const display = document.getElementById('myDiv01');
+    
+      let left = parseInt(img.style.left) || 0;
+      let top = parseInt(img.style.top) || 0;
+    
+      switch(event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();  // Prevent page scroll!
+          left -= 50;
+          img.style.left = left + 'px';
+          display.innerHTML = 'Moved left to ' + img.style.left;
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          left += 50;
+          img.style.left = left + 'px';
+          display.innerHTML = 'Moved right to ' + img.style.left;
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          top -= 50;
+          img.style.top = top + 'px';
+          display.innerHTML = 'Moved up to ' + img.style.top;
+          break;
+        case 'ArrowDown':
+          event.preventDefault();
+          top += 50;
+          img.style.top = top + 'px';
+          display.innerHTML = 'Moved down to ' + img.style.top;
+          break;
+  }
+});
 </script>
 </body>
