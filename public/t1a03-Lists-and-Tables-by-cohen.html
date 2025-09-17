@@ -112,7 +112,7 @@ Load an image and get it to move 10 pixels to the left using the button below<br
 <input type="button" value="Left" onclick="
   var img = document.getElementById('myImage01');
   var currentLeft = parseInt(img.style.left) || 0;
-  img.style.left = (currentLeft - 10) + 'px';
+  img.style.left = (currentLeft - 50) + 'px';
   document.getElementById('myDiv01').innerHTML = 'Moved left to ' + img.style.left;
 ">
 
@@ -120,7 +120,7 @@ Load an image and get it to move 10 pixels to the left using the button below<br
 <input type="button" value="Right" onclick="
   var img = document.getElementById('myImage01');
   var currentLeft = parseInt(img.style.left) || 0;
-  img.style.left = (currentLeft + 10) + 'px';
+  img.style.left = (currentLeft + 50) + 'px';
   document.getElementById('myDiv01').innerHTML = 'Moved right to ' + img.style.left;
 ">
 
@@ -128,7 +128,7 @@ Load an image and get it to move 10 pixels to the left using the button below<br
 <input type="button" value="Up" onclick="
   var img = document.getElementById('myImage01');
   var currentTop = parseInt(img.style.top) || 0;
-  img.style.top = (currentTop - 10) + 'px';
+  img.style.top = (currentTop - 50) + 'px';
   document.getElementById('myDiv01').innerHTML = 'Moved up to ' + img.style.top;
 ">
 
@@ -136,7 +136,7 @@ Load an image and get it to move 10 pixels to the left using the button below<br
 <input type="button" value="Down" onclick="
   var img = document.getElementById('myImage01');
   var currentTop = parseInt(img.style.top) || 0;
-  img.style.top = (currentTop + 10) + 'px';
+  img.style.top = (currentTop + 50) + 'px';
   document.getElementById('myDiv01').innerHTML = 'Moved down to ' + img.style.top;
 "><br><br>
 <div id="myDiv01">...</div>
