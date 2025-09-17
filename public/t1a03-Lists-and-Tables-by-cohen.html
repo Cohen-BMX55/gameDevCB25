@@ -10,8 +10,27 @@
 </ol>
 
 <ul>
-  <li>Canada
-  <li>France
+  <li>Fruits
+    <ul>
+      <li>Apple</li>
+      <li>Banana</li>
+      <li>Cherry</li>
+    </ul>
+  </li>
+  <li>Vegetables
+    <ul>
+      <li>Carrot</li>
+      <li>Broccoli</li>
+      <li>Spinach</li>
+    </ul>
+  </li>
+  <li>Dairy
+    <ul>
+      <li>Milk</li>
+      <li>Cheese</li>
+      <li>Yogurt</li>
+    </ul>
+  </li>
 </ul>
 
 <b>Assingment</b>. You make a list inside a list of multiple items<br>
@@ -19,20 +38,48 @@
 <h2> Tables</h2>
 
 <table border=1>
-<tr><td>A</td><td>B</td></tr>
-<tr><td>1</td><td>2</td></tr>
+  <tr>
+    <th>Header 1</th>
+    <th>Header 2</th>
+    <th>Header 3</th>
+    <th>Header 4</th>
+  </tr>
+  <tr>
+    <td>Row 1, Col 1</td>
+    <td>Row 1, Col 2</td>
+    <td>Row 1, Col 3</td>
+    <td>Row 1, Col 4</td>
+  </tr>
+  <tr>
+    <td>Row 2, Col 1</td>
+    <td>Row 2, Col 2</td>
+    <td>Row 2, Col 3</td>
+    <td>Row 2, Col 4</td>
+  </tr>
 </table><br>
 
 <b>Assignment</b>. Make a 3x4 table, then make a link and image table with border = 0 <br><br><br>
+
+
+<table border="0">
+  <tr>
+    <td><a href="https://www.google.com" target="_blank">Visit Google</a></td>
+    <td><img src="https://via.placeholder.com/100" alt="Placeholder Image"></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.wikipedia.org" target="_blank">Visit Wikipedia</a></td>
+    <td><img src="https://via.placeholder.com/100?text=Wiki" alt="Wikipedia Image"></td>
+  </tr>
+</table><br><br>
 
 <h2>Advanced</h2>
 
 Load an image and get it to move 10 pixels to the left using the button below<br>
 
-<image id="myImage01" src="" style="position:relative; left:0; top:0; width:50; height:50; "><br>
+<image id="myImage01" src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Ffree-photos-vectors%2Fpictue&psig=AOvVaw0j-KrJoTbgaZLUU1H_YHfl&ust=1758211398684000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCJjIkIWW4I8DFQAAAAAdAAAAABAE" style="position:relative; left:0; top:0; width:50; height:50; "><br>
 
 <input type=button value="Go left" onclick="{
-  document.getElementById('myImage01').style.left = '200px'
+  document.getElementById('myImage01').style.left = '10px'
   document.getElementById('myDiv01').innerHTML = 'It went left'
   }">
 
