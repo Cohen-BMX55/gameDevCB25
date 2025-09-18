@@ -33,6 +33,7 @@ Today we talked about website certificates and vibe code cleaning.
 </details>
 <details><summary>Thursday, September 18, 2025</summary></details>
 Today we did a different vibe coding assingment and the name test.
+</details>
 <details><summary>Friday, September 19, 2025</summary></details>
 
 <details><summary>Monday, September 22, 2025</summary></details>
