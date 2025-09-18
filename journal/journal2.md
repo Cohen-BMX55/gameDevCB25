@@ -32,6 +32,7 @@ Today we talked about website certificates and vibe code cleaning.
 
 </details>
 <details><summary>Thursday, September 18, 2025</summary></details>
+Today we did a different vibe coding assingment and the name test.
 <details><summary>Friday, September 19, 2025</summary></details>
 
 <details><summary>Monday, September 22, 2025</summary></details>
@@ -46,7 +47,7 @@ Today we talked about website certificates and vibe code cleaning.
 </details>
 </details>
 
-<details open><summary>October 2025 Journal Entries</summary>
+<details><summary>October 2025 Journal Entries</summary>
 
 <details><summary>Wednesday, October 1, 2025</summary></details>
 <details><summary>Thursday, October 2, 2025</summary></details>
@@ -79,7 +80,7 @@ Today we talked about website certificates and vibe code cleaning.
 </details>
 </details>
 
-<details open><summary>November 2025 Journal Entries</summary>
+<details><summary>November 2025 Journal Entries</summary>
 
 <details><summary>Monday, November 3, 2025</summary></details>
 <details><summary>Tuesday, November 4, 2025</summary></details>
@@ -108,7 +109,7 @@ Today we talked about website certificates and vibe code cleaning.
 </details>
 </details>
 
-<details open><summary>December 2025 Journal Entries</summary>
+<details><summary>December 2025 Journal Entries</summary>
 
 <details><summary>Monday, December 1, 2025</summary></details>
 <details><summary>Tuesday, December 2, 2025</summary></details>
@@ -141,7 +142,7 @@ Today we talked about website certificates and vibe code cleaning.
 </details>
 </details>
 
-<details open><summary>January 2026 Journal Entries</summary>
+<details><summary>January 2026 Journal Entries</summary>
 
 <details><summary>Thursday, January 1, 2026</summary></details>
 <details><summary>Friday, January 2, 2026</summary></details>
@@ -173,7 +174,7 @@ Today we talked about website certificates and vibe code cleaning.
 </details>
 </details>
 
-<details open><summary>February 2026 Journal Entries</summary>
+<details><summary>February 2026 Journal Entries</summary>
 
 <details><summary>Monday, February 2, 2026</summary></details>
 <details><summary>Tuesday, February 3, 2026</summary></details>
