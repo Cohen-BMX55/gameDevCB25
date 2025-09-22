@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weekday Journal (Sep - Jan)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      color: #444;
+    }
+    .month {
+      margin-top: 40px;
+      border-top: 2px solid #ccc;
+      padding-top: 20px;
+    }
+    .day-entry {
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      font-size: 14px;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <h1>Weekday Journal: September to January</h1>
+
+  <!-- JS will generate months and weekdays -->
+  <div id="journal"></div>
+
+  <script>
+    const startDate = new Date('2025-09-01');
+    const endDate = new Date('2026-01-31');
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"];
+    const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const journalDiv = document.getElementById('journal');
+
+    let currentMonth = '';
+    for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+      const day = date.getDay();
+      if (day === 0 || day === 6) continue; // skip weekends
+
+      const month = monthNames[date.getMonth()];
+      const dayName = weekdayNames[day];
+      const formattedDate = `${dayName}, ${date.getDate()} ${month}`;
+
+      if (month !== currentMonth) {
+        currentMonth = month;
+        const monthSection = document.createElement('div');
+        monthSection.className = 'month';
+        monthSection.innerHTML = `<h2>${month}</h2>`;
+        journalDiv.appendChild(monthSection);
+      }
+
+      const dayEntry = document.createElement('div');
+      dayEntry.className = 'day-entry';
+      dayEntry.innerHTML = `
+        <label><strong>${formattedDate}</strong></label><br>
+        <textarea placeholder="Write your entry for ${formattedDate}..."></textarea>
+      `;
+      journalDiv.lastChild.appendChild(dayEntry);
+    }
+  </script>
+</body>
+</html>
