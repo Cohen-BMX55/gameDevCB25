@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fun HTML Elements Demo</title>
+</head>
+<body>
 
+  <header>
+    <marquee behavior="scroll" direction="left" scrollamount="8">
+      Welcome to the Fun HTML Elements Demo! 🚀
+    </marquee>
+  </header>
+
+  <section>
+    <h2>Tell me your favorite fruit:</h2>
+    <input list="fruits" type="text" id="fruitInput" placeholder="Start typing..." />
+    <datalist id="fruits">
+      <option value="Apple"></option>
+      <option value="Banana"></option>
+      <option value="Cherry"></option>
+      <option value="Date"></option>
+      <option value="Elderberry"></option>
+      <option value="Fig"></option>
+      <option value="Grapes"></option>
+    </datalist>
+
+    <progress id="progressBar" max="20" value="0"></progress>
+
+    <button id="showFruit">Show My Favorite Fruit</button>
+
+    <details>
+      <summary>Why use datalist?</summary>
+      <p>The &lt;datalist&gt; element provides autocomplete suggestions for input fields, making it easier for users to pick options while still allowing them to type freely.</p>
+    </details>
+  </section>
+
+  <script>
+    const input = document.getElementById('fruitInput');
+    const progressBar = document.getElementById('progressBar');
+    const button = document.getElementById('showFruit');
+
+    input.addEventListener('input', () => {
+      let length = input.value.length;
+      if(length > progressBar.max) length = progressBar.max;
+      progressBar.value = length;
+    });
+
+    button.addEventListener('click', () => {
+      if(input.value.trim() === '') {
+        alert('Please enter your favorite fruit first!');
+      } else {
+        alert(`Your favorite fruit is: ${input.value}`);
+      }
+    });
+  </script>
+
+</body>
+</html>
