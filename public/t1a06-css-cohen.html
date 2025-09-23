@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cool CSS Features Demo</title>
+  <title>Cool CSS Buttons Demo</title>
 </head>
 <body style="
   margin: 0;
@@ -22,7 +22,7 @@
     margin-bottom: 0.5em;
     text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
   ">
-    ✨ Welcome to My Cool CSS Page
+    ✨ CSS Button Effects (Inline!)
   </h1>
 
   <p style="
@@ -35,26 +35,102 @@
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   ">
-    This page uses <strong>inline CSS</strong> to demonstrate cool styling features like gradients,
-    shadows, hover effects, transitions, and flexbox layout—all without any external stylesheets!
+    Below are some buttons styled with inline CSS only. Hover or click to see effects in action!
   </p>
 
-  <a href="#"
-    style="
-      background-color: #333;
-      color: white;
-      text-decoration: none;
-      padding: 12px 24px;
-      border-radius: 25px;
-      font-size: 1em;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    "
-    onmouseover="this.style.backgroundColor='#555'; this.style.transform='scale(1.05)'"
-    onmouseout="this.style.backgroundColor='#333'; this.style.transform='scale(1)'"
-  >
-    Hover Me 🚀
-  </a>
+  <!-- Container for Buttons -->
+  <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+
+    <!-- Button 1: Color Change on Hover -->
+    <button
+      style="
+        background-color: #333;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      "
+      onmouseover="this.style.backgroundColor='#FF6F61'"
+      onmouseout="this.style.backgroundColor='#333'"
+    >
+      Color Change 🎨
+    </button>
+
+    <!-- Button 2: Pulse Animation -->
+    <button
+      style="
+        background-color: #6A5ACD;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      "
+      onmouseover="this.style.transform='scale(1.1)'"
+      onmouseout="this.style.transform='scale(1)'"
+    >
+      Pulse 💓
+    </button>
+
+    <!-- Button 3: Glowing Border -->
+    <button
+      style="
+        background-color: black;
+        color: white;
+        padding: 12px 20px;
+        border: 2px solid #0ff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+        cursor: pointer;
+        transition: box-shadow 0.3s ease;
+      "
+      onmouseover="this.style.boxShadow='0 0 20px #0ff, 0 0 40px #0ff'"
+      onmouseout="this.style.boxShadow='0 0 10px #0ff, 0 0 20px #0ff'"
+    >
+      Glow ⚡
+    </button>
+
+    <!-- Button 4: 3D Press Effect -->
+    <button
+      style="
+        background-color: #FFB347;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px #D2691E;
+        transition: all 0.1s ease-in-out;
+      "
+      onmousedown="this.style.transform='translateY(4px)'; this.style.boxShadow='0 0 #D2691E'"
+      onmouseup="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px #D2691E'"
+    >
+      Press Me 🧱
+    </button>
+
+    <!-- Button 5: Fade & Scale -->
+    <button
+      style="
+        background-color: #2E8B57;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        opacity: 1;
+        transition: all 0.3s ease;
+      "
+      onmouseover="this.style.opacity='0.7'; this.style.transform='scale(1.1)'"
+      onmouseout="this.style.opacity='1'; this.style.transform='scale(1)'"
+    >
+      Fade + Zoom 👻
+    </button>
+
+  </div>
 
 </body>
 </html>
+
