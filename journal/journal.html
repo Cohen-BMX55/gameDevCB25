@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Weekday Journal 1(Sept to Jan)</title>
+  <title>Weekday Journal (Sept to Jan)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,23 +16,43 @@
       text-align: center;
       margin-bottom: 20px;
     }
-    .entry {
-      background: #fff;
+    .month {
+      margin-bottom: 20px;
       border: 1px solid #ccc;
-      margin-bottom: 15px;
-      padding: 10px;
       border-radius: 5px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .month-header {
+      background: #007acc;
+      color: white;
+      cursor: pointer;
+      padding: 10px;
+      user-select: none;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    .month-entries {
+      padding: 10px;
+      display: none;
+    }
+    .entry {
+      border-bottom: 1px solid #ddd;
+      padding: 8px 0;
+    }
+    .entry:last-child {
+      border-bottom: none;
     }
     .date {
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
     .text {
       white-space: pre-wrap;
       background: #eee;
       padding: 8px;
       border-radius: 4px;
-      min-height: 80px;
+      min-height: 60px;
     }
   </style>
 </head>
@@ -50,30 +70,70 @@
         const journalDiv = document.getElementById('journal');
         journalDiv.innerHTML = '';
 
-        const start = new Date(new Date().getFullYear(), 8, 1); // Sept 1 current year
-        const end = new Date(new Date().getFullYear() + 1, 0, 31); // Jan 31 next year
+        const start = new Date(2025, 8, 1); // Sept 1, 2025 (month 8 = Sept)
+        const end = new Date(2026, 0, 31);  // Jan 31, 2026
+
+        // Group entries by month-year string like "September 2025"
+        const months = {};
 
         for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
           const day = d.getDay();
-          if (day >= 1 && day <= 5) { // Monday to Friday
+          if (day >= 1 && day <= 5) { // Weekdays Mon-Fri
             const isoDate = d.toISOString().slice(0, 10);
-            const dateStr = d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+            const dateStr = d.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const monthKey = d.toLocaleDateString(undefined, { year: 'numeric', month: 'long' });
 
+            if (!months[monthKey]) {
+              months[monthKey] = [];
+            }
+
+            months[monthKey].push({
+              dateStr,
+              isoDate,
+              text: entries[isoDate] || '(No entry)'
+            });
+          }
+        }
+
+        // Create collapsible sections for each month
+        for (const [monthName, days] of Object.entries(months)) {
+          const monthDiv = document.createElement('div');
+          monthDiv.className = 'month';
+
+          const header = document.createElement('div');
+          header.className = 'month-header';
+          header.textContent = monthName;
+
+          const entriesDiv = document.createElement('div');
+          entriesDiv.className = 'month-entries';
+
+          // Add each day's entry
+          days.forEach(day => {
             const entryDiv = document.createElement('div');
             entryDiv.className = 'entry';
 
             const dateLabel = document.createElement('div');
             dateLabel.className = 'date';
-            dateLabel.textContent = dateStr;
+            dateLabel.textContent = day.dateStr;
 
             const textDiv = document.createElement('div');
             textDiv.className = 'text';
-            textDiv.textContent = entries[isoDate] || '(No entry)';
+            textDiv.textContent = day.text;
 
             entryDiv.appendChild(dateLabel);
             entryDiv.appendChild(textDiv);
-            journalDiv.appendChild(entryDiv);
-          }
+            entriesDiv.appendChild(entryDiv);
+          });
+
+          // Toggle visibility on header click
+          header.addEventListener('click', () => {
+            const isVisible = entriesDiv.style.display === 'block';
+            entriesDiv.style.display = isVisible ? 'none' : 'block';
+          });
+
+          monthDiv.appendChild(header);
+          monthDiv.appendChild(entriesDiv);
+          journalDiv.appendChild(monthDiv);
         }
       } catch (err) {
         document.getElementById('journal').textContent = 'Error loading journal entries.';
@@ -85,3 +145,4 @@
   </script>
 </body>
 </html>
+
