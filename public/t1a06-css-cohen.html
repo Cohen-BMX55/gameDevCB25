@@ -1,9 +1,60 @@
-<h1 align=center>t1a06-css-cohen.html</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cool CSS Features Demo</title>
+</head>
+<body style="
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #333;
+">
 
-<a href="https://www.w3schools.com/css/css_border.asp">w3schools css</a><br><br>
+  <h1 style="
+    font-size: 3em;
+    margin-bottom: 0.5em;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  ">
+    ✨ Welcome to My Cool CSS Page
+  </h1>
 
-This is <b>bold</b> True?<br>
-This is <b style="color:red; background-color:yellow;">cool</b> Yes! <br>
-<br>
+  <p style="
+    font-size: 1.2em;
+    max-width: 600px;
+    line-height: 1.5;
+    margin: 0 20px 2em 20px;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 1em;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  ">
+    This page uses <strong>inline CSS</strong> to demonstrate cool styling features like gradients,
+    shadows, hover effects, transitions, and flexbox layout—all without any external stylesheets!
+  </p>
 
-This is <i style="border-style:groove;">italic with a border</i>
+  <a href="#"
+    style="
+      background-color: #333;
+      color: white;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 1em;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    "
+    onmouseover="this.style.backgroundColor='#555'; this.style.transform='scale(1.05)'"
+    onmouseout="this.style.backgroundColor='#333'; this.style.transform='scale(1)'"
+  >
+    Hover Me 🚀
+  </a>
+
+</body>
+</html>
