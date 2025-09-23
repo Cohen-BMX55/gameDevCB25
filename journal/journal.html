@@ -1,74 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Weekday Journal (Sep - Jan)</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weekday Journal (Sept to Jan)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 0 10px;
       background: #f9f9f9;
-      color: #333;
     }
-    h1, h2 {
-      color: #444;
-    }
-    .month {
-      margin-top: 40px;
-      border-top: 2px solid #ccc;
-      padding-top: 20px;
-    }
-    .day-entry {
+    h1 {
+      text-align: center;
       margin-bottom: 20px;
     }
-    textarea {
-      width: 100%;
-      height: 80px;
-      font-size: 14px;
+    .entry {
+      background: #fff;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .date {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .text {
+      white-space: pre-wrap;
+      background: #eee;
       padding: 8px;
-      box-sizing: border-box;
+      border-radius: 4px;
+      min-height: 80px;
     }
   </style>
 </head>
 <body>
-  <h1>Weekday Journal: September to January</h1>
-
-  <!-- JS will generate months and weekdays -->
-  <div id="journal"></div>
+  <h1>Weekday Journal (Sept to Jan)</h1>
+  <div id="journal">Loading journal entries...</div>
 
   <script>
-    const startDate = new Date('2025-09-01');
-    const endDate = new Date('2026-01-31');
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-                        "July", "August", "September", "October", "November", "December"];
-    const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const journalDiv = document.getElementById('journal');
+    async function loadJournal() {
+      try {
+        const res = await fetch('journal.json');
+        if (!res.ok) throw new Error('Could not load journal.json');
+        const entries = await res.json();
 
-    let currentMonth = '';
-    for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
-      const day = date.getDay();
-      if (day === 0 || day === 6) continue; // skip weekends
+        const journalDiv = document.getElementById('journal');
+        journalDiv.innerHTML = '';
 
-      const month = monthNames[date.getMonth()];
-      const dayName = weekdayNames[day];
-      const formattedDate = `${dayName}, ${date.getDate()} ${month}`;
+        const start = new Date(new Date().getFullYear(), 8, 1); // Sept 1 current year
+        const end = new Date(new Date().getFullYear() + 1, 0, 31); // Jan 31 next year
 
-      if (month !== currentMonth) {
-        currentMonth = month;
-        const monthSection = document.createElement('div');
-        monthSection.className = 'month';
-        monthSection.innerHTML = `<h2>${month}</h2>`;
-        journalDiv.appendChild(monthSection);
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+          const day = d.getDay();
+          if (day >= 1 && day <= 5) { // Monday to Friday
+            const isoDate = d.toISOString().slice(0, 10);
+            const dateStr = d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'entry';
+
+            const dateLabel = document.createElement('div');
+            dateLabel.className = 'date';
+            dateLabel.textContent = dateStr;
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'text';
+            textDiv.textContent = entries[isoDate] || '(No entry)';
+
+            entryDiv.appendChild(dateLabel);
+            entryDiv.appendChild(textDiv);
+            journalDiv.appendChild(entryDiv);
+          }
+        }
+      } catch (err) {
+        document.getElementById('journal').textContent = 'Error loading journal entries.';
+        console.error(err);
       }
-
-      const dayEntry = document.createElement('div');
-      dayEntry.className = 'day-entry';
-      dayEntry.innerHTML = `
-        <label><strong>${formattedDate}</strong></label><br>
-        <textarea placeholder="Write your entry for ${formattedDate}..."></textarea>
-      `;
-      journalDiv.lastChild.appendChild(dayEntry);
     }
+
+    loadJournal();
   </script>
 </body>
 </html>
