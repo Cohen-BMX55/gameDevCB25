@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Game Dev 2025 Journal</title>
+  <title>Weekday Journal (Sept to Jan)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -57,7 +57,7 @@
   </style>
 </head>
 <body>
-  <h1>Game Dev 2025 Journal</h1>
+  <h1>Weekday Journal (Sept to Jan)</h1>
   <div id="journal">Loading journal entries...</div>
 
   <script>
@@ -95,6 +95,10 @@
           }
         }
 
+        // Current month-year string to auto-open
+        const now = new Date();
+        const currentMonthKey = now.toLocaleDateString(undefined, { year: 'numeric', month: 'long' });
+
         // Create collapsible sections for each month
         for (const [monthName, days] of Object.entries(months)) {
           const monthDiv = document.createElement('div');
@@ -107,7 +111,11 @@
           const entriesDiv = document.createElement('div');
           entriesDiv.className = 'month-entries';
 
-          // Add each day's entry
+          // Show current month expanded by default
+          if (monthName === currentMonthKey) {
+            entriesDiv.style.display = 'block';
+          }
+
           days.forEach(day => {
             const entryDiv = document.createElement('div');
             entryDiv.className = 'entry';
@@ -125,7 +133,6 @@
             entriesDiv.appendChild(entryDiv);
           });
 
-          // Toggle visibility on header click
           header.addEventListener('click', () => {
             const isVisible = entriesDiv.style.display === 'block';
             entriesDiv.style.display = isVisible ? 'none' : 'block';
@@ -145,4 +152,5 @@
   </script>
 </body>
 </html>
+
 
