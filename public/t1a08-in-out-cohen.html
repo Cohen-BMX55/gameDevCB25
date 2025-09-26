@@ -17,9 +17,9 @@
       let button = document.getElementById('myButton01')
       let text = document.getElementById('myInput01')
 
-      function moveText() {
-        span.innerHTML = text.value
-      }
+      button.addEventListener("click", function() {
+        span.textContent = text.value
+      })
 
     </script>
   </body>
