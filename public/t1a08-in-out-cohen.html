@@ -1,33 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
-  <head>
-    <title>t1a08-in-out-cohen</title>
-    <style>
-      body {
-        background-color: aquamarine;
-        
-      }
+  <title>t1a08-in-out-cohen</title>
+  <style>
+    body {
+      background-color: aquamarine;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
 
+    h1 {
+      color: #005f5f;
+    }
 
-    </style>
-  </head>
-  <body>
-    <h1 align=center><b>Input Output Assignment</b></h1><br><hr><br>
-    <input type="text" id="myInput01" placeholder="Input Text Here">
-    <p>Output:<span id="mySpan01">...</span></p>
-    <button id="myButton01" type="button" onclick="{moveText()}">Do Things</button>
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+      border: 2px solid #008080;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
 
+    button {
+      padding: 10px 20px;
+      background-color: #008080;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-    <script>
-      let span = document.getElementById('mySpan01')
-      let button = document.getElementById('myButton01')
-      let text = document.getElementById('myInput01')
+    button:hover {
+      background-color: #006666;
+    }
 
-      button.addEventListener("click", function() {
-        span.textContent = text.value
-      })
+    p {
+      font-size: 18px;
+      color: #004d4d;
+    }
 
-    </script>
-  </body>
+    span {
+      font-weight: bold;
+      color: #000;
+      margin-left: 10px;
+    }
+
+    hr {
+      width: 60%;
+      border: 1px solid #006666;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Input Output Assignment</h1>
+  <hr>
+
+  <input type="text" id="myInput01" placeholder="Input Text Here">
+  <p>Output: <span id="mySpan01">...</span></p>
+  <button id="myButton01" type="button">Do Things</button>
+
+  <script>
+    // Get elements
+    const span = document.getElementById('mySpan01');
+    const button = document.getElementById('myButton01');
+    const text = document.getElementById('myInput01');
+
+    // Add event listener for button click
+    button.addEventListener("click", function () {
+      span.textContent = text.value;
+    });
+  </script>
+
+</body>
 </html>
+
