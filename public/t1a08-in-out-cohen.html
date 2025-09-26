@@ -3,80 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <title>t1a08-in-out-cohen</title>
-  <style>
-    body {
-      background-color: aquamarine;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px;
-    }
-
-    h1 {
-      color: #005f5f;
-    }
-
-    input[type="text"] {
-      padding: 10px;
-      font-size: 16px;
-      width: 250px;
-      border: 2px solid #008080;
-      border-radius: 5px;
-      margin-bottom: 20px;
-    }
-
-    button {
-      padding: 10px 20px;
-      background-color: #008080;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #006666;
-    }
-
-    p {
-      font-size: 18px;
-      color: #004d4d;
-    }
-
-    span {
-      font-weight: bold;
-      color: #000;
-      margin-left: 10px;
-    }
-
-    hr {
-      width: 60%;
-      border: 1px solid #006666;
-      margin-bottom: 30px;
-    }
-  </style>
 </head>
 <body>
 
   <h1>Input Output Assignment</h1>
   <hr>
 
+  <!-- Original Input -->
   <input type="text" id="myInput01" placeholder="Input Text Here">
   <p>Output: <span id="mySpan01">...</span></p>
-  <button id="myButton01" type="button">Do Things</button>
+  <button id="myButton01" type="button">Echo Input</button>
+
+  <!-- Uppercase -->
+  <input type="text" id="upperInput" placeholder="Type something to UPPERCASE">
+  <p>Uppercase: <span id="upperOutput">...</span></p>
+  <button id="upperButton">Convert to Uppercase</button>
+
+  <!-- Word Counter -->
+  <textarea id="wordInput" rows="3" placeholder="Type a sentence"></textarea>
+  <p>Word Count: <span id="wordCount">0</span></p>
+  <button id="wordButton">Count Words</button>
+
+  <!-- Reverser -->
+  <input type="text" id="reverseInput" placeholder="Text to Reverse">
+  <p>Reversed: <span id="reverseOutput">...</span></p>
+  <button id="reverseButton">Reverse Text</button>
+
+  <!-- Live Character Count -->
+  <input type="text" id="liveInput" placeholder="Watch character count...">
+  <p>Characters: <span id="charCount">0</span></p>
 
   <script>
-    // Get elements
+    // Echo Input
     const span = document.getElementById('mySpan01');
     const button = document.getElementById('myButton01');
     const text = document.getElementById('myInput01');
-
-    // Add event listener for button click
     button.addEventListener("click", function () {
       span.textContent = text.value;
+    });
+
+    // Uppercase Converter
+    document.getElementById("upperButton").addEventListener("click", function () {
+      const input = document.getElementById("upperInput").value;
+      document.getElementById("upperOutput").textContent = input.toUpperCase();
+    });
+
+    // Word Counter
+    document.getElementById("wordButton").addEventListener("click", function () {
+      const input = document.getElementById("wordInput").value.trim();
+      const words = input === "" ? 0 : input.split(/\s+/).length;
+      document.getElementById("wordCount").textContent = words;
+    });
+
+    // Reverser
+    document.getElementById("reverseButton").addEventListener("click", function () {
+      const input = document.getElementById("reverseInput").value;
+      const reversed = input.split("").reverse().join("");
+      document.getElementById("reverseOutput").textContent = reversed;
+    });
+
+    // Live Character Counter
+    document.getElementById("liveInput").addEventListener("input", function () {
+      const length = this.value.length;
+      document.getElementById("charCount").textContent = length;
     });
   </script>
 
