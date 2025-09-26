@@ -4,15 +4,23 @@
   <head>
     <title>t1a08-in-out-cohen</title>
     <script>
-      let button =
-      
+      let span = document.getElementById('mySpan01')
+      let button = document.getElementById('myButton01')
+      let text = document.getElementById('myInput01')
+
+      function moveText() {
+        span.innerHTML = text.value
+      }
+
+      button.onclick(moveText())
+
     </script>
   </head>
   <body>
     <h1 align=center><b>Input Output Assignment</b></h1><br><hr><br>
-    <
-    
-    
-    
+    <input type="text" id="myInput01" placeholder="Input Text Here">
+    <p>Output:<span id="mySpan01">...</span></p>
+    <button id="myButton01" type="button">Do Things</button>
+
   </body>
 </html>
