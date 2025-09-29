@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JS Variables Demo</title>
+</head>
+<body>
+  <h1>JavaScript Variables and Data Types Demo</h1>
+  
+  <div id="output"></div>
+
+  <script>
+    // Using const for values that won't change
+    const integerValue = 42;             // integer
+    const charValue = 'A';               // character (in JS, it's a string of length 1)
+    const booleanValue = true;           // boolean
+    const floatValue = 3.14;             // float (number with decimals)
+    const stringValue = "Hello, world!"; // string
+
+    // Using let for variables that may change later
+    let changingInteger = 10;
+    changingInteger = 20; // updating value
+
+    // Using var (function-scoped, older way)
+    var oldStyleString = "I'm declared with var";
+
+    // Display values on the webpage
+    const outputDiv = document.getElementById('output');
+    outputDiv.innerHTML = 
+      "<p><strong>const integerValue:</strong> " + integerValue + " (integer)</p>" +
+      "<p><strong>const charValue:</strong> '" + charValue + "' (character)</p>" +
+      "<p><strong>const booleanValue:</strong> " + booleanValue + " (boolean)</p>" +
+      "<p><strong>const floatValue:</strong> " + floatValue + " (float)</p>" +
+      "<p><strong>const stringValue:</strong> \"" + stringValue + "\" (string)</p>" +
+      "<p><strong>let changingInteger (after update):</strong> " + changingInteger + "</p>" +
+      "<p><strong>var oldStyleString:</strong> " + oldStyleString + "</p>";
+  </script>
+</body>
+</html>
