@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Loops with User Input</title>
+</head>
+<body>
+    <h1>Loop Demonstration with User Input</h1>
+
+    <label for="numberInput">Enter a number:</label>
+    <input type="number" id="numberInput" min="1">
+    <button onclick="runLoops()">Run Loops</button>
+
+    <h2>For Loop</h2>
+    <div id="for-loop"></div>
+
+    <h2>While Loop</h2>
+    <div id="while-loop"></div>
+
+    <h2>Do...While Loop</h2>
+    <div id="do-while-loop"></div>
+
+    <h2>For...of Loop (Array of numbers)</h2>
+    <div id="for-of-loop"></div>
+
+    <h2>For...in Loop (Object with numbers)</h2>
+    <div id="for-in-loop"></div>
+
+    <script>
+        function runLoops() {
+            const num = parseInt(document.getElementById("numberInput").value);
+
+            if (isNaN(num) || num < 1) {
+                alert("Please enter a valid number greater than 0.");
+                return;
+            }
+
+            // For Loop
+            let forOutput = "";
+            for (let i = 1; i <= num; i++) {
+                forOutput += "For loop value: " + i + "<br>";
+            }
+            document.getElementById("for-loop").innerHTML = forOutput;
+
+            // While Loop
+            let whileOutput = "";
+            let j = 1;
+            while (j <= num) {
+                whileOutput += "While loop value: " + j + "<br>";
+                j++;
+            }
+            document.getElementById("while-loop").innerHTML = whileOutput;
+
+            // Do...While Loop
+            let doWhileOutput = "";
+            let k = 1;
+            do {
+                doWhileOutput += "Do...While loop value: " + k + "<br>";
+                k++;
+            } while (k <= num);
+            document.getElementById("do-while-loop").innerHTML = doWhileOutput;
+
+            // For...of Loop (using array)
+            let numberArray = [];
+            for (let i = 1; i <= num; i++) {
+                numberArray.push(i);
+            }
+            let forOfOutput = "";
+            for (let n of numberArray) {
+                forOfOutput += "For...of loop value: " + n + "<br>";
+            }
+            document.getElementById("for-of-loop").innerHTML = forOfOutput;
+
+            // For...in Loop (using object)
+            let numberObject = {};
+            for (let i = 1; i <= num; i++) {
+                numberObject["value" + i] = i;
+            }
+            let forInOutput = "";
+            for (let key in numberObject) {
+                forInOutput += key + ": " + numberObject[key] + "<br>";
+            }
+            document.getElementById("for-in-loop").innerHTML = forInOutput;
+        }
+    </script>
+</body>
+</html>
