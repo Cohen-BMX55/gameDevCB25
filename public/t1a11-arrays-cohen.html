@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Arrays with User Input</title>
+</head>
+<body>
+    <h1>Array Operations with User Input</h1>
+
+    <label for="arrayInput">Enter comma-separated values:</label><br>
+    <input type="text" id="arrayInput" placeholder="e.g. 1,2,3,4,5">
+    <button onclick="processArray()">Process Array</button>
+
+    <h2>Original Array</h2>
+    <div id="original-array"></div>
+
+    <h2>Array Length</h2>
+    <div id="array-length"></div>
+
+    <h2>Mapped Array (x2)</h2>
+    <div id="mapped-array"></div>
+
+    <h2>Filtered Array (values > 2)</h2>
+    <div id="filtered-array"></div>
+
+    <h2>Reduced Value (sum)</h2>
+    <div id="reduced-value"></div>
+
+    <h2>forEach Output</h2>
+    <div id="foreach-output"></div>
+
+    <script>
+        function processArray() {
+            const input = document.getElementById("arrayInput").value;
+            let rawArray = input.split(",").map(item => item.trim());
+
+            // Try converting all values to numbers if possible
+            let numberArray = rawArray.map(val => {
+                let num = Number(val);
+                return isNaN(num) ? val : num;
+            });
+
+            // Show Original Array
+            document.getElementById("original-array").innerHTML = JSON.stringify(numberArray);
+
+            // Array Length
+            document.getElementById("array-length").innerHTML = numberArray.length;
+
+            // Mapped Array (multiply by 2 if number)
+            const mappedArray = numberArray.map(val => {
+                return typeof val === "number" ? val * 2 : val;
+            });
+            document.getElementById("mapped-array").innerHTML = JSON.stringify(mappedArray);
+
+            // Filtered Array (numbers > 2 only)
+            const filteredArray = numberArray.filter(val => typeof val === "number" && val > 2);
+            document.getElementById("filtered-array").innerHTML = JSON.stringify(filteredArray);
+
+            // Reduced Value (sum numbers only)
+            const numericValues = numberArray.filter(val => typeof val === "number");
+            const reducedValue = numericValues.reduce((sum, val) => sum + val, 0);
+            document.getElementById("reduced-value").innerHTML = reducedValue;
+
+            // forEach Output
+            let foreachOutput = "";
+            numberArray.forEach((val, index) => {
+                foreachOutput += "Index " + index + ": " + val + "<br>";
+            });
+            document.getElementById("foreach-output").innerHTML = foreachOutput;
+        }
+    </script>
+</body>
+</html>
