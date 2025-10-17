@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Classes Demo</title>
+</head>
+<body>
+    <h1>JavaScript Classes Demonstration</h1>
+
+    <label for="nameInput">Enter a name:</label>
+    <input type="text" id="nameInput" placeholder="e.g. Alice">
+    <button onclick="createPerson()">Create Person</button>
+
+    <br><br>
+
+    <label for="studentInput">Enter a student name:</label>
+    <input type="text" id="studentInput" placeholder="e.g. Bob">
+    <input type="number" id="gradeInput" placeholder="Grade">
+    <button onclick="createStudent()">Create Student</button>
+
+    <h2>Output</h2>
+    <div id="output"></div>
+
+    <script>
+        // Base class
+        class Person {
+            constructor(name) {
+                this._name = name;
+            }
+
+            greet() {
+                return `Hi, my name is ${this._name}.`;
+            }
+
+            get name() {
+                return this._name;
+            }
+
+            set name(newName) {
+                if (typeof newName === "string" && newName.length > 0) {
+                    this._name = newName;
+                }
+            }
+
+            static species() {
+                return "Homo sapiens";
+            }
+        }
+
+        // Derived class
+        class Student extends Person {
+            constructor(name, grade) {
+                super(name); // call base constructor
+                this.grade = grade;
+            }
+
+            // Method override
+            greet() {
+                return `Hello, I'm ${this.name} and I'm in grade ${this.grade}.`;
+            }
+
+            // New method
+            study() {
+                return `${this.name} is studying...`;
+            }
+        }
+
+        // Output helpers
+        function outputText(text) {
+            const div = document.createElement("div");
+            div.innerHTML = text;
+            document.getElementById("output").appendChild(div);
+        }
+
+        // Create a person instance
+        function createPerson() {
+            const name = document.getElementById("nameInput").value.trim();
+            if (!name) {
+                alert("Please enter a name.");
+                return;
+            }
+
+            const person = new Person(name);
+            outputText("Created Person:");
+            outputText("Name: " + person.name);
+            outputText(person.greet());
+            outputText("Species (static): " + Person.species());
+            outputText("---");
+        }
+
+        // Create a student instance
+        function createStudent() {
+            const name = document.getElementById("studentInput").value.trim();
+            const grade = parseInt(document.getElementById("gradeInput").value);
+
+            if (!name || isNaN(grade)) {
+                alert("Please enter a valid student name and grade.");
+                return;
+            }
+
+            const student = new Student(name, grade);
+            outputText("Created Student:");
+            outputText("Name: " + student.name);
+            outputText("Grade: " + student.grade);
+            outputText(student.greet());
+            outputText(student.study());
+            outputText("Species (inherited static): " + Student.species());
+            outputText("---");
+        }
+    </script>
+</body>
+</html>
