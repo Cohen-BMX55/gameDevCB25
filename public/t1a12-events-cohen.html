@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Events Demo</title>
+</head>
+<body>
+    <h1>JavaScript Events Demonstration</h1>
+
+    <!-- Click Event -->
+    <button id="clickBtn">Click Me</button>
+    <div id="clickOutput"></div>
+
+    <!-- Input Event -->
+    <h2>Live Input</h2>
+    <input type="text" id="liveInput" placeholder="Type something...">
+    <div id="inputOutput"></div>
+
+    <!-- Mouse Events -->
+    <h2>Mouse Events</h2>
+    <div id="hoverBox" style="width:200px;height:100px;border:1px solid black;">
+        Hover over this box
+    </div>
+    <div id="mouseOutput"></div>
+
+    <!-- Keyboard Events -->
+    <h2>Keyboard Events</h2>
+    <input type="text" id="keyInput" placeholder="Type here for key events">
+    <div id="keyOutput"></div>
+
+    <!-- Submit Event -->
+    <h2>Form Submit Event</h2>
+    <form id="myForm">
+        <input type="text" name="username" placeholder="Enter username">
+        <button type="submit">Submit</button>
+    </form>
+    <div id="formOutput"></div>
+
+    <!-- Context Menu (Right Click) -->
+    <h2>Right-Click Area</h2>
+    <div id="contextBox" style="width:200px;height:100px;border:1px dashed gray;">
+        Right-click inside this box
+    </div>
+    <div id="contextOutput"></div>
+
+    <!-- Event Delegation -->
+    <h2>Event Delegation</h2>
+    <ul id="itemList">
+        <li data-id="1">Item 1</li>
+        <li data-id="2">Item 2</li>
+        <li data-id="3">Item 3</li>
+    </ul>
+    <div id="delegationOutput"></div>
+
+    <!-- Toggle Event Listener -->
+    <h2>Toggle Event Listener</h2>
+    <button id="toggleBtn">Toggle Click Handler</button>
+    <button id="targetBtn">Target Button</button>
+    <div id="toggleOutput"></div>
+
+    <script>
+        // Click Event
+        document.getElementById("clickBtn").addEventListener("click", () => {
+            document.getElementById("clickOutput").innerText = "Button clicked!";
+        });
+
+        // Input Event
+        document.getElementById("liveInput").addEventListener("input", (e) => {
+            document.getElementById("inputOutput").innerText = "You typed: " + e.target.value;
+        });
+
+        // Mouseover / Mouseout
+        const hoverBox = document.getElementById("hoverBox");
+        const mouseOutput = document.getElementById("mouseOutput");
+        hoverBox.addEventListener("mouseover", () => {
+            mouseOutput.innerText = "Mouse is over the box";
+        });
+        hoverBox.addEventListener("mouseout", () => {
+            mouseOutput.innerText = "Mouse left the box";
+        });
+
+        // Keydown / Keyup
+        const keyInput = document.getElementById("keyInput");
+        keyInput.addEventListener("keydown", (e) => {
+            document.getElementById("keyOutput").innerText = "Key down: " + e.key;
+        });
+        keyInput.addEventListener("keyup", (e) => {
+            document.getElementById("keyOutput").innerText = "Key up: " + e.key;
+        });
+
+        // Submit Event
+        document.getElementById("myForm").addEventListener("submit", (e) => {
+            e.preventDefault(); // prevent page reload
+            const username = e.target.username.value;
+            document.getElementById("formOutput").innerText = "Form submitted. Username: " + username;
+        });
+
+        // Context Menu (Right Click)
+        document.getElementById("contextBox").addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            document.getElementById("contextOutput").innerText = "Right-click detected!";
+        });
+
+        // Event Delegation
+        document.getElementById("itemList").addEventListener("click", (e) => {
+            if (e.target.tagName === "LI") {
+                const id = e.target.dataset.id;
+                document.getElementById("delegationOutput").innerText = "You clicked on item ID: " + id;
+            }
+        });
+
+        // Toggle Event Listener (Add/Remove)
+        const toggleBtn = document.getElementById("toggleBtn");
+        const targetBtn = document.getElementById("targetBtn");
+        const toggleOutput = document.getElementById("toggleOutput");
+
+        function targetHandler() {
+            toggleOutput.innerText = "Target button clicked!";
+        }
+
+        let listenerActive = false;
+        toggleBtn.addEventListener("click", () => {
+            if (!listenerActive) {
+                targetBtn.addEventListener("click", targetHandler);
+                toggleOutput.innerText = "Listener attached.";
+            } else {
+                targetBtn.removeEventListener("click", targetHandler);
+                toggleOutput.innerText = "Listener removed.";
+            }
+            listenerActive = !listenerActive;
+        });
+    </script>
+</body>
+</html>
