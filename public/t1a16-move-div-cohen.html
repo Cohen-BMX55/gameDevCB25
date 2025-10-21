@@ -188,4 +188,162 @@
     document.getElementById('obj3'),
     document.getElementById('obj4'),
     document.getElementById('obj5'),
-    document.getElementById('obj6')
+    document.getElementById('obj6'),
+    document.getElementById('obj7'),
+    document.getElementById('obj8'),
+  ];
+
+  // Initial positions and speeds
+  const state = [
+    // obj1: moves left to right and resets
+    { x: 0, y: 50, speedX: 2, speedY: 0, baseSpeedX: 2, baseSpeedY: 0, paused: false },
+
+    // obj2: moves top to bottom and resets
+    { x: 150, y: 0, speedX: 0, speedY: 3, baseSpeedX: 0, baseSpeedY: 3, paused: false },
+
+    // obj3: bounces horizontally
+    { x: 0, y: 150, speedX: 4, speedY: 0, baseSpeedX: 4, baseSpeedY: 0, paused: false },
+
+    // obj4: bounces vertically
+    { x: 250, y: 0, speedX: 0, speedY: 5, baseSpeedX: 0, baseSpeedY: 5, paused: false },
+
+    // obj5: moves diagonally bounces inside container
+    { x: 0, y: 0, speedX: 3, speedY: 3, baseSpeedX: 3, baseSpeedY: 3, paused: false },
+
+    // obj6: circular motion
+    { centerX: 400, centerY: 300, angle: 0, radius: 80, speed: 0.05, baseSpeed: 0.05, paused: false },
+
+    // obj7: sinusoidal horizontal motion
+    { baseX: 0, baseY: 400, speedX: 2, angle: 0, amplitude: 50, frequency: 0.05, baseSpeedX: 2, paused: false },
+
+    // obj8: random walk
+    { x: 700, y: 500, speedX: 0, speedY: 0, paused: false },
+  ];
+
+  // Handle interaction logic per object
+  objs.forEach((obj, i) => {
+    obj.addEventListener('click', () => {
+      if(state[i].paused) return; // Don't speed up if paused
+      // Temporarily speed up for 1 second
+      if (i === 5) { // circular motion speed
+        state[i].speed = state[i].baseSpeed * 5;
+        setTimeout(() => { state[i].speed = state[i].baseSpeed; }, 1000);
+      } else if (i === 6) { // sinusoidal horizontal speed
+        state[i].speedX = state[i].baseSpeedX * 5;
+        setTimeout(() => { state[i].speedX = state[i].baseSpeedX; }, 1000);
+      } else if (i === 7) {
+        // For random walk, just speed up step size temporarily
+        state[i].speedX = 10;
+        state[i].speedY = 10;
+        setTimeout(() => { state[i].speedX = 0; state[i].speedY = 0; }, 1000);
+      } else {
+        // Others: multiply speed by 5 temporarily
+        state[i].speedX *= 5;
+        state[i].speedY *= 5;
+        setTimeout(() => {
+          state[i].speedX = state[i].baseSpeedX || 0;
+          state[i].speedY = state[i].baseSpeedY || 0;
+        }, 1000);
+      }
+    });
+
+    obj.addEventListener('dblclick', () => {
+      if(state[i].paused) return; // ignore if already paused
+      state[i].paused = true;
+
+      // After 2 seconds, resume movement
+      setTimeout(() => {
+        state[i].paused = false;
+      }, 2000);
+    });
+  });
+
+  function update() {
+    // obj1: moves left to right and resets
+    if (!state[0].paused) {
+      state[0].x += state[0].speedX;
+      if(state[0].x > width) state[0].x = -50;
+    }
+    objs[0].style.left = state[0].x + 'px';
+    objs[0].style.top = state[0].y + 'px';
+
+    // obj2: moves top to bottom and resets
+    if (!state[1].paused) {
+      state[1].y += state[1].speedY;
+      if(state[1].y > height) state[1].y = -50;
+    }
+    objs[1].style.left = state[1].x + 'px';
+    objs[1].style.top = state[1].y + 'px';
+
+    // obj3: bounces horizontally
+    if (!state[2].paused) {
+      state[2].x += state[2].speedX;
+      if(state[2].x > width - 50 || state[2].x < 0) state[2].speedX *= -1;
+    }
+    objs[2].style.left = state[2].x + 'px';
+    objs[2].style.top = state[2].y + 'px';
+
+    // obj4: bounces vertically
+    if (!state[3].paused) {
+      state[3].y += state[3].speedY;
+      if(state[3].y > height - 50 || state[3].y < 0) state[3].speedY *= -1;
+    }
+    objs[3].style.left = state[3].x + 'px';
+    objs[3].style.top = state[3].y + 'px';
+
+    // obj5: moves diagonally bounces inside container
+    if (!state[4].paused) {
+      state[4].x += state[4].speedX;
+      state[4].y += state[4].speedY;
+      if(state[4].x > width - 54 || state[4].x < 0) state[4].speedX *= -1;
+      if(state[4].y > height - 54 || state[4].y < 0) state[4].speedY *= -1;
+    }
+    objs[4].style.left = state[4].x + 'px';
+    objs[4].style.top = state[4].y + 'px';
+
+    // obj6: circular motion
+    if (!state[5].paused) {
+      state[5].angle += state[5].speed;
+    }
+    const x6 = state[5].centerX + Math.cos(state[5].angle) * state[5].radius - 30;
+    const y6 = state[5].centerY + Math.sin(state[5].angle) * state[5].radius - 26;
+    objs[5].style.left = x6 + 'px';
+    objs[5].style.top = y6 + 'px';
+
+    // obj7: sinusoidal horizontal motion
+    if (!state[6].paused) {
+      state[6].x += state[6].speedX;
+      if(state[6].x > width + 50) state[6].x = -50;
+      state[6].angle += state[6].frequency;
+    }
+    const y7 = state[6].baseY + Math.sin(state[6].angle) * state[6].amplitude;
+    objs[6].style.left = state[6].x + 'px';
+    objs[6].style.top = y7 + 'px';
+
+    // obj8: random walk (small steps)
+    if (!state[7].paused) {
+      const stepX = (Math.random() - 0.5) * 4;
+      const stepY = (Math.random() - 0.5) * 4;
+      state[7].x += stepX + (state[7].speedX || 0);
+      state[7].y += stepY + (state[7].speedY || 0);
+
+      // Keep inside container
+      if(state[7].x < 0) state[7].x = 0;
+      if(state[7].x > width - 50) state[7].x = width - 50;
+      if(state[7].y < 0) state[7].y = 0;
+      if(state[7].y > height - 50) state[7].y = height - 50;
+    }
+    objs[7].style.left = state[7].x + 'px';
+    objs[7].style.top = state[7].y + 'px';
+
+    requestAnimationFrame(update);
+  }
+
+  // Initialize some starting positions for obj7 x, as it's used in motion calculation
+  state[6].x = -50;
+
+  update();
+</script>
+
+</body>
+</html>
