@@ -162,6 +162,25 @@
     background: #ecf0f1;
     transform: rotate(45deg);
   }
+  /* Resize handles at corners */
+.handle {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: #fff;
+  border: 2px solid #555;
+  border-radius: 3px;
+  cursor: nwse-resize;
+  user-select: none;
+  z-index: 10;
+}
+
+/* Position handles */
+.handle.tl { top: -10px; left: -10px; cursor: nwse-resize; }
+.handle.tr { top: -10px; right: -10px; cursor: nesw-resize; }
+.handle.bl { bottom: -10px; left: -10px; cursor: nesw-resize; }
+.handle.br { bottom: -10px; right: -10px; cursor: nwse-resize; }
+
 </style>
 </head>
 <body>
@@ -175,6 +194,14 @@
   <div id="obj6" class="object"></div>
   <div id="obj7" class="object"></div>
   <div id="obj8" class="object"></div>
+  <div id="container">
+  <!-- existing objects here -->
+  <div class="handle tl"></div>
+  <div class="handle tr"></div>
+  <div class="handle bl"></div>
+  <div class="handle br"></div>
+</div>
+
 </div>
 
 <script>
@@ -257,6 +284,80 @@
       }, 2000);
     });
   });
+  const containerEl = document.getElementById('container');
+const handles = document.querySelectorAll('.handle');
+
+let isResizing = false;
+let currentHandle = null;
+let startX, startY;
+let startWidth, startHeight;
+
+// Helper function to clamp size so container doesn't get too small
+function clampSize(size, min = 200, max = 1200) {
+  return Math.min(Math.max(size, min), max);
+}
+
+handles.forEach(handle => {
+  handle.addEventListener('mousedown', e => {
+    e.preventDefault();
+    isResizing = true;
+    currentHandle = handle;
+    startX = e.clientX;
+    startY = e.clientY;
+    startWidth = containerEl.offsetWidth;
+    startHeight = containerEl.offsetHeight;
+    window.addEventListener('mousemove', resize);
+    window.addEventListener('mouseup', stopResize);
+  });
+});
+
+function resize(e) {
+  if (!isResizing) return;
+
+  let dx = e.clientX - startX;
+  let dy = e.clientY - startY;
+
+  let newWidth = startWidth;
+  let newHeight = startHeight;
+
+  // Depending on handle position, calculate new size
+  if (currentHandle.classList.contains('br')) {
+    newWidth = clampSize(startWidth + dx);
+    newHeight = clampSize(startHeight + dy);
+  } else if (currentHandle.classList.contains('bl')) {
+    newWidth = clampSize(startWidth - dx);
+    newHeight = clampSize(startHeight + dy);
+    if (newWidth !== startWidth - dx) return;
+    containerEl.style.left = (containerEl.offsetLeft + dx) + 'px';
+  } else if (currentHandle.classList.contains('tr')) {
+    newWidth = clampSize(startWidth + dx);
+    newHeight = clampSize(startHeight - dy);
+    if (newHeight !== clampSize(startHeight - dy)) return;
+    containerEl.style.top = (containerEl.offsetTop + dy) + 'px';
+  } else if (currentHandle.classList.contains('tl')) {
+    newWidth = clampSize(startWidth - dx);
+    newHeight = clampSize(startHeight - dy);
+    if (newWidth !== clampSize(startWidth - dx) || newHeight !== clampSize(startHeight - dy)) return;
+    containerEl.style.left = (containerEl.offsetLeft + dx) + 'px';
+    containerEl.style.top = (containerEl.offsetTop + dy) + 'px';
+  }
+
+  containerEl.style.width = newWidth + 'px';
+  containerEl.style.height = newHeight + 'px';
+
+  // Update width and height globals used for shape motion boundaries
+  // (You might want to expose these as let variables at top so they can update here)
+  width = containerEl.clientWidth;
+  height = containerEl.clientHeight;
+}
+
+function stopResize() {
+  isResizing = false;
+  currentHandle = null;
+  window.removeEventListener('mousemove', resize);
+  window.removeEventListener('mouseup', stopResize);
+}
+
 
   function update() {
     // obj1: moves left to right and resets
