@@ -1,187 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Interactive Moving Shapes</title>
-<style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background: #222;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  #container {
-    position: relative;
-    width: 800px;
-    height: 600px;
-    background: #333;
-    border: 2px solid #555;
-    overflow: hidden;
-  }
-  .object {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    transition: transform 0.3s, filter 0.3s;
-  }
-  .object:hover {
-    transform: scale(1.3);
-    filter: brightness(1.4);
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interactive Moving Shapes</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #222;
+    }
 
-  /* 1. Circle */
-  #obj1 {
-    background: #e74c3c;
-    border-radius: 50%;
-  }
+    #container {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      width: 800px;
+      height: 600px;
+      background: #333;
+      border: 2px solid #555;
+      overflow: hidden;
+    }
 
-  /* 2. Triangle */
-  #obj2 {
-    width: 0;
-    height: 0;
-    border-left: 25px solid transparent;
-    border-right: 25px solid transparent;
-    border-bottom: 50px solid #3498db;
-    background: none;
-  }
+    .object {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      transition: transform 0.3s, filter 0.3s;
+    }
 
-  /* 3. Star */
-  #obj3 {
-    position: relative;
-    color: #f1c40f;
-    width: 0;
-    height: 0;
-    margin: 0;
-  }
-  #obj3::before, #obj3::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -15px;
-    width: 0;
-    height: 0;
-    border-right: 15px solid transparent;
-    border-bottom: 35px solid #f1c40f;
-    border-left: 15px solid transparent;
-    transform: rotate(-35deg);
-    transform-origin: 50% 100%;
-  }
-  #obj3::after {
-    transform: rotate(35deg);
-    transform-origin: 50% 100%;
-    left: 15px;
-  }
+    .object:hover {
+      transform: scale(1.3);
+      filter: brightness(1.4);
+    }
 
-  /* 4. Heart */
-  #obj4 {
-    position: relative;
-    width: 50px;
-    height: 45px;
-    background: #e84393;
-    transform: rotate(-45deg);
-    top: 0;
-    left: 0;
-  }
-  #obj4::before,
-  #obj4::after {
-    content: "";
-    position: absolute;
-    width: 50px;
-    height: 45px;
-    background: #e84393;
-    border-radius: 50%;
-  }
-  #obj4::before {
-    top: -25px;
-    left: 0;
-  }
-  #obj4::after {
-    left: 25px;
-    top: 0;
-  }
+    /* Shapes */
+    #obj1 {
+      background: #e74c3c;
+      border-radius: 50%;
+    }
 
-  /* 5. Pentagon */
-  #obj5 {
-    width: 54px;
-    height: 54px;
-    background: #9b59b6;
-    clip-path: polygon(
-      50% 0%, 
-      90% 35%, 
-      72% 90%, 
-      28% 90%, 
-      10% 35%
-    );
-  }
+    #obj2 {
+      width: 0;
+      height: 0;
+      border-left: 25px solid transparent;
+      border-right: 25px solid transparent;
+      border-bottom: 50px solid #3498db;
+      background: none;
+    }
 
-  /* 6. Hexagon */
-  #obj6 {
-    width: 60px;
-    height: 52px;
-    background: #e67e22;
-    clip-path: polygon(
-      25% 0%, 75% 0%, 
-      100% 50%, 75% 100%, 
-      25% 100%, 0% 50%
-    );
-  }
+    #obj3 {
+      position: relative;
+      color: #f1c40f;
+      width: 0;
+      height: 0;
+      margin: 0;
+    }
 
-  /* 7. Cross */
-  #obj7 {
-    width: 50px;
-    height: 50px;
-    background: transparent;
-  }
-  #obj7::before, #obj7::after {
-    content: '';
-    position: absolute;
-    background: #1abc9c;
-  }
-  #obj7::before {
-    left: 22px;
-    top: 0;
-    width: 6px;
-    height: 50px;
-  }
-  #obj7::after {
-    top: 22px;
-    left: 0;
-    width: 50px;
-    height: 6px;
-  }
+    #obj3::before, #obj3::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -15px;
+      width: 0;
+      height: 0;
+      border-right: 15px solid transparent;
+      border-bottom: 35px solid #f1c40f;
+      border-left: 15px solid transparent;
+      transform: rotate(-35deg);
+      transform-origin: 50% 100%;
+    }
 
-  /* 8. Diamond */
-  #obj8 {
-    width: 50px;
-    height: 50px;
-    background: #ecf0f1;
-    transform: rotate(45deg);
-  }
-  /* Resize handles at corners */
-.handle {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background: #fff;
-  border: 2px solid #555;
-  border-radius: 3px;
-  cursor: nwse-resize;
-  user-select: none;
-  z-index: 10;
-}
+    #obj3::after {
+      transform: rotate(35deg);
+      left: 15px;
+    }
 
-/* Position handles */
-.handle.tl { top: -10px; left: -10px; cursor: nwse-resize; }
-.handle.tr { top: -10px; right: -10px; cursor: nesw-resize; }
-.handle.bl { bottom: -10px; left: -10px; cursor: nesw-resize; }
-.handle.br { bottom: -10px; right: -10px; cursor: nwse-resize; }
+    #obj4 {
+      position: relative;
+      width: 50px;
+      height: 45px;
+      background: #e84393;
+      transform: rotate(-45deg);
+    }
 
-</style>
+    #obj4::before,
+    #obj4::after {
+      content: "";
+      position: absolute;
+      width: 50px;
+      height: 45px;
+      background: #e84393;
+      border-radius: 50%;
+    }
+
+    #obj4::before {
+      top: -25px;
+      left: 0;
+    }
+
+    #obj4::after {
+      left: 25px;
+      top: 0;
+    }
+
+    #obj5 {
+      width: 54px;
+      height: 54px;
+      background: #9b59b6;
+      clip-path: polygon(50% 0%, 90% 35%, 72% 90%, 28% 90%, 10% 35%);
+    }
+
+    #obj6 {
+      width: 60px;
+      height: 52px;
+      background: #e67e22;
+      clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    }
+
+    #obj7 {
+      width: 50px;
+      height: 50px;
+      background: transparent;
+    }
+
+    #obj7::before, #obj7::after {
+      content: '';
+      position: absolute;
+      background: #1abc9c;
+    }
+
+    #obj7::before {
+      left: 22px;
+      top: 0;
+      width: 6px;
+      height: 50px;
+    }
+
+    #obj7::after {
+      top: 22px;
+      left: 0;
+      width: 50px;
+      height: 6px;
+    }
+
+    #obj8 {
+      width: 50px;
+      height: 50px;
+      background: #ecf0f1;
+      transform: rotate(45deg);
+    }
+
+    /* Resize handles */
+    .handle {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: #fff;
+      border: 2px solid #555;
+      border-radius: 3px;
+      cursor: nwse-resize;
+      user-select: none;
+      z-index: 10;
+    }
+
+    .handle.tl { top: -10px; left: -10px; cursor: nwse-resize; }
+    .handle.tr { top: -10px; right: -10px; cursor: nesw-resize; }
+    .handle.bl { bottom: -10px; left: -10px; cursor: nesw-resize; }
+    .handle.br { bottom: -10px; right: -10px; cursor: nwse-resize; }
+  </style>
 </head>
 <body>
 
@@ -194,14 +182,12 @@
   <div id="obj6" class="object"></div>
   <div id="obj7" class="object"></div>
   <div id="obj8" class="object"></div>
-  <div id="container">
-  <!-- existing objects here -->
+
+  <!-- Correctly placed resize handles -->
   <div class="handle tl"></div>
   <div class="handle tr"></div>
   <div class="handle bl"></div>
   <div class="handle br"></div>
-</div>
-
 </div>
 
 <script>
@@ -220,51 +206,32 @@
     document.getElementById('obj8'),
   ];
 
-  // Initial positions and speeds
   const state = [
-    // obj1: moves left to right and resets
     { x: 0, y: 50, speedX: 2, speedY: 0, baseSpeedX: 2, baseSpeedY: 0, paused: false },
-
-    // obj2: moves top to bottom and resets
     { x: 150, y: 0, speedX: 0, speedY: 3, baseSpeedX: 0, baseSpeedY: 3, paused: false },
-
-    // obj3: bounces horizontally
     { x: 0, y: 150, speedX: 4, speedY: 0, baseSpeedX: 4, baseSpeedY: 0, paused: false },
-
-    // obj4: bounces vertically
     { x: 250, y: 0, speedX: 0, speedY: 5, baseSpeedX: 0, baseSpeedY: 5, paused: false },
-
-    // obj5: moves diagonally bounces inside container
     { x: 0, y: 0, speedX: 3, speedY: 3, baseSpeedX: 3, baseSpeedY: 3, paused: false },
-
-    // obj6: circular motion
     { centerX: 400, centerY: 300, angle: 0, radius: 80, speed: 0.05, baseSpeed: 0.05, paused: false },
-
-    // obj7: sinusoidal horizontal motion
     { baseX: 0, baseY: 400, speedX: 2, angle: 0, amplitude: 50, frequency: 0.05, baseSpeedX: 2, paused: false },
-
-    // obj8: random walk
     { x: 700, y: 500, speedX: 0, speedY: 0, paused: false },
   ];
 
-  // Handle interaction logic per object
   objs.forEach((obj, i) => {
     obj.addEventListener('click', () => {
-      if(state[i].paused) return; // Don't speed up if paused
-      // Temporarily speed up for 1 second
-      if (i === 5) { // circular motion speed
+      if (state[i].paused) return;
+
+      if (i === 5) {
         state[i].speed = state[i].baseSpeed * 5;
         setTimeout(() => { state[i].speed = state[i].baseSpeed; }, 1000);
-      } else if (i === 6) { // sinusoidal horizontal speed
+      } else if (i === 6) {
         state[i].speedX = state[i].baseSpeedX * 5;
         setTimeout(() => { state[i].speedX = state[i].baseSpeedX; }, 1000);
       } else if (i === 7) {
-        // For random walk, just speed up step size temporarily
         state[i].speedX = 10;
         state[i].speedY = 10;
         setTimeout(() => { state[i].speedX = 0; state[i].speedY = 0; }, 1000);
       } else {
-        // Others: multiply speed by 5 temporarily
         state[i].speedX *= 5;
         state[i].speedY *= 5;
         setTimeout(() => {
@@ -275,134 +242,117 @@
     });
 
     obj.addEventListener('dblclick', () => {
-      if(state[i].paused) return; // ignore if already paused
+      if (state[i].paused) return;
       state[i].paused = true;
-
-      // After 2 seconds, resume movement
       setTimeout(() => {
         state[i].paused = false;
       }, 2000);
     });
   });
-  const containerEl = document.getElementById('container');
-const handles = document.querySelectorAll('.handle');
 
-let isResizing = false;
-let currentHandle = null;
-let startX, startY;
-let startWidth, startHeight;
+  const handles = document.querySelectorAll('.handle');
+  let isResizing = false;
+  let currentHandle = null;
+  let startX, startY;
+  let startWidth, startHeight;
 
-// Helper function to clamp size so container doesn't get too small
-function clampSize(size, min = 200, max = 1200) {
-  return Math.min(Math.max(size, min), max);
-}
-
-handles.forEach(handle => {
-  handle.addEventListener('mousedown', e => {
-    e.preventDefault();
-    isResizing = true;
-    currentHandle = handle;
-    startX = e.clientX;
-    startY = e.clientY;
-    startWidth = containerEl.offsetWidth;
-    startHeight = containerEl.offsetHeight;
-    window.addEventListener('mousemove', resize);
-    window.addEventListener('mouseup', stopResize);
-  });
-});
-
-function resize(e) {
-  if (!isResizing) return;
-
-  let dx = e.clientX - startX;
-  let dy = e.clientY - startY;
-
-  let newWidth = startWidth;
-  let newHeight = startHeight;
-
-  // Depending on handle position, calculate new size
-  if (currentHandle.classList.contains('br')) {
-    newWidth = clampSize(startWidth + dx);
-    newHeight = clampSize(startHeight + dy);
-  } else if (currentHandle.classList.contains('bl')) {
-    newWidth = clampSize(startWidth - dx);
-    newHeight = clampSize(startHeight + dy);
-    if (newWidth !== startWidth - dx) return;
-    containerEl.style.left = (containerEl.offsetLeft + dx) + 'px';
-  } else if (currentHandle.classList.contains('tr')) {
-    newWidth = clampSize(startWidth + dx);
-    newHeight = clampSize(startHeight - dy);
-    if (newHeight !== clampSize(startHeight - dy)) return;
-    containerEl.style.top = (containerEl.offsetTop + dy) + 'px';
-  } else if (currentHandle.classList.contains('tl')) {
-    newWidth = clampSize(startWidth - dx);
-    newHeight = clampSize(startHeight - dy);
-    if (newWidth !== clampSize(startWidth - dx) || newHeight !== clampSize(startHeight - dy)) return;
-    containerEl.style.left = (containerEl.offsetLeft + dx) + 'px';
-    containerEl.style.top = (containerEl.offsetTop + dy) + 'px';
+  function clampSize(size, min = 200, max = 1200) {
+    return Math.min(Math.max(size, min), max);
   }
 
-  containerEl.style.width = newWidth + 'px';
-  containerEl.style.height = newHeight + 'px';
+  handles.forEach(handle => {
+    handle.addEventListener('mousedown', e => {
+      e.preventDefault();
+      isResizing = true;
+      currentHandle = handle;
+      startX = e.clientX;
+      startY = e.clientY;
+      startWidth = container.offsetWidth;
+      startHeight = container.offsetHeight;
+      window.addEventListener('mousemove', resize);
+      window.addEventListener('mouseup', stopResize);
+    });
+  });
 
-  // Update width and height globals used for shape motion boundaries
-  // (You might want to expose these as let variables at top so they can update here)
-  width = containerEl.clientWidth;
-  height = containerEl.clientHeight;
-}
+  function resize(e) {
+    if (!isResizing) return;
 
-function stopResize() {
-  isResizing = false;
-  currentHandle = null;
-  window.removeEventListener('mousemove', resize);
-  window.removeEventListener('mouseup', stopResize);
-}
+    let dx = e.clientX - startX;
+    let dy = e.clientY - startY;
 
+    let newWidth = startWidth;
+    let newHeight = startHeight;
+
+    if (currentHandle.classList.contains('br')) {
+      newWidth = clampSize(startWidth + dx);
+      newHeight = clampSize(startHeight + dy);
+    } else if (currentHandle.classList.contains('bl')) {
+      newWidth = clampSize(startWidth - dx);
+      newHeight = clampSize(startHeight + dy);
+      container.style.left = (container.offsetLeft + dx) + 'px';
+    } else if (currentHandle.classList.contains('tr')) {
+      newWidth = clampSize(startWidth + dx);
+      newHeight = clampSize(startHeight - dy);
+      container.style.top = (container.offsetTop + dy) + 'px';
+    } else if (currentHandle.classList.contains('tl')) {
+      newWidth = clampSize(startWidth - dx);
+      newHeight = clampSize(startHeight - dy);
+      container.style.left = (container.offsetLeft + dx) + 'px';
+      container.style.top = (container.offsetTop + dy) + 'px';
+    }
+
+    container.style.width = newWidth + 'px';
+    container.style.height = newHeight + 'px';
+
+    width = container.clientWidth;
+    height = container.clientHeight;
+  }
+
+  function stopResize() {
+    isResizing = false;
+    currentHandle = null;
+    window.removeEventListener('mousemove', resize);
+    window.removeEventListener('mouseup', stopResize);
+  }
 
   function update() {
-    // obj1: moves left to right and resets
     if (!state[0].paused) {
       state[0].x += state[0].speedX;
-      if(state[0].x > width) state[0].x = -50;
+      if (state[0].x > width) state[0].x = -50;
     }
     objs[0].style.left = state[0].x + 'px';
     objs[0].style.top = state[0].y + 'px';
 
-    // obj2: moves top to bottom and resets
     if (!state[1].paused) {
       state[1].y += state[1].speedY;
-      if(state[1].y > height) state[1].y = -50;
+      if (state[1].y > height) state[1].y = -50;
     }
     objs[1].style.left = state[1].x + 'px';
     objs[1].style.top = state[1].y + 'px';
 
-    // obj3: bounces horizontally
     if (!state[2].paused) {
       state[2].x += state[2].speedX;
-      if(state[2].x > width - 50 || state[2].x < 0) state[2].speedX *= -1;
+      if (state[2].x > width - 50 || state[2].x < 0) state[2].speedX *= -1;
     }
     objs[2].style.left = state[2].x + 'px';
     objs[2].style.top = state[2].y + 'px';
 
-    // obj4: bounces vertically
     if (!state[3].paused) {
       state[3].y += state[3].speedY;
-      if(state[3].y > height - 50 || state[3].y < 0) state[3].speedY *= -1;
+      if (state[3].y > height - 50 || state[3].y < 0) state[3].speedY *= -1;
     }
     objs[3].style.left = state[3].x + 'px';
     objs[3].style.top = state[3].y + 'px';
 
-    // obj5: moves diagonally bounces inside container
     if (!state[4].paused) {
       state[4].x += state[4].speedX;
       state[4].y += state[4].speedY;
-      if(state[4].x > width - 54 || state[4].x < 0) state[4].speedX *= -1;
-      if(state[4].y > height - 54 || state[4].y < 0) state[4].speedY *= -1;
+      if (state[4].x > width - 54 || state[4].x < 0) state[4].speedX *= -1;
+      if (state[4].y > height - 54 || state[4].y < 0) state[4].speedY *= -1;
     }
     objs[4].style.left = state[4].x + 'px';
     objs[4].style.top = state[4].y + 'px';
 
-    // obj6: circular motion
     if (!state[5].paused) {
       state[5].angle += state[5].speed;
     }
@@ -411,28 +361,23 @@ function stopResize() {
     objs[5].style.left = x6 + 'px';
     objs[5].style.top = y6 + 'px';
 
-    // obj7: sinusoidal horizontal motion
     if (!state[6].paused) {
       state[6].x += state[6].speedX;
-      if(state[6].x > width + 50) state[6].x = -50;
+      if (state[6].x > width + 50) state[6].x = -50;
       state[6].angle += state[6].frequency;
     }
     const y7 = state[6].baseY + Math.sin(state[6].angle) * state[6].amplitude;
     objs[6].style.left = state[6].x + 'px';
     objs[6].style.top = y7 + 'px';
 
-    // obj8: random walk (small steps)
     if (!state[7].paused) {
       const stepX = (Math.random() - 0.5) * 4;
       const stepY = (Math.random() - 0.5) * 4;
       state[7].x += stepX + (state[7].speedX || 0);
       state[7].y += stepY + (state[7].speedY || 0);
 
-      // Keep inside container
-      if(state[7].x < 0) state[7].x = 0;
-      if(state[7].x > width - 50) state[7].x = width - 50;
-      if(state[7].y < 0) state[7].y = 0;
-      if(state[7].y > height - 50) state[7].y = height - 50;
+      state[7].x = Math.max(0, Math.min(state[7].x, width - 50));
+      state[7].y = Math.max(0, Math.min(state[7].y, height - 50));
     }
     objs[7].style.left = state[7].x + 'px';
     objs[7].style.top = state[7].y + 'px';
@@ -440,11 +385,8 @@ function stopResize() {
     requestAnimationFrame(update);
   }
 
-  // Initialize some starting positions for obj7 x, as it's used in motion calculation
   state[6].x = -50;
-
   update();
 </script>
-
 </body>
 </html>
