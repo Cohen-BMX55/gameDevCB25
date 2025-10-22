@@ -306,6 +306,23 @@
 
     width = container.clientWidth;
     height = container.clientHeight;
+    // Ensure all shapes are still inside the resized container
+    objs.forEach((obj, i) => {
+      const rect = obj.getBoundingClientRect();
+      const objWidth = rect.width;
+      const objHeight = rect.height;
+  
+  // Clamp x/y values
+      if (state[i].x !== undefined) {
+        state[i].x = Math.min(state[i].x, width - objWidth);
+      }
+      if (state[i].y !== undefined) {
+        state[i].y = Math.min(state[i].y, height - objHeight);
+      }
+
+  // Special cases (like circle orbit or wave) don't need clamping
+    });
+
   }
 
   function stopResize() {
