@@ -289,16 +289,12 @@
     } else if (currentHandle.classList.contains('bl')) {
       newWidth = clampSize(startWidth - dx);
       newHeight = clampSize(startHeight + dy);
-      container.style.left = (container.offsetLeft + dx) + 'px';
     } else if (currentHandle.classList.contains('tr')) {
       newWidth = clampSize(startWidth + dx);
       newHeight = clampSize(startHeight - dy);
-      container.style.top = (container.offsetTop + dy) + 'px';
     } else if (currentHandle.classList.contains('tl')) {
       newWidth = clampSize(startWidth - dx);
       newHeight = clampSize(startHeight - dy);
-      container.style.left = (container.offsetLeft + dx) + 'px';
-      container.style.top = (container.offsetTop + dy) + 'px';
     }
 
     container.style.width = newWidth + 'px';
