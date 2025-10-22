@@ -191,6 +191,15 @@
 </div>
 
 <script>
+  const keys = {};
+
+  window.addEventListener('keydown', (event) => {
+      keys[event.key.toLowerCase()] = true;
+  });
+  
+  window.addEventListener('keyup', (event) => {
+      keys[event.key.toLowerCase()] = false;
+  });
   const container = document.getElementById('container');
   let width = container.clientWidth;
   let height = container.clientHeight;
@@ -384,8 +393,22 @@
     objs[6].style.top = y7 + 'px';
 
     if (!state[7].paused) {
-      const stepX = (Math.random() - 0.5) * 4;
-      const stepY = (Math.random() - 0.5) * 4;
+      const stepX = 0;
+      const stepY = 0;
+      if (keys['w']) {
+        stepY += 10;
+      }
+      if (keys['a']) {
+        stepX -= 10;
+      }
+      if (keys['s']) {
+        stepY -= 10;
+      }
+      if (keys['d']) {
+        stepX += 10;
+      }
+      
+      
       state[7].x += stepX + (state[7].speedX || 0);
       state[7].y += stepY + (state[7].speedY || 0);
 
