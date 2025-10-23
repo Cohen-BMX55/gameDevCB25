@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TFLite Model Webcam Tester</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.19.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite@0.1.0/dist/tf-tflite.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #111;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+    }
+    #dropzone {
+      border: 3px dashed #555;
+      border-radius: 10px;
+      padding: 50px;
+      margin: 20px;
+      color: #aaa;
+    }
+    #dropzone.dragover {
+      border-color: #0f0;
+      color: #0f0;
+    }
+    video {
+      margin-top: 20px;
+      width: 480px;
+      border-radius: 10px;
+      border: 2px solid #333;
+    }
+    #output {
+      margin-top: 10px;
+      font-size: 1.2em;
+      color: #0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>TFLite Webcam Model Tester</h1>
+  <div id="dropzone">Drag & Drop your <b>.tflite</b> model here</div>
+  <video id="webcam" autoplay playsinline></video>
+  <div id="output">Load a model to start inference...</div>
+
+  <script>
+    const dropzone = document.getElementById('dropzone');
+    const webcam = document.getElementById('webcam');
+    const output = document.getElementById('output');
+    let model = null;
+    let running = false;
+
+    // Handle drag & drop
+    dropzone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+    dropzone.addEventListener('dragleave', e => {
+      dropzone.classList.remove('dragover');
+    });
+    dropzone.addEventListener('drop', async e => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (!file || !file.name.endsWith('.tflite')) {
+        alert('Please drop a .tflite file.');
+        return;
+      }
+      output.textContent = 'Loading model...';
+      const buffer = await file.arrayBuffer();
+      try {
+        model = await tflite.loadTFLiteModel(buffer);
+        output.textContent = 'Model loaded! Starting webcam...';
+        await startWebcam();
+        startInference();
+      } catch (err) {
+        console.error(err);
+        output.textContent = 'Error loading model.';
+      }
+    });
+
+    // Start webcam
+    async function startWebcam() {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      webcam.srcObject = stream;
+      return new Promise(resolve => {
+        webcam.onloadedmetadata = () => resolve();
+      });
+    }
+
+    // Run inference loop
+    async function startInference() {
+      if (running) return;
+      running = true;
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      while (running && model) {
+        // Adjust to model input size if known
+        const inputShape = model.inputs[0]?.shape || [1, 224, 224, 3];
+        const [_, h, w, c] = inputShape;
+        canvas.width = w;
+        canvas.height = h;
+        ctx.drawImage(webcam, 0, 0, w, h);
+        const imgData = tf.browser.fromPixels(canvas).toFloat().div(255).expandDims(0);
+        const prediction = model.predict(imgData);
+        const result = await prediction.data();
+        output.textContent = 'Prediction: [' + Array.from(result).map(x => x.toFixed(3)).join(', ') + ']';
+        imgData.dispose();
+        prediction.dispose();
+        await new Promise(r => requestAnimationFrame(r));
+      }
+    }
+  </script>
+</body>
+</html>
