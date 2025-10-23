@@ -1,117 +1,300 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TFLite Model Webcam Tester</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.19.0/dist/tf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite/dist/tf-tflite.min.js"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      background: #111;
-      color: #eee;
-      margin: 0;
-      padding: 0;
-    }
-    #dropzone {
-      border: 3px dashed #555;
-      border-radius: 10px;
-      padding: 50px;
-      margin: 20px;
-      color: #aaa;
-    }
-    #dropzone.dragover {
-      border-color: #0f0;
-      color: #0f0;
-    }
-    video {
-      margin-top: 20px;
-      width: 480px;
-      border-radius: 10px;
-      border: 2px solid #333;
-    }
-    #output {
-      margin-top: 10px;
-      font-size: 1.2em;
-      color: #0f0;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TFLite Tester — Webcam optional</title>
+
+<!-- TensorFlow.js -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+<!-- TFLite library (latest published on jsdelivr) -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite/dist/tf-tflite.min.js"></script>
+
+<style>
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#0f1113; color:#e6eef6; margin:0; padding:20px; }
+  h1 { margin:0 0 12px 0; font-size:20px; }
+  #controls { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0; }
+  button, label { background:#1b2530; border:1px solid #2f3a45; color:#cfe7ff; padding:8px 12px; border-radius:6px; cursor:pointer; }
+  #dropzone { border:2px dashed #29404d; padding:18px; border-radius:8px; color:#9fb8c9; margin-bottom:10px; }
+  #dropzone.dragover { border-color:#46d6a8; color:#aef0c3; background:rgba(70,214,168,0.03); }
+  #viewer { display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; }
+  video, canvas, img { width:480px; max-width:100%; border-radius:8px; background:#000; border:1px solid #222; }
+  #output { font-family: monospace; background:#081018; padding:10px; border-radius:6px; border:1px solid #122; color:#9ff2c1; min-height:46px; }
+  small { color:#9fb8c9; }
+  .muted { color:#93a7b6; font-size:13px; }
+  input[type=file] { display:none; }
+</style>
 </head>
 <body>
-  <h1>TFLite Webcam Model Tester</h1>
-  <div id="dropzone">Drag & Drop your <b>.tflite</b> model here</div>
-  <video id="webcam" autoplay playsinline></video>
-  <div id="output">Load a model to start inference...</div>
+<h1>TFLite Model Tester — webcam optional</h1>
+<div id="dropzone">Drag & drop a <b>.tflite</b> file here (or click to choose)</div>
+<div id="controls">
+  <button id="btn-webcam">Use Webcam</button>
+  <label for="img-file">Upload Image</label><input id="img-file" type="file" accept="image/*">
+  <label for="video-file">Upload Video</label><input id="video-file" type="file" accept="video/*">
+  <button id="btn-synthetic">Use Synthetic Frames</button>
+  <button id="btn-stop">Stop</button>
+</div>
 
-  <script>
-    const dropzone = document.getElementById('dropzone');
-    const webcam = document.getElementById('webcam');
-    const output = document.getElementById('output');
-    let model = null;
-    let running = false;
+<div id="viewer">
+  <video id="video" autoplay playsinline muted style="display:none"></video>
+  <canvas id="canvas" width="480" height="480"></canvas>
+  <div style="flex:1; min-width:220px">
+    <div id="output">Load a model to begin. <small class="muted">Predictions will appear here</small></div>
+    <div style="margin-top:10px" id="meta"></div>
+  </div>
+</div>
 
-    // Handle drag & drop
-    dropzone.addEventListener('dragover', e => {
-      e.preventDefault();
-      dropzone.classList.add('dragover');
-    });
-    dropzone.addEventListener('dragleave', e => {
-      dropzone.classList.remove('dragover');
-    });
-    dropzone.addEventListener('drop', async e => {
-      e.preventDefault();
-      dropzone.classList.remove('dragover');
-      const file = e.dataTransfer.files[0];
-      if (!file || !file.name.endsWith('.tflite')) {
-        alert('Please drop a .tflite file.');
-        return;
-      }
-      output.textContent = 'Loading model...';
-      const buffer = await file.arrayBuffer();
-      try {
-        model = await tflite.loadTFLiteModel(buffer);
-        output.textContent = 'Model loaded! Starting webcam...';
-        await startWebcam();
-        startInference();
-      } catch (err) {
-        console.error(err);
-        output.textContent = 'Error loading model.';
-      }
-    });
+<script>
+(async ()=>{
 
-    // Start webcam
-    async function startWebcam() {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      webcam.srcObject = stream;
-      return new Promise(resolve => {
-        webcam.onloadedmetadata = () => resolve();
-      });
+// ---- Elements ----
+const dropzone = document.getElementById('dropzone');
+const btnWebcam = document.getElementById('btn-webcam');
+const btnSynthetic = document.getElementById('btn-synthetic');
+const btnStop = document.getElementById('btn-stop');
+const imgFile = document.getElementById('img-file');
+const videoFile = document.getElementById('video-file');
+const videoEl = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const output = document.getElementById('output');
+const meta = document.getElementById('meta');
+
+let model = null;
+let running = false;
+let sourceType = null; // 'webcam' | 'video' | 'image' | 'synthetic'
+let webcamStream = null;
+let frameRequester = null;
+let tfliteLoader = null;
+
+// ---- Logging namespaces (helpful) ----
+console.log('tf global:', window.tf);
+console.log('Potential tflite globals:', window.tflite, window.tfTFLite, (tf && tf.tflite));
+
+// pick loader with fallbacks
+tfliteLoader = window.tflite || window.tfTFLite || (window.tf && window.tf.tflite) || (window.tf && window.tfTFLite);
+console.log('Chosen tflite loader:', tfliteLoader);
+
+// ---- Drag & drop model ----
+dropzone.addEventListener('click', ()=> {
+  const f = document.createElement('input'); f.type='file'; f.accept='.tflite'; f.onchange = e => handleModelFile(e.target.files[0]); f.click();
+});
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', e => dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', async e => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  const f = e.dataTransfer.files[0];
+  await handleModelFile(f);
+});
+
+async function handleModelFile(file) {
+  if (!file) return;
+  if (!file.name.endsWith('.tflite')) { alert('Please drop a .tflite file'); return; }
+  output.textContent = 'Loading model...';
+  try {
+    const buf = await file.arrayBuffer();
+
+    // re-evaluate loader in case script loaded late
+    tfliteLoader = window.tflite || window.tfTFLite || (window.tf && window.tf.tflite) || (window.tf && window.tfTFLite);
+    if (!tfliteLoader || !tfliteLoader.loadTFLiteModel) {
+      console.error('TFLite loader not found. Current globals:', window.tflite, window.tfTFLite, (window.tf && window.tf.tflite));
+      throw new Error('TFLite loader not available in this page. Check console and ensure tfjs-tflite script loaded.');
     }
 
-    // Run inference loop
-    async function startInference() {
-      if (running) return;
-      running = true;
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      while (running && model) {
-        // Adjust to model input size if known
-        const inputShape = model.inputs[0]?.shape || [1, 224, 224, 3];
-        const [_, h, w, c] = inputShape;
-        canvas.width = w;
-        canvas.height = h;
-        ctx.drawImage(webcam, 0, 0, w, h);
-        const imgData = tf.browser.fromPixels(canvas).toFloat().div(255).expandDims(0);
-        const prediction = model.predict(imgData);
-        const result = await prediction.data();
-        output.textContent = 'Prediction: [' + Array.from(result).map(x => x.toFixed(3)).join(', ') + ']';
-        imgData.dispose();
-        prediction.dispose();
-        await new Promise(r => requestAnimationFrame(r));
+    model = await tfliteLoader.loadTFLiteModel(buf);
+    console.log('Loaded model:', model);
+    const inShape = model.inputs && model.inputs[0] && model.inputs[0].shape ? model.inputs[0].shape : null;
+    meta.innerHTML = `<div class="muted">Model loaded. Input shape: ${JSON.stringify(inShape)}</div>`;
+    output.textContent = 'Model loaded — choose a source (webcam/image/video/synthetic).';
+  } catch (err) {
+    console.error(err);
+    output.textContent = 'Error loading model: ' + (err.message||err);
+  }
+}
+
+// ---- Sources ----
+btnWebcam.addEventListener('click', async ()=>{
+  stopAll();
+  sourceType = 'webcam';
+  try {
+    webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    videoEl.srcObject = webcamStream;
+    videoEl.style.display = '';
+    await videoEl.play();
+    startInferenceLoop();
+  } catch (err) {
+    console.warn('Webcam start failed:', err);
+    output.textContent = 'Webcam unavailable: ' + (err.message||err);
+  }
+});
+
+imgFile.addEventListener('change', async (e)=>{
+  const f = e.target.files[0]; if (!f) return;
+  stopAll();
+  sourceType = 'image';
+  const blobUrl = URL.createObjectURL(f);
+  const img = new Image();
+  img.onload = () => {
+    // draw to canvas sized to model input or image
+    canvas.width = img.width; canvas.height = img.height;
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    // single inference (or loop if you prefer)
+    startInferenceLoop(true); // single-run mode true
+    URL.revokeObjectURL(blobUrl);
+  };
+  img.src = blobUrl;
+});
+
+videoFile.addEventListener('change', async e=>{
+  const f = e.target.files[0]; if (!f) return;
+  stopAll();
+  sourceType = 'video';
+  const blobUrl = URL.createObjectURL(f);
+  videoEl.srcObject = null;
+  videoEl.src = blobUrl;
+  videoEl.style.display = '';
+  await videoEl.play();
+  // run inference on video frames
+  startInferenceLoop();
+});
+
+btnSynthetic.addEventListener('click', ()=>{
+  stopAll();
+  sourceType = 'synthetic';
+  videoEl.style.display = 'none';
+  startInferenceLoop();
+});
+
+btnStop.addEventListener('click', stopAll);
+
+function stopAll(){
+  running = false;
+  sourceType = null;
+  output.textContent = 'Stopped.';
+  meta.innerHTML = '';
+  if (webcamStream) {
+    webcamStream.getTracks().forEach(t=>t.stop());
+    webcamStream = null;
+  }
+  if (videoEl) {
+    try { videoEl.pause(); videoEl.srcObject = null; videoEl.src = ''; } catch(e){}
+  }
+  if (frameRequester) cancelAnimationFrame(frameRequester);
+}
+
+// ---- Inference loop ----
+async function startInferenceLoop(singleRun=false){
+  if (!model) { output.textContent = 'Load a .tflite model first.'; return; }
+  running = true;
+  output.textContent = 'Running inference...';
+
+  // determine model input size (fallback to 224x224x3)
+  const inShape = model.inputs && model.inputs[0] && model.inputs[0].shape ? model.inputs[0].shape : [1,224,224,3];
+  const [, inH, inW, inC] = inShape.length===4 ? inShape : [1, inShape[1]||224, inShape[2]||224, inShape[3]||3];
+  canvas.width = inW; canvas.height = inH;
+
+  async function step(){
+    if (!running) return;
+    // draw a frame depending on source
+    if (sourceType === 'webcam') {
+      if (videoEl.readyState >= 2) ctx.drawImage(videoEl, 0, 0, inW, inH);
+      else { frameRequester = requestAnimationFrame(step); return; }
+    } else if (sourceType === 'video') {
+      if (videoEl.readyState >= 2 && !videoEl.paused && !videoEl.ended) {
+        ctx.drawImage(videoEl,0,0,inW,inH);
+      } else {
+        // if video ended, stop loop
+        if (videoEl.ended) { running = false; output.textContent = 'Video ended.'; return; }
       }
+    } else if (sourceType === 'image') {
+      // image already drawn; single-run mode by default for image
+      // nothing else to draw here – keep canvas as-is
+    } else if (sourceType === 'synthetic') {
+      // generate a simple animated noise / gradient
+      const t = Date.now()/200;
+      const id = ctx.createImageData(inW, inH);
+      for (let i=0;i<id.data.length;i+=4){
+        const idx = i/4;
+        const x = idx % inW, y = Math.floor(idx / inW);
+        id.data[i  ] = Math.floor((128 + 127*Math.sin(x/10 + t)) % 256); // R
+        id.data[i+1] = Math.floor((128 + 127*Math.cos(y/14 + t)) % 256); // G
+        id.data[i+2] = Math.floor((128 + 127*Math.sin((x+y)/20 + t)) % 256); // B
+        id.data[i+3] = 255;
+      }
+      ctx.putImageData(id, 0, 0);
+    } else {
+      output.textContent = 'No source chosen.';
+      running = false; return;
     }
-  </script>
+
+    // Prepare tensor: convert canvas pixels -> normalized float tensor [1,h,w,3]
+    let inputTensor = tf.tidy(()=> {
+      let t = tf.browser.fromPixels(canvas);
+      // If the canvas has alpha channel etc, ensure shape matches 3 channels
+      if (t.shape.length===3 && t.shape[2]===4) t = t.slice([0,0,0],[t.shape[0], t.shape[1],3]);
+      // Convert to float and normalize to [0,1]
+      t = t.toFloat().div(255.0);
+      // Some models expect NHWC shape and batch dim — ensure expandDims
+      t = t.expandDims(0);
+      return t;
+    });
+
+    try {
+      // model.predict may return Tensor or TFLite-specific result object
+      const pred = model.predict(inputTensor);
+      let result;
+      if (pred instanceof tf.Tensor) {
+        result = await pred.data();
+        pred.dispose();
+      } else if (pred && typeof pred.data === 'function') {
+        // some tflite wrappers return an object with data()
+        result = await pred.data();
+      } else if (Array.isArray(pred)) {
+        // array of tensors maybe
+        result = [];
+        for (const p of pred) {
+          if (p instanceof tf.Tensor) { result.push(Array.from(await p.data())); p.dispose(); }
+        }
+      } else {
+        result = JSON.stringify(pred).slice(0,300);
+      }
+
+      // show result
+      if (Array.isArray(result)) {
+        // flatten and show top elements
+        const flat = result.length>0 && Array.isArray(result[0]) ? result[0] : result;
+        const topN = flat.slice(0,10).map((v,i)=> `${i}:${(v).toFixed(4)}`).join(' ');
+        output.textContent = 'Pred: [' + topN + (flat.length>10? ' ...':'') + ']';
+      } else if (result && result.length !== undefined) {
+        // TypedArray
+        const arr = Array.from(result).slice(0,10).map(v => v.toFixed(4));
+        output.textContent = 'Pred: [' + arr.join(', ') + (result.length>10? ' ...':'') + ']';
+      } else {
+        output.textContent = 'Pred: ' + String(result);
+      }
+
+    } catch (err) {
+      console.error('Inference error:', err);
+      output.textContent = 'Inference error: ' + (err.message||err);
+      running = false;
+    } finally {
+      inputTensor.dispose();
+    }
+
+    if (singleRun || sourceType==='image') { running = false; return; }
+    frameRequester = requestAnimationFrame(step);
+  }
+
+  step();
+}
+
+// ---- Helpful tip printed to console ----
+console.log('Page ready. If you do not have a webcam, choose "Upload Image", "Upload Video", or "Use Synthetic Frames".');
+
+})(); // end async IIFE
+</script>
 </body>
 </html>
+
