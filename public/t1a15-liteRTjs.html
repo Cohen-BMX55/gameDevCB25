@@ -7,6 +7,12 @@
 
 <!-- TensorFlow.js -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+<script>
+  // Force CPU backend to avoid WebGL warnings
+  tf.setBackend('cpu').then(() => {
+    console.log('✅ Using CPU backend for TensorFlow.js');
+  });
+</script>
 <!-- TFLite library (latest published on jsdelivr) -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite/dist/tf-tflite.min.js"></script>
 
