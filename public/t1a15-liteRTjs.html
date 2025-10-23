@@ -91,7 +91,10 @@ dropzone.addEventListener('dragleave', e => dropzone.classList.remove('dragover'
 dropzone.addEventListener('drop', async e => {
   e.preventDefault();
   dropzone.classList.remove('dragover');
-  const f = e.dataTransfer.files[0];
+  //const f = e.dataTransfer.files[0];
+  const modelPath = 'ei-cohen-bmx55-project-1-classifier-tensorflow-lite-float32-model.7.tflite';
+  const response = await fetch(modelPath);
+  const f = await response.arrayBuffer();
   await handleModelFile(f);
 });
 
