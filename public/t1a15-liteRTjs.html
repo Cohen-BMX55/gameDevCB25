@@ -71,7 +71,7 @@
       output.textContent = 'Loading model...';
       const buffer = await file.arrayBuffer();
       try {
-        model = await tflite.loadTFLiteModel(buffer);
+        model = await tfTFlite.loadTFLiteModel(buffer);
         output.textContent = 'Model loaded! Starting webcam...';
         await startWebcam();
         startInference();
