@@ -19,6 +19,7 @@
 <style>
   body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#0f1113; color:#e6eef6; margin:0; padding:20px; }
   h1 { margin:0 0 12px 0; font-size:20px; }
+  button { align: center color: red }
   #controls { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0; }
   button, label { background:#1b2530; border:1px solid #2f3a45; color:#cfe7ff; padding:8px 12px; border-radius:6px; cursor:pointer; }
   #dropzone { border:2px dashed #29404d; padding:18px; border-radius:8px; color:#9fb8c9; margin-bottom:10px; }
@@ -33,7 +34,8 @@
 </head>
 <body>
 <h1>TFLite Model Tester — webcam optional</h1>
-<div id="dropzone">Drag & drop a <b>.tflite</b> file here (or click to choose)</div>
+<div id="dropzone">Drag & drop a <b>.tflite</b> file here (or click to choose)</div><br>
+<button id="myButton">Start Demo</button>
 <div id="controls">
   <button id="btn-webcam">Use Webcam</button>
   <label for="img-file">Upload Image</label><input id="img-file" type="file" accept="image/*">
@@ -66,6 +68,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const output = document.getElementById('output');
 const meta = document.getElementById('meta');
+const myButton = document.getElementById('myButton');
 
 let model = null;
 let running = false;
@@ -83,7 +86,7 @@ tfliteLoader = window.tflite || window.tfTFLite || (window.tf && window.tf.tflit
 console.log('Chosen tflite loader:', tfliteLoader);
 
 // ---- Drag & drop model ----
-dropzone.addEventListener('click', ()=> {
+/*dropzone.addEventListener('click', ()=> {
   const f = document.createElement('input'); f.type='file'; f.accept='.tflite'; f.onchange = e => handleModelFile(e.target.files[0]); f.click();
 });
 dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
@@ -95,8 +98,15 @@ dropzone.addEventListener('drop', async e => {
   const modelPath = 'https://github.com/Cohen-BMX55/gameDevCB25/blob/main/public/ei-cohen-bmx55-project-1-classifier-tensorflow-lite-float32-model.7.tflite';
   const response = await fetch(modelPath);
   const f = await response.arrayBuffer();
+  await handleModelFile(f);*/
+});
+myButton.addEventListener('click', ()=> {
+  const modelPath = 'https://github.com/Cohen-BMX55/gameDevCB25/blob/main/public/ei-cohen-bmx55-project-1-classifier-tensorflow-lite-float32-model.7.tflite';
+  const response = await fetch(modelPath);
+  const f = await response.arrayBuffer();
   await handleModelFile(f);
 });
+  
 
 async function handleModelFile(file) {
   if (!file) return;
