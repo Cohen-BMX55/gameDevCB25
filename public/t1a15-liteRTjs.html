@@ -101,9 +101,9 @@ dropzone.addEventListener('drop', async e => {
   await handleModelFile(f);
 });*/
 myButton.addEventListener('click', async e => {
-  const f = 'ei-cohen-bmx55-project-1-classifier-tensorflow-lite-float32-model.7.tflite';
+  const getFile = 'ei-cohen-bmx55-project-1-classifier-tensorflow-lite-float32-model.7.tflite';
   //const response = await fetch(modelPath);
-  //const f = await response.arrayBuffer();
+  //const f = await getFile.arrayBuffer();
   await handleModelFile(f);
 });
   
@@ -113,7 +113,17 @@ async function handleModelFile(file) {
   //if (!file.name.endsWith('.tflite')) { alert('Please drop a .tflite file'); return; }
   output.textContent = 'Loading model...';
   try {
-    const buf = await file.arrayBuffer();
+    let buf;
+
+    if (typeof file === 'string') {
+      // treat as URL or filename
+      const response = await fetch(file);
+      buf = await response.arrayBuffer();
+    } else if (file instanceof Blob) {
+      buf = await file.arrayBuffer();
+    } else {
+      throw new Error('Invalid model file type');
+    }
 
     // re-evaluate loader in case script loaded late
     tfliteLoader = window.tflite || window.tfTFLite || (window.tf && window.tf.tflite) || (window.tf && window.tfTFLite);
