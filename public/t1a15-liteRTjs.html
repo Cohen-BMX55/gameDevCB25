@@ -92,7 +92,7 @@ dropzone.addEventListener('drop', async e => {
   e.preventDefault();
   dropzone.classList.remove('dragover');
   //const f = e.dataTransfer.files[0];
-  const modelPath = 'ei-cohen-bmx55-project-1-classifier-tensorflow-lite-float32-model.7.tflite';
+  const modelPath = 'https://github.com/Cohen-BMX55/gameDevCB25/blob/main/public/ei-cohen-bmx55-project-1-classifier-tensorflow-lite-float32-model.7.tflite';
   const response = await fetch(modelPath);
   const f = await response.arrayBuffer();
   await handleModelFile(f);
