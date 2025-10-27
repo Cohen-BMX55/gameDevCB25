@@ -113,7 +113,7 @@ async function handleModelFile(file) {
   //if (!file.name.endsWith('.tflite')) { alert('Please drop a .tflite file'); return; }
   output.textContent = 'Loading model...';
   try {
-    //const buf = await file.arrayBuffer();
+    const buf = await file.arrayBuffer();
 
     // re-evaluate loader in case script loaded late
     tfliteLoader = window.tflite || window.tfTFLite || (window.tf && window.tf.tflite) || (window.tf && window.tfTFLite);
