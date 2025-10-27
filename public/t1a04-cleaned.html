@@ -3,111 +3,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>All HTML Input Types Demo with Live Summary</title>
+  <title>All HTML Input Types Demo with Default Values</title>
 </head>
 <body>
 
-  <h1>All HTML Input Types Demo with Live Summary</h1>
+  <h1>All HTML Input Types Demo with Default Values</h1>
   <form id="inputForm">
     <div class="input-group">
       <label for="text">Text</label>
-      <input type="text" id="text" name="text" placeholder="Enter text" />
+      <input type="text" id="text" name="text" placeholder="Enter text" value="Sample text" />
     </div>
+
     <div class="input-group">
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="Enter password" />
+      <input type="password" id="password" name="password" placeholder="Enter password" value="password123" />
     </div>
+
     <div class="input-group">
       <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="example@domain.com" />
+      <input type="email" id="email" name="email" placeholder="example@domain.com" value="user@example.com" />
     </div>
+
     <div class="input-group">
       <label for="url">URL</label>
-      <input type="url" id="url" name="url" placeholder="https://example.com" />
+      <input type="url" id="url" name="url" placeholder="https://example.com" value="https://example.com" />
     </div>
+
     <div class="input-group">
       <label for="tel">Telephone</label>
-      <input type="tel" id="tel" name="tel" placeholder="+1234567890" />
+      <input type="tel" id="tel" name="tel" placeholder="+1234567890" value="+15551234567" />
     </div>
 
     <div class="input-group">
       <label for="search">Search</label>
-      <input type="search" id="search" name="search" placeholder="Search..." />
+      <input type="search" id="search" name="search" placeholder="Search..." value="Example search" />
     </div>
+
     <div class="input-group">
       <label for="number">Number</label>
-      <input type="number" id="number" name="number" min="0" max="100" />
+      <input type="number" id="number" name="number" min="0" max="100" placeholder="Enter a number" value="42" />
     </div>
+
     <div class="input-group">
       <label for="range">Range</label>
-      <input type="range" id="range" name="range" min="0" max="100" />
+      <input type="range" id="range" name="range" min="0" max="100" value="50" />
     </div>
+
     <div class="input-group">
       <label for="date">Date</label>
-      <input type="date" id="date" name="date" />
+      <input type="date" id="date" name="date" value="2025-10-27" />
     </div>
+
     <div class="input-group">
       <label for="month">Month</label>
-      <input type="month" id="month" name="month" />
+      <input type="month" id="month" name="month" value="2025-10" />
     </div>
+
     <div class="input-group">
       <label for="week">Week</label>
-      <input type="week" id="week" name="week" />
+      <input type="week" id="week" name="week" value="2025-W44" />
     </div>
+
     <div class="input-group">
       <label for="time">Time</label>
-      <input type="time" id="time" name="time" />
+      <input type="time" id="time" name="time" value="12:00" />
     </div>
+
     <div class="input-group">
       <label for="datetime-local">Date & Time (local)</label>
-      <input type="datetime-local" id="datetime-local" name="datetime-local" />
+      <input type="datetime-local" id="datetime-local" name="datetime-local" value="2025-10-27T12:00" />
     </div>
+
     <div class="input-group">
       <label for="color">Color</label>
-      <input type="color" id="color" name="color" value="#ff0000" />
+      <input type="color" id="color" name="color" value="#00aaff" />
     </div>
+
     <div class="input-group">
       <label>Checkboxes</label>
-      <label class="inline"><input type="checkbox" name="checkbox1" /> Option 1</label>
+      <label class="inline"><input type="checkbox" name="checkbox1" checked /> Option 1</label>
       <label class="inline"><input type="checkbox" name="checkbox2" /> Option 2</label>
-      <label class="inline"><input type="checkbox" name="checkbox3" /> Option 3</label>
+      <label class="inline"><input type="checkbox" name="checkbox3" checked /> Option 3</label>
     </div>
+
     <div class="input-group">
       <label>Radio Buttons</label>
-      <label class="inline"><input type="radio" name="radio-group" value="Choice 1" /> Choice 1</label>
+      <label class="inline"><input type="radio" name="radio-group" value="Choice 1" checked /> Choice 1</label>
       <label class="inline"><input type="radio" name="radio-group" value="Choice 2" /> Choice 2</label>
       <label class="inline"><input type="radio" name="radio-group" value="Choice 3" /> Choice 3</label>
     </div>
+
     <div class="input-group">
       <label for="file">File Upload</label>
-      <input type="file" id="file" name="file" />
+      <input type="file" id="file" name="file" placeholder="Choose a file" />
     </div>
+
     <div class="input-group hidden-group">
       <label for="hidden">Hidden Input (not visible)</label>
       <input type="hidden" id="hidden" name="hidden" value="secretValue" />
       <small>This input is hidden and won't show on the page.</small>
     </div>
+
     <div class="input-group">
       <input type="submit" value="Submit" />
       <input type="reset" value="Reset" />
       <input type="button" value="Button" onclick="alert('Button clicked!')" />
     </div>
   </form>
+
   <div id="summary">
     <h2>Live Input Summary</h2>
     <pre id="summaryContent">Start filling the form to see values here...</pre>
   </div>
+
   <script>
     const form = document.getElementById('inputForm');
     const summaryContent = document.getElementById('summaryContent');
     const hiddenInput = document.getElementById('hidden');
 
-    // Update summary function
     function updateSummary() {
       const data = new FormData(form);
       let summaryText = '';
 
-      // Text inputs
       summaryText += `Text: ${data.get('text') || ''}\n`;
       summaryText += `Password: ${data.get('password') ? '*'.repeat(data.get('password').length) : ''}\n`;
       summaryText += `Email: ${data.get('email') || ''}\n`;
@@ -115,29 +132,23 @@
       summaryText += `Telephone: ${data.get('tel') || ''}\n`;
       summaryText += `Search: ${data.get('search') || ''}\n`;
 
-      // Number and Range
       summaryText += `Number: ${data.get('number') || ''}\n`;
       summaryText += `Range: ${data.get('range') || ''}\n`;
 
-      // Date/time inputs
       summaryText += `Date: ${data.get('date') || ''}\n`;
       summaryText += `Month: ${data.get('month') || ''}\n`;
       summaryText += `Week: ${data.get('week') || ''}\n`;
       summaryText += `Time: ${data.get('time') || ''}\n`;
       summaryText += `DateTime-Local: ${data.get('datetime-local') || ''}\n`;
 
-      // Color
       summaryText += `Color: ${data.get('color') || ''}\n`;
 
-      // Checkboxes
       const checkboxes = ['checkbox1', 'checkbox2', 'checkbox3'];
       const checkedBoxes = checkboxes.filter(name => form.elements[name].checked);
       summaryText += `Checkboxes: ${checkedBoxes.length ? checkedBoxes.join(', ') : 'None'}\n`;
 
-      // Radio buttons
       summaryText += `Radio: ${data.get('radio-group') || 'None'}\n`;
 
-      // File upload
       const fileInput = form.elements['file'];
       if (fileInput.files.length > 0) {
         summaryText += `File: ${fileInput.files[0].name} (${fileInput.files[0].type}, ${fileInput.files[0].size} bytes)\n`;
@@ -145,13 +156,11 @@
         summaryText += `File: None\n`;
       }
 
-      // Hidden input
       summaryText += `Hidden Input: ${hiddenInput.value}\n`;
 
       summaryContent.textContent = summaryText;
     }
 
-    // Attach event listeners for all inputs except hidden and buttons
     [...form.elements].forEach(el => {
       if (el.type !== 'hidden' && el.type !== 'submit' && el.type !== 'reset' && el.type !== 'button') {
         el.addEventListener('input', updateSummary);
@@ -159,16 +168,13 @@
       }
     });
 
-    // Initial summary update
     updateSummary();
 
-    // On form submit, show alert with summary, prevent actual submit
     form.addEventListener('submit', e => {
       e.preventDefault();
       alert('Form Submitted!\n\n' + summaryContent.textContent);
     });
 
-    // On reset, clear summary and set hidden input again
     form.addEventListener('reset', () => {
       setTimeout(() => {
         hiddenInput.value = 'secretValue';
