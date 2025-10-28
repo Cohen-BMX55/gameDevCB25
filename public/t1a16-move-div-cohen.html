@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
+  <title>t1a16-move-div-cohen.html</title>
 </head>
 <body onkeypress="myPressEventBody(event)">
   <script>
@@ -9,13 +9,36 @@
 
     function myAuto() {
       const myIm = document.getElementById('myImage01');
-      myIm.style.left = parseInt(myIm.style.left) + 5 + 'px'
+      myIm.style.left = parseInt(myIm.style.left) + 5 + 'px';
       if (parseInt(myIm.style.left > 600 {
-        myIm.style.left = '10px'
-      }
-    }
+        myIm.style.left = '10px';
+      };
+    };
+
+    function myKeyPressBody(event) {
+      alert('You pressed: ${event.key}');
   </script>
-  
+
+  <h1 align=center>t1a16-move-div-cohen.html</h1>
+
+  Have 8 different types of objects move in different ways
+
+  <div style="position:relative; left:0; right:0" id="myDiv01">...</div>
+
+  <button onclick="{
+    const myDiv = document.getElementById('myDiv01')
+    myDiv.style.left = '100px'
+  }">Move to 100px</button><br>
+
+  <button id="myButton02" onclick="{
+    const myDiv = document.getElementById('myDiv01')
+    myDiv.style.left = parseInt(myDiv.style.left) + 20 + 'px'
+  }">Move Right</button><br>
+
+  <b onclick="{
+    myTimer01 = setInterval(myAuto, 50)
+  }">Move Auto</b><br>
+      
 
 </body>
 </html>
