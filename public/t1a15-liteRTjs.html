@@ -171,7 +171,7 @@ imgFile.addEventListener('change', async (e)=>{
     canvas.width = img.width; canvas.height = img.height;
     ctx.drawImage(img,0,0,canvas.width,canvas.height);
     // single inference (or loop if you prefer)
-    startInferenceLoop(true); // single-run mode true
+    startInferenceLoop(); // single-run mode true
     URL.revokeObjectURL(blobUrl);
   };
   img.src = blobUrl;
