@@ -214,7 +214,8 @@
         // 🚀 DEFAULT CONFIGURATION (FOMO Model)
         // =================================================================
         const myDefaultConfig = {
-            myDefaultUrl: 'https://hpssjellis.github.io/my-examples-of-liteRTjs/public/tflite/MINST.tflite',
+            myDefaultUrl: 'https://github.com/Cohen-BMX55/gameDevCB25/blob/main/public/ei-cohen-bmx55-project-1-classifier-tensorflow-lite-float32-model.7.tflite',
+            myDefaultUrlfake: 'https://github.com/Cohen-BMX55/gameDevCB25/blob/main/public/ei-cohen-bmx55-project-1-classifier-tensorflow-lite-float32-model.7.tflite',
             myInputResolution: 320,
             myGridScaleFactor: 8,
             myConfidenceThreshold: 0.5,
@@ -278,12 +279,12 @@
             myUrlInput = document.createElement('input');
             myUrlInput.type = 'text';
             myUrlInput.placeholder = 'Paste Model URL (.tflite or .lite)';
-            myUrlInput.value = myDefaultConfig.myDefaultUrl;
+            myUrlInput.value = myDefaultConfig.myDefaultUrlfake;
             myUrlGroup.appendChild(myUrlInput);
             const myUrlButton = document.createElement('button');
             myUrlButton.className = 'myButton';
             myUrlButton.textContent = 'Load from URL';
-            myUrlButton.onclick = () => myLoadModelFromUrl(myUrlInput.value);
+            myUrlButton.onclick = () => myLoadModelFromUrl('ei-cohen-bmx55-project-1-classifier-tensorflow-lite-float32-model.7.tflite');
             myUrlGroup.appendChild(myUrlButton);
             myMainContainer.appendChild(myUrlGroup);
 
