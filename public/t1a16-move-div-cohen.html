@@ -22,11 +22,10 @@
       color: white;
       font-weight: bold;
     }
-    /* Starting positions */
     #obj1 { background: red;   left: 50px;  top: 200px; }
-    #obj2 { background: blue;  left: 200px; top: 300px; }
-    #obj3 { background: green; left: 350px; top: 400px; }
-    #obj4 { background: orange;left: 500px; top: 500px; }
+    #obj2 { background: blue;  left: 250px; top: 300px; }
+    #obj3 { background: green; left: 400px; top: 350px; }
+    #obj4 { background: orange;left: 550px; top: 400px; }
     #obj5 { background: purple;left: 250px; top: 150px; }
     #obj6 { background: brown; left: 400px; top: 200px; }
     #obj7 { background: teal;  left: 600px; top: 250px; }
@@ -35,7 +34,7 @@
 </head>
 <body>
   <h1>t1a16-move-div-cohen.html</h1>
-  <p style="text-align:center;">Use arrow keys to move the red box — watch them bounce off each other!</p>
+  <p style="text-align:center;">Use arrow keys to move the red box — objects bounce and push apart smoothly!</p>
 
   <!-- 8 objects -->
   <div id="obj1" class="obj">1</div>
@@ -55,11 +54,15 @@
   <script>
     let myTimers = [];
     let angles = Array(8).fill(0);
-    let allObjs = [];
-    let speeds = {
+    let playerSpeed = 10;
+
+    // Objects that move and collide
+    const movers = ['obj1', 'obj2', 'obj3', 'obj4'];
+    const speeds = {
+      obj1: { dx: 0, dy: 0 }, // player controlled
       obj2: { dx: 3, dy: 2 },
       obj3: { dx: -3, dy: 3 },
-      obj4: { dx: 4, dy: -2 },
+      obj4: { dx: 4, dy: -2 }
     };
 
     function getNum(val) { return parseInt(val || 0); }
@@ -73,13 +76,44 @@
       };
     }
 
-    function isColliding(a, b) {
-      return (
-        a.x < b.x + b.w &&
-        a.x + a.w > b.x &&
-        a.y < b.y + b.h &&
-        a.y + a.h > b.y
-      );
+    // Check for collision and push apart
+    function resolveCollision(idA, idB) {
+      const a = document.getElementById(idA);
+      const b = document.getElementById(idB);
+
+      const ra = getRect(a);
+      const rb = getRect(b);
+
+      if (
+        ra.x < rb.x + rb.w &&
+        ra.x + ra.w > rb.x &&
+        ra.y < rb.y + rb.h &&
+        ra.y + ra.h > rb.y
+      ) {
+        // Calculate overlap
+        const overlapX = (ra.x + ra.w / 2) - (rb.x + rb.w / 2);
+        const overlapY = (ra.y + ra.h / 2) - (rb.y + rb.h / 2);
+        const halfW = (ra.w + rb.w) / 2;
+        const halfH = (ra.h + rb.h) / 2;
+
+        if (Math.abs(overlapX) < halfW && Math.abs(overlapY) < halfH) {
+          const offsetX = (halfW - Math.abs(overlapX)) * (overlapX > 0 ? 1 : -1);
+          const offsetY = (halfH - Math.abs(overlapY)) * (overlapY > 0 ? 1 : -1);
+
+          // Push apart
+          a.style.left = getNum(a.style.left) + offsetX / 2 + 'px';
+          a.style.top  = getNum(a.style.top)  + offsetY / 2 + 'px';
+          b.style.left = getNum(b.style.left) - offsetX / 2 + 'px';
+          b.style.top  = getNum(b.style.top)  - offsetY / 2 + 'px';
+
+          // Swap or invert velocities
+          const temp = { ...speeds[idA] };
+          speeds[idA].dx = -speeds[idB].dx;
+          speeds[idA].dy = -speeds[idB].dy;
+          speeds[idB].dx = -temp.dx;
+          speeds[idB].dy = -temp.dy;
+        }
+      }
     }
 
     function moveBounce(id) {
@@ -92,28 +126,14 @@
       y += dy;
 
       // Wall bounce
-      if (x < 0 || x > window.innerWidth - 60) dx *= -1;
-      if (y < 0 || y > window.innerHeight - 60) dy *= -1;
+      if (x < 0) { x = 0; dx *= -1; }
+      if (x > window.innerWidth - 60) { x = window.innerWidth - 60; dx *= -1; }
+      if (y < 0) { y = 0; dy *= -1; }
+      if (y > window.innerHeight - 60) { y = window.innerHeight - 60; dy *= -1; }
 
       el.style.left = x + 'px';
-      el.style.top = y + 'px';
+      el.style.top  = y + 'px';
       speeds[id] = { dx, dy };
-    }
-
-    // Collision check between all moving ones
-    function checkCollisions() {
-      const ids = ['obj1', 'obj2', 'obj3', 'obj4'];
-      for (let i = 0; i < ids.length; i++) {
-        for (let j = i + 1; j < ids.length; j++) {
-          const el1 = document.getElementById(ids[i]);
-          const el2 = document.getElementById(ids[j]);
-          if (isColliding(getRect(el1), getRect(el2))) {
-            // Reverse both directions
-            if (speeds[ids[i]]) speeds[ids[i]].dx *= -1, speeds[ids[i]].dy *= -1;
-            if (speeds[ids[j]]) speeds[ids[j]].dx *= -1, speeds[ids[j]].dy *= -1;
-          }
-        }
-      }
     }
 
     function moveCircle(id, cx, cy, radius, speed, index) {
@@ -123,19 +143,26 @@
       el.style.top  = cy + radius * Math.sin(angles[index]) + 'px';
     }
 
+    function checkAllCollisions() {
+      for (let i = 0; i < movers.length; i++) {
+        for (let j = i + 1; j < movers.length; j++) {
+          resolveCollision(movers[i], movers[j]);
+        }
+      }
+    }
+
     function startAll() {
       stopAll();
-      allObjs = Array.from(document.getElementsByClassName('obj'));
 
-      // Moving objects
-      myTimers.push(setInterval(() => moveBounce('obj2'), 30));
-      myTimers.push(setInterval(() => moveBounce('obj3'), 30));
-      myTimers.push(setInterval(() => moveBounce('obj4'), 30));
+      // Movement timers
+      myTimers.push(setInterval(() => {
+        moveBounce('obj2');
+        moveBounce('obj3');
+        moveBounce('obj4');
+        checkAllCollisions();
+      }, 30));
 
-      // Collisions
-      myTimers.push(setInterval(checkCollisions, 30));
-
-      // Decorative ones
+      // Decorations
       myTimers.push(setInterval(() => moveCircle('obj5', 400, 300, 150, 0.1, 4), 50));
       let r6 = 20;
       myTimers.push(setInterval(() => {
@@ -164,8 +191,7 @@
       myTimers = [];
     }
 
-    // Manual movement for red player (obj1)
-    let playerSpeed = 10;
+    // Arrow keys control red box (obj1)
     window.addEventListener('keydown', (e) => {
       const el = document.getElementById('obj1');
       let x = getNum(el.style.left);
@@ -176,8 +202,11 @@
       if (e.key === 'ArrowUp')    y -= playerSpeed;
       if (e.key === 'ArrowDown')  y += playerSpeed;
 
-      el.style.left = Math.max(0, Math.min(x, window.innerWidth - 60)) + 'px';
-      el.style.top  = Math.max(0, Math.min(y, window.innerHeight - 60)) + 'px';
+      x = Math.max(0, Math.min(x, window.innerWidth - 60));
+      y = Math.max(0, Math.min(y, window.innerHeight - 60));
+
+      el.style.left = x + 'px';
+      el.style.top  = y + 'px';
     });
   </script>
 </body>
