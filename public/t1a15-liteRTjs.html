@@ -171,9 +171,10 @@ imgFile.addEventListener('change', async (e)=>{
     ctx.drawImage(img,0,0,canvas.width,canvas.height);
     // single inference (or loop if you prefer)
     startInferenceLoop(true); // single-run mode true
-    URL.revokeObjectURL(blobUrl);
+    
   };
   img.src = blobUrl;
+  URL.revokeObjectURL(blobUrl);
 });
 
 videoFile.addEventListener('change', async e=>{
