@@ -11,9 +11,7 @@
       margin: 0;
       padding: 0;
     }
-    h1 {
-      text-align: center;
-    }
+    h1 { text-align: center; }
     .obj {
       position: absolute;
       width: 50px;
@@ -24,23 +22,22 @@
       color: white;
       font-weight: bold;
     }
-    /* Start positions */
+    /* Starting positions */
     #obj1 { background: red;   left: 50px;  top: 200px; }
-    #obj2 { background: blue;  left: 150px; top: 300px; }
-    #obj3 { background: green; left: 250px; top: 400px; }
-    #obj4 { background: orange;left: 350px; top: 500px; }
-    #obj5 { background: purple;left: 200px; top: 150px; }
+    #obj2 { background: blue;  left: 200px; top: 300px; }
+    #obj3 { background: green; left: 350px; top: 400px; }
+    #obj4 { background: orange;left: 500px; top: 500px; }
+    #obj5 { background: purple;left: 250px; top: 150px; }
     #obj6 { background: brown; left: 400px; top: 200px; }
-    #obj7 { background: teal;  left: 300px; top: 250px; }
-    #obj8 { background: black; left: 500px; top: 350px; }
+    #obj7 { background: teal;  left: 600px; top: 250px; }
+    #obj8 { background: black; left: 700px; top: 350px; }
   </style>
 </head>
 <body>
   <h1>t1a16-move-div-cohen.html</h1>
+  <p style="text-align:center;">Use arrow keys to move the red box — watch them bounce off each other!</p>
 
-  <p style="text-align:center;">Use arrow keys to move the red square. Click buttons to start and stop auto motion.</p>
-
-  <!-- 8 moving divs -->
+  <!-- 8 objects -->
   <div id="obj1" class="obj">1</div>
   <div id="obj2" class="obj">2</div>
   <div id="obj3" class="obj">3</div>
@@ -50,7 +47,7 @@
   <div id="obj7" class="obj">7</div>
   <div id="obj8" class="obj">8</div>
 
-  <div style="text-align:center; margin-top:600px;">
+  <div style="text-align:center; margin-top:620px;">
     <button onclick="startAll()">▶ Start All</button>
     <button onclick="stopAll()">⏸ Stop All</button>
   </div>
@@ -58,27 +55,33 @@
   <script>
     let myTimers = [];
     let angles = Array(8).fill(0);
+    let allObjs = [];
     let speeds = {
-      obj2: { dx: 4, dy: 3 },
-      obj3: { dx: 0, dy: 5 },
-      obj4: { dx: 5, dy: 0 }
+      obj2: { dx: 3, dy: 2 },
+      obj3: { dx: -3, dy: 3 },
+      obj4: { dx: 4, dy: -2 },
     };
 
-    // Helper to get numeric position even if CSS set it
-    function getNum(val) {
-      return parseInt(val || 0);
+    function getNum(val) { return parseInt(val || 0); }
+
+    function getRect(el) {
+      return {
+        x: getNum(el.style.left),
+        y: getNum(el.style.top),
+        w: el.offsetWidth,
+        h: el.offsetHeight
+      };
     }
 
-    // Basic linear movement
-    function moveLinearRight(id, speed) {
-      const el = document.getElementById(id);
-      let x = getNum(el.style.left);
-      x += speed;
-      if (x > window.innerWidth - 60) x = 0;
-      el.style.left = x + 'px';
+    function isColliding(a, b) {
+      return (
+        a.x < b.x + b.w &&
+        a.x + a.w > b.x &&
+        a.y < b.y + b.h &&
+        a.y + a.h > b.y
+      );
     }
 
-    // Bounce off window edges
     function moveBounce(id) {
       const el = document.getElementById(id);
       let x = getNum(el.style.left);
@@ -88,6 +91,7 @@
       x += dx;
       y += dy;
 
+      // Wall bounce
       if (x < 0 || x > window.innerWidth - 60) dx *= -1;
       if (y < 0 || y > window.innerHeight - 60) dy *= -1;
 
@@ -96,7 +100,22 @@
       speeds[id] = { dx, dy };
     }
 
-    // Circle and spiral motion
+    // Collision check between all moving ones
+    function checkCollisions() {
+      const ids = ['obj1', 'obj2', 'obj3', 'obj4'];
+      for (let i = 0; i < ids.length; i++) {
+        for (let j = i + 1; j < ids.length; j++) {
+          const el1 = document.getElementById(ids[i]);
+          const el2 = document.getElementById(ids[j]);
+          if (isColliding(getRect(el1), getRect(el2))) {
+            // Reverse both directions
+            if (speeds[ids[i]]) speeds[ids[i]].dx *= -1, speeds[ids[i]].dy *= -1;
+            if (speeds[ids[j]]) speeds[ids[j]].dx *= -1, speeds[ids[j]].dy *= -1;
+          }
+        }
+      }
+    }
+
     function moveCircle(id, cx, cy, radius, speed, index) {
       const el = document.getElementById(id);
       angles[index] += speed;
@@ -106,19 +125,18 @@
 
     function startAll() {
       stopAll();
+      allObjs = Array.from(document.getElementsByClassName('obj'));
 
-      // Obj1: moves to the right
-      myTimers.push(setInterval(() => moveLinearRight('obj1', 5), 50));
+      // Moving objects
+      myTimers.push(setInterval(() => moveBounce('obj2'), 30));
+      myTimers.push(setInterval(() => moveBounce('obj3'), 30));
+      myTimers.push(setInterval(() => moveBounce('obj4'), 30));
 
-      // Obj2, 3, 4: bounce around
-      myTimers.push(setInterval(() => moveBounce('obj2'), 50));
-      myTimers.push(setInterval(() => moveBounce('obj3'), 50));
-      myTimers.push(setInterval(() => moveBounce('obj4'), 50));
+      // Collisions
+      myTimers.push(setInterval(checkCollisions, 30));
 
-      // Obj5: circular
+      // Decorative ones
       myTimers.push(setInterval(() => moveCircle('obj5', 400, 300, 150, 0.1, 4), 50));
-
-      // Obj6: spiral
       let r6 = 20;
       myTimers.push(setInterval(() => {
         moveCircle('obj6', 600, 400, r6, 0.15, 5);
@@ -126,14 +144,12 @@
         if (r6 > 200) r6 = 20;
       }, 50));
 
-      // Obj7: random jumps
       myTimers.push(setInterval(() => {
         const el = document.getElementById('obj7');
         el.style.left = Math.random() * (window.innerWidth - 60) + 'px';
         el.style.top  = Math.random() * (window.innerHeight - 60) + 'px';
       }, 300));
 
-      // Obj8: sine wave
       let x8 = 0;
       myTimers.push(setInterval(() => {
         const el = document.getElementById('obj8');
@@ -148,18 +164,18 @@
       myTimers = [];
     }
 
-    // ✅ Arrow-key movement for red object
-    window.addEventListener('keydown', (event) => {
+    // Manual movement for red player (obj1)
+    let playerSpeed = 10;
+    window.addEventListener('keydown', (e) => {
       const el = document.getElementById('obj1');
       let x = getNum(el.style.left);
       let y = getNum(el.style.top);
 
-      if (event.key === 'ArrowRight') x += 10;
-      if (event.key === 'ArrowLeft')  x -= 10;
-      if (event.key === 'ArrowUp')    y -= 10;
-      if (event.key === 'ArrowDown')  y += 10;
+      if (e.key === 'ArrowRight') x += playerSpeed;
+      if (e.key === 'ArrowLeft')  x -= playerSpeed;
+      if (e.key === 'ArrowUp')    y -= playerSpeed;
+      if (e.key === 'ArrowDown')  y += playerSpeed;
 
-      // keep inside window bounds
       el.style.left = Math.max(0, Math.min(x, window.innerWidth - 60)) + 'px';
       el.style.top  = Math.max(0, Math.min(y, window.innerHeight - 60)) + 'px';
     });
