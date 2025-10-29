@@ -11,7 +11,9 @@
       margin: 0;
       padding: 0;
     }
-    h1 { text-align: center; }
+    h1 {
+      text-align: center;
+    }
     .obj {
       position: absolute;
       width: 50px;
@@ -22,21 +24,23 @@
       color: white;
       font-weight: bold;
     }
+    /* Start positions */
     #obj1 { background: red;   left: 50px;  top: 200px; }
-    #obj2 { background: blue;  left: 250px; top: 300px; }
-    #obj3 { background: green; left: 400px; top: 350px; }
-    #obj4 { background: orange;left: 550px; top: 400px; }
-    #obj5 { background: purple;left: 250px; top: 150px; }
+    #obj2 { background: blue;  left: 150px; top: 300px; }
+    #obj3 { background: green; left: 250px; top: 400px; }
+    #obj4 { background: orange;left: 350px; top: 500px; }
+    #obj5 { background: purple;left: 200px; top: 150px; }
     #obj6 { background: brown; left: 400px; top: 200px; }
-    #obj7 { background: teal;  left: 600px; top: 250px; }
-    #obj8 { background: black; left: 700px; top: 350px; }
+    #obj7 { background: teal;  left: 300px; top: 250px; }
+    #obj8 { background: black; left: 500px; top: 350px; }
   </style>
 </head>
 <body>
   <h1>t1a16-move-div-cohen.html</h1>
-  <p style="text-align:center;">Use arrow keys to move the red box — objects bounce and push apart smoothly!</p>
 
-  <!-- 8 objects -->
+  <p style="text-align:center;">Use arrow keys to move the red square. Click buttons to start and stop auto motion.</p>
+
+  <!-- 8 moving divs -->
   <div id="obj1" class="obj">1</div>
   <div id="obj2" class="obj">2</div>
   <div id="obj3" class="obj">3</div>
@@ -46,7 +50,7 @@
   <div id="obj7" class="obj">7</div>
   <div id="obj8" class="obj">8</div>
 
-  <div style="text-align:center; margin-top:620px;">
+  <div style="text-align:center; margin-top:600px;">
     <button onclick="startAll()">▶ Start All</button>
     <button onclick="stopAll()">⏸ Stop All</button>
   </div>
@@ -54,68 +58,27 @@
   <script>
     let myTimers = [];
     let angles = Array(8).fill(0);
-    let playerSpeed = 10;
-
-    // Objects that move and collide
-    const movers = ['obj1', 'obj2', 'obj3', 'obj4'];
-    const speeds = {
-      obj1: { dx: 0, dy: 0 }, // player controlled
-      obj2: { dx: 3, dy: 2 },
-      obj3: { dx: -3, dy: 3 },
-      obj4: { dx: 4, dy: -2 }
+    let speeds = {
+      obj2: { dx: 4, dy: 3 },
+      obj3: { dx: 0, dy: 5 },
+      obj4: { dx: 5, dy: 0 }
     };
 
-    function getNum(val) { return parseInt(val || 0); }
-
-    function getRect(el) {
-      return {
-        x: getNum(el.style.left),
-        y: getNum(el.style.top),
-        w: el.offsetWidth,
-        h: el.offsetHeight
-      };
+    // Helper to get numeric position even if CSS set it
+    function getNum(val) {
+      return parseInt(val || 0);
     }
 
-    // Check for collision and push apart
-    function resolveCollision(idA, idB) {
-      const a = document.getElementById(idA);
-      const b = document.getElementById(idB);
-
-      const ra = getRect(a);
-      const rb = getRect(b);
-
-      if (
-        ra.x < rb.x + rb.w &&
-        ra.x + ra.w > rb.x &&
-        ra.y < rb.y + rb.h &&
-        ra.y + ra.h > rb.y
-      ) {
-        // Calculate overlap
-        const overlapX = (ra.x + ra.w / 2) - (rb.x + rb.w / 2);
-        const overlapY = (ra.y + ra.h / 2) - (rb.y + rb.h / 2);
-        const halfW = (ra.w + rb.w) / 2;
-        const halfH = (ra.h + rb.h) / 2;
-
-        if (Math.abs(overlapX) < halfW && Math.abs(overlapY) < halfH) {
-          const offsetX = (halfW - Math.abs(overlapX)) * (overlapX > 0 ? 1 : -1);
-          const offsetY = (halfH - Math.abs(overlapY)) * (overlapY > 0 ? 1 : -1);
-
-          // Push apart
-          a.style.left = getNum(a.style.left) + offsetX / 2 + 'px';
-          a.style.top  = getNum(a.style.top)  + offsetY / 2 + 'px';
-          b.style.left = getNum(b.style.left) - offsetX / 2 + 'px';
-          b.style.top  = getNum(b.style.top)  - offsetY / 2 + 'px';
-
-          // Swap or invert velocities
-          const temp = { ...speeds[idA] };
-          speeds[idA].dx = -speeds[idB].dx;
-          speeds[idA].dy = -speeds[idB].dy;
-          speeds[idB].dx = -temp.dx;
-          speeds[idB].dy = -temp.dy;
-        }
-      }
+    // Basic linear movement
+    function moveLinearRight(id, speed) {
+      const el = document.getElementById(id);
+      let x = getNum(el.style.left);
+      x += speed;
+      if (x > window.innerWidth - 60) x = 0;
+      el.style.left = x + 'px';
     }
 
+    // Bounce off window edges
     function moveBounce(id) {
       const el = document.getElementById(id);
       let x = getNum(el.style.left);
@@ -125,17 +88,15 @@
       x += dx;
       y += dy;
 
-      // Wall bounce
-      if (x < 0) { x = 0; dx *= -1; }
-      if (x > window.innerWidth - 60) { x = window.innerWidth - 60; dx *= -1; }
-      if (y < 0) { y = 0; dy *= -1; }
-      if (y > window.innerHeight - 60) { y = window.innerHeight - 60; dy *= -1; }
+      if (x < 0 || x > window.innerWidth - 60) dx *= -1;
+      if (y < 0 || y > window.innerHeight - 60) dy *= -1;
 
       el.style.left = x + 'px';
-      el.style.top  = y + 'px';
+      el.style.top = y + 'px';
       speeds[id] = { dx, dy };
     }
 
+    // Circle and spiral motion
     function moveCircle(id, cx, cy, radius, speed, index) {
       const el = document.getElementById(id);
       angles[index] += speed;
@@ -143,27 +104,21 @@
       el.style.top  = cy + radius * Math.sin(angles[index]) + 'px';
     }
 
-    function checkAllCollisions() {
-      for (let i = 0; i < movers.length; i++) {
-        for (let j = i + 1; j < movers.length; j++) {
-          resolveCollision(movers[i], movers[j]);
-        }
-      }
-    }
-
     function startAll() {
       stopAll();
 
-      // Movement timers
-      myTimers.push(setInterval(() => {
-        moveBounce('obj2');
-        moveBounce('obj3');
-        moveBounce('obj4');
-        checkAllCollisions();
-      }, 30));
+      // Obj1: moves to the right
+      myTimers.push(setInterval(() => moveLinearRight('obj1', 5), 50));
 
-      // Decorations
+      // Obj2, 3, 4: bounce around
+      myTimers.push(setInterval(() => moveBounce('obj2'), 50));
+      myTimers.push(setInterval(() => moveBounce('obj3'), 50));
+      myTimers.push(setInterval(() => moveBounce('obj4'), 50));
+
+      // Obj5: circular
       myTimers.push(setInterval(() => moveCircle('obj5', 400, 300, 150, 0.1, 4), 50));
+
+      // Obj6: spiral
       let r6 = 20;
       myTimers.push(setInterval(() => {
         moveCircle('obj6', 600, 400, r6, 0.15, 5);
@@ -171,12 +126,14 @@
         if (r6 > 200) r6 = 20;
       }, 50));
 
+      // Obj7: random jumps
       myTimers.push(setInterval(() => {
         const el = document.getElementById('obj7');
         el.style.left = Math.random() * (window.innerWidth - 60) + 'px';
         el.style.top  = Math.random() * (window.innerHeight - 60) + 'px';
       }, 300));
 
+      // Obj8: sine wave
       let x8 = 0;
       myTimers.push(setInterval(() => {
         const el = document.getElementById('obj8');
@@ -191,22 +148,20 @@
       myTimers = [];
     }
 
-    // Arrow keys control red box (obj1)
-    window.addEventListener('keydown', (e) => {
+    // ✅ Arrow-key movement for red object
+    window.addEventListener('keydown', (event) => {
       const el = document.getElementById('obj1');
       let x = getNum(el.style.left);
       let y = getNum(el.style.top);
 
-      if (e.key === 'ArrowRight') x += playerSpeed;
-      if (e.key === 'ArrowLeft')  x -= playerSpeed;
-      if (e.key === 'ArrowUp')    y -= playerSpeed;
-      if (e.key === 'ArrowDown')  y += playerSpeed;
+      if (event.key === 'ArrowRight') x += 10;
+      if (event.key === 'ArrowLeft')  x -= 10;
+      if (event.key === 'ArrowUp')    y -= 10;
+      if (event.key === 'ArrowDown')  y += 10;
 
-      x = Math.max(0, Math.min(x, window.innerWidth - 60));
-      y = Math.max(0, Math.min(y, window.innerHeight - 60));
-
-      el.style.left = x + 'px';
-      el.style.top  = y + 'px';
+      // keep inside window bounds
+      el.style.left = Math.max(0, Math.min(x, window.innerWidth - 60)) + 'px';
+      el.style.top  = Math.max(0, Math.min(y, window.innerHeight - 60)) + 'px';
     });
   </script>
 </body>
