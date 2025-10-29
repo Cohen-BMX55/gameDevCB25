@@ -5,8 +5,9 @@
   <meta charset="UTF-8">
   <style>
     body {
-      background: #f2f2f2;
+      background: #eef;
       font-family: Arial, sans-serif;
+      overflow: hidden;
     }
     h1 {
       text-align: center;
@@ -21,20 +22,20 @@
       color: white;
       font-weight: bold;
     }
-    #obj1 { background: red; left: 20px; top: 100px; }
-    #obj2 { background: blue; left: 20px; top: 200px; }
-    #obj3 { background: green; left: 20px; top: 300px; }
-    #obj4 { background: orange; left: 20px; top: 400px; }
-    #obj5 { background: purple; left: 200px; top: 100px; }
-    #obj6 { background: brown; left: 400px; top: 150px; }
-    #obj7 { background: teal; left: 300px; top: 250px; }
+    #obj1 { background: red;   left: 50px;  top: 100px; }
+    #obj2 { background: blue;  left: 150px; top: 200px; }
+    #obj3 { background: green; left: 250px; top: 300px; }
+    #obj4 { background: orange;left: 350px; top: 400px; }
+    #obj5 { background: purple;left: 200px; top: 150px; }
+    #obj6 { background: brown; left: 400px; top: 200px; }
+    #obj7 { background: teal;  left: 300px; top: 250px; }
     #obj8 { background: black; left: 500px; top: 350px; }
   </style>
 </head>
-<body onkeypress="myKeyPressBody(event)">
+<body onkeydown="myKeyPressBody(event)">
   <h1>t1a16-move-div-cohen.html</h1>
 
-  <p>Have 8 different types of objects move in different ways</p>
+  <p>Eight objects moving in different ways — use arrow keys to move the red one.</p>
 
   <!-- 8 moving divs -->
   <div id="obj1" class="obj">1</div>
@@ -46,22 +47,17 @@
   <div id="obj7" class="obj">7</div>
   <div id="obj8" class="obj">8</div>
 
-  <button onclick="{
-    const myDiv = document.getElementById('obj1');
-    myDiv.style.left = '100px';
-  }">Move Obj1 to 100px</button>
-
-  <button onclick="{
-    const myDiv = document.getElementById('obj1');
-    myDiv.style.left = parseInt(myDiv.style.left) + 20 + 'px';
-  }">Move Obj1 Right</button>
-
-  <button onclick="startAll()">Move All Auto</button>
-  <button onclick="stopAll()">Stop All</button>
+  <button onclick="startAll()">▶ Start All Moving</button>
+  <button onclick="stopAll()">⏸ Stop All</button>
 
   <script>
     let myTimers = [];
-    let angles = Array(8).fill(0); // for circular motion
+    let angles = Array(8).fill(0);
+    let speeds = {
+      obj2: { dx: 4, dy: 3 },
+      obj3: { dx: 0, dy: 5 },
+      obj4: { dx: 5, dy: 0 }
+    };
 
     function moveLinearRight(id, speed) {
       const el = document.getElementById(id);
@@ -71,60 +67,45 @@
       el.style.left = x + 'px';
     }
 
-    function moveDiagonal(id, dx, dy) {
+    function moveBounce(id) {
       const el = document.getElementById(id);
       let x = parseInt(el.style.left);
       let y = parseInt(el.style.top);
-      x += dx; y += dy;
-      if (x > window.innerWidth - 60 || x < 0) dx *= -1;
-      if (y > window.innerHeight - 60 || y < 0) dy *= -1;
+      let { dx, dy } = speeds[id];
+
+      x += dx;
+      y += dy;
+
+      if (x < 0 || x > window.innerWidth - 60) dx *= -1;
+      if (y < 0 || y > window.innerHeight - 60) dy *= -1;
+
       el.style.left = x + 'px';
       el.style.top = y + 'px';
-      return [dx, dy];
+      speeds[id] = { dx, dy };
     }
 
-    function moveBounce(id, speedX, speedY) {
-      const el = document.getElementById(id);
-      let x = parseInt(el.style.left);
-      let y = parseInt(el.style.top);
-      x += speedX;
-      y += speedY;
-      if (x > window.innerWidth - 60 || x < 0) speedX *= -1;
-      if (y > window.innerHeight - 60 || y < 0) speedY *= -1;
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
-      return [speedX, speedY];
-    }
-
-    function moveCircle(id, centerX, centerY, radius, speed, index) {
+    function moveCircle(id, cx, cy, radius, speed, index) {
       const el = document.getElementById(id);
       angles[index] += speed;
-      el.style.left = centerX + radius * Math.cos(angles[index]) + 'px';
-      el.style.top = centerY + radius * Math.sin(angles[index]) + 'px';
+      el.style.left = cx + radius * Math.cos(angles[index]) + 'px';
+      el.style.top  = cy + radius * Math.sin(angles[index]) + 'px';
     }
 
     function startAll() {
-      stopAll(); // clear previous timers
+      stopAll();
 
-      // Obj1: Linear
+      // Obj1: just moves linearly right
       myTimers.push(setInterval(() => moveLinearRight('obj1', 5), 50));
 
-      // Obj2: Diagonal bounce
-      let dx2 = 4, dy2 = 3;
-      myTimers.push(setInterval(() => { [dx2, dy2] = moveDiagonal('obj2', dx2, dy2) }, 50));
+      // Obj2, 3, 4: bouncing motion
+      myTimers.push(setInterval(() => moveBounce('obj2'), 50));
+      myTimers.push(setInterval(() => moveBounce('obj3'), 50));
+      myTimers.push(setInterval(() => moveBounce('obj4'), 50));
 
-      // Obj3: Vertical bounce
-      let dy3 = 5;
-      myTimers.push(setInterval(() => { [dummy, dy3] = moveBounce('obj3', 0, dy3) }, 50));
-
-      // Obj4: Horizontal bounce
-      let dx4 = 5;
-      myTimers.push(setInterval(() => { [dx4, dummy] = moveBounce('obj4', dx4, 0) }, 50));
-
-      // Obj5: Circular motion
+      // Obj5: circular motion
       myTimers.push(setInterval(() => moveCircle('obj5', 400, 300, 150, 0.1, 4), 50));
 
-      // Obj6: Spiral motion
+      // Obj6: spiral motion
       let r6 = 20;
       myTimers.push(setInterval(() => {
         moveCircle('obj6', 600, 400, r6, 0.15, 5);
@@ -132,20 +113,20 @@
         if (r6 > 200) r6 = 20;
       }, 50));
 
-      // Obj7: Random jitter
+      // Obj7: random jump
       myTimers.push(setInterval(() => {
         const el = document.getElementById('obj7');
         el.style.left = Math.random() * (window.innerWidth - 60) + 'px';
-        el.style.top = Math.random() * (window.innerHeight - 60) + 'px';
+        el.style.top  = Math.random() * (window.innerHeight - 60) + 'px';
       }, 300));
 
-      // Obj8: Sine wave motion
+      // Obj8: sine wave
       let x8 = 0;
       myTimers.push(setInterval(() => {
         const el = document.getElementById('obj8');
         x8 += 5;
-        el.style.left = x8 % (window.innerWidth - 60) + 'px';
-        el.style.top = 200 + 100 * Math.sin(x8 / 50) + 'px';
+        el.style.left = (x8 % (window.innerWidth - 60)) + 'px';
+        el.style.top  = 300 + 100 * Math.sin(x8 / 50) + 'px';
       }, 50));
     }
 
@@ -154,8 +135,19 @@
       myTimers = [];
     }
 
+    // Arrow-key movement for red box (obj1)
     function myKeyPressBody(event) {
-      alert(`You pressed: ${event.key}`);
+      const el = document.getElementById('obj1');
+      let x = parseInt(el.style.left);
+      let y = parseInt(el.style.top);
+
+      if (event.key === 'ArrowRight') x += 10;
+      if (event.key === 'ArrowLeft')  x -= 10;
+      if (event.key === 'ArrowUp')    y -= 10;
+      if (event.key === 'ArrowDown')  y += 10;
+
+      el.style.left = Math.max(0, Math.min(x, window.innerWidth - 60)) + 'px';
+      el.style.top  = Math.max(0, Math.min(y, window.innerHeight - 60)) + 'px';
     }
   </script>
 </body>
