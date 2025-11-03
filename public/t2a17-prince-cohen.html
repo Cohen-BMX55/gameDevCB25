@@ -6,13 +6,14 @@
       color: red;
     }
     canvas {
-      border-color: black;
-      border-width: 1px;
-      align-self: center;
+      border: 5px solid beige;
+      display: flex;
+      margin: auto;
 
     }
     button {
-      align-self: center;
+      display: flex;
+      margin: auto;
     }
   </style>
   
@@ -21,18 +22,120 @@
   <h1 align=center>t2a17-prince-cohen.html</h1><br>
   <canvas id="myCanvas" width=600 height=600></canvas><br>
   <button id="myButton" onclick="drawCrown()"> Start Animation </button>
+  <button id="clearButton" onClick="clearCanvas()">Clear Canvas</button>
 
 
 
   <script>
     const myCanvas = document.getElementById('myCanvas');
     const myButton = document.getElementById('myButton');
+    const clearButton = document.getElementById('clearButton');
     const ctx = myCanvas.getContext("2d");
 
+    function drawCircle(x, y, r, color) {
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.closePath();
+    };
+
     function drawCrown() {
-      ctx.moveTo(100, 100)
-      ctx.lineTo(200, 200)
-      ctx.stroke()
+      ctx.beginPath();
+      ctx.moveTo(80, 200);
+      ctx.lineTo(320, 200);
+      ctx.lineTo(320, 180);
+      ctx.lineTo(80, 180);
+      ctx.closePath();
+      ctx.fillStyle = '#FFD700'; // gold color
+      ctx.fill();
+      ctx.stroke();
+
+      // Crown points
+      ctx.beginPath();
+      ctx.moveTo(80, 180);
+      ctx.lineTo(120, 100);
+      ctx.lineTo(160, 180);
+      ctx.lineTo(200, 100);
+      ctx.lineTo(240, 180);
+      ctx.lineTo(280, 100);
+      ctx.lineTo(320, 180);
+      ctx.closePath();
+
+      ctx.fillStyle = '#FFD700';
+      ctx.fill();
+      ctx.stroke();
+
+      // Jewels on each point
+      drawCircle(120, 100, 8, '#ff0000');
+      drawCircle(200, 100, 8, '#00ff00');
+      drawCircle(280, 100, 8, '#0000ff');
+    };
+
+    function drawCrownSlowly(ctx) {
+      const points = [
+        [80, 200], [80, 180], [120, 100],
+        [160, 180], [200, 100], [240, 180],
+        [280, 100], [320, 180], [320, 200], [80, 200]
+      ];
+
+      let step = 0;
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#000';
+      ctx.fillStyle = '#FFD700';
+
+      // Animate crown outline
+      const drawStep = () => {
+        if (step === 0) ctx.beginPath();
+
+        const [x, y] = points[step];
+        if (step === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+
+        ctx.stroke();
+
+        step++;
+        if (step < points.length) {
+          requestAnimationFrame(drawStep);
+        } else {
+          ctx.closePath();
+          ctx.fill();
+
+          // After filling, draw jewels one by one
+          drawJewels();
+        }
+      };
+
+      // Draw jewels slowly
+      function drawJewels() {
+        const jewels = [
+          { x: 120, y: 100, color: '#ff0000' },
+          { x: 200, y: 100, color: '#00ff00' },
+          { x: 280, y: 100, color: '#0000ff' }
+        ];
+        let i = 0;
+
+        function drawNextJewel() {
+          const jewel = jewels[i];
+          ctx.beginPath();
+          ctx.arc(jewel.x, jewel.y, 8, 0, Math.PI * 2);
+          ctx.fillStyle = jewel.color;
+          ctx.fill();
+          i++;
+          if (i < jewels.length) {
+            setTimeout(drawNextJewel, 300);
+          }
+        }
+
+        setTimeout(drawNextJewel, 300);
+      }
+    }
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
     };
     
 
