@@ -5,18 +5,36 @@
     h1 {
       color: red;
     }
+    canvas {
+      border-color: black;
+      border-width: 1px;
+      align-self: center;
+
+    }
+    button {
+      align-self: center;
+    }
   </style>
   
 </head>
 <body>
   <h1 align=center>t2a17-prince-cohen.html</h1><br>
   <canvas id="myCanvas" width=600 height=600></canvas><br>
-  <button id="myButton" onclick="drawCrown()" align=center> Start Animation </button>
+  <button id="myButton" onclick="drawCrown()"> Start Animation </button>
 
 
 
   <script>
-    let myCanvas = document
+    const myCanvas = document.getElementById('myCanvas');
+    const myButton = document.getElementById('myButton');
+    const ctx = myCanvas.getContext("2d");
+
+    function drawCrown() {
+      ctx.moveTo(100, 100)
+      ctx.lineTo(200, 200)
+      ctx.stroke()
+    };
+    
 
 
     
