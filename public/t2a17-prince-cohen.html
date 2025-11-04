@@ -21,7 +21,7 @@
 <body>
   <h1 align=center>t2a17-prince-cohen.html</h1><br>
   <canvas id="myCanvas" width=600 height=600></canvas><br>
-  <button id="myButton" onclick="drawCrown()"> Start Animation </button>
+  <button id="myButton"> Start Animation </button>
   <button id="clearButton" onClick="clearCanvas()">Clear Canvas</button>
 
 
@@ -31,6 +31,8 @@
     const myButton = document.getElementById('myButton');
     const clearButton = document.getElementById('clearButton');
     const ctx = myCanvas.getContext("2d");
+
+    myButton.addEventListener('click', drawCrownSlowly(ctx));
 
     function drawCircle(x, y, r, color) {
       ctx.beginPath();
