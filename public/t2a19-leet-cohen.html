@@ -65,7 +65,14 @@ var TwoSum = function(input, target) {
   }
 }
 
-myDivHTML = mySubmitButton.addEventListener('click', TwoSum(myNumInput, myTargetInput))
+mySubmitButton.addEventListener('click', function() {
+      // 4️⃣ Call your function and update the div
+      const result = TwoSum(myNumInput, myTargetInput);
+      console.log(myNumInput)
+      console.log(myTargetInput)
+      console.log(result)
+      myDivHTML = result; // changes the text inside the div
+    });
 
 </script>
 </body>
