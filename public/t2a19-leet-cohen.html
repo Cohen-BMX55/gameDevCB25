@@ -9,8 +9,8 @@
     }
     
     h1 {
-      color: green;
-      border: 1px green;
+      color: rebeccapurple;
+      border: 5px black;
     }
   </style>
 </head>
@@ -21,6 +21,47 @@
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
 You can return the answer in any order.</p><br><br>
 
-<p></p>
+<pre><code>
+var TwoSum = function(input, target) {
+  let index = 0
+  let resultArray = []
+  for (index; index < input.length; index++){
+    for (let element = index + 1; element < input.length; element++){
+      if ((input[index] + input[element]) == target) {
+        resultArray[0] = index
+        resultArray[1] = element
+        return resultArray
+      }
+    }
+  }
+    
+</code></pre>
+
+<p>Enter list of comma seperated values</p><br>
+<input id="numInput" type="text" value="1, 5, 2, 6, 8"><br>
+<p>Enter target number</p><br>
+<input id="targetNum" type="number" value="6"><br>
+<button id="numSubmit">Submit</button>
+
+<script>
+let myNumInput = document.getElementById('numInput')
+let myTargetInput = document.getElementById('targetNum')
+let mySubmitButton = document.getElementById('numSubmit')
+
+var TwoSum = function(input, target) {
+  let index = 0
+  let resultArray = []
+  for (index; index < input.length; index++){
+    for (let element = index + 1; element < input.length; element++){
+      if ((input[index] + input[element]) == target) {
+        resultArray[0] = index
+        resultArray[1] = element
+        return resultArray
+      }
+    }
+  }
+    
+  }
+</script>
 </body>
 </html>
