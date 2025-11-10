@@ -41,12 +41,15 @@ var TwoSum = function(input, target) {
 <input id="numInput" type="text" value="1, 5, 2, 6, 8"><br>
 <p>Enter target number</p><br>
 <input id="targetNum" type="number" value="6"><br>
-<button id="numSubmit">Submit</button>
+<button id="numSubmit">Submit</button><br>
+<div id="resultDiv">...</div>
+
 
 <script>
-let myNumInput = document.getElementById('numInput')
-let myTargetInput = document.getElementById('targetNum')
+let myNumInput = document.getElementById('numInput').value
+let myTargetInput = document.getElementById('targetNum').value
 let mySubmitButton = document.getElementById('numSubmit')
+let myDivHTML = document.getElementById('resultDiv').innerHTML
 
 var TwoSum = function(input, target) {
   let index = 0
@@ -60,8 +63,10 @@ var TwoSum = function(input, target) {
       }
     }
   }
-    
-  }
+}
+
+myDivHTML = document.addEventListener('click', TwoSum(myNumInput, myTargetInput))
+
 </script>
 </body>
 </html>
