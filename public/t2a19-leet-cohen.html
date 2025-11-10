@@ -46,10 +46,8 @@ var TwoSum = function(input, target) {
 
 
 <script>
-let myNumInput = document.getElementById('numInput').value
-let myTargetInput = document.getElementById('targetNum').value
 let mySubmitButton = document.getElementById('numSubmit')
-let myDivHTML = document.getElementById('resultDiv').innerHTML
+let myDivHTML = document.getElementById('resultDiv')
 
 var TwoSum = function(input, target) {
   let index = 0
@@ -67,11 +65,14 @@ var TwoSum = function(input, target) {
 
 mySubmitButton.addEventListener('click', function() {
       // 4️⃣ Call your function and update the div
-      const result = TwoSum(myNumInput, myTargetInput);
+      let myNumInput = document.getElementById('numInput').value
+      let myTargetInput = document.getElementById('targetNum').value
+      numbs= myNumInput.split(',').map(Number)
+      const result = TwoSum(numbs, myTargetInput);
       console.log(myNumInput)
       console.log(myTargetInput)
       console.log(result)
-      myDivHTML = result; // changes the text inside the div
+      myDivHTML.textContent = result; // changes the text inside the div
     });
 
 </script>
