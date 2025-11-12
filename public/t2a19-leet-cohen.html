@@ -15,12 +15,16 @@
   </style>
 </head>
 <body>
-  <h1 align=center>t2a20-leet-cohen.html</h1>
+  <h1 align=center>t2a20-leet-cohen.html</h1><br>
+
+  <p><strong>Prompt:</strong>Give me a beginner leet code question for me to solve.</p>
 
   <p><strong>Question:</strong> Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
 You can return the answer in any order.</p><br><br>
 
+
+<h2>My answer</h2><br>
 <pre><code>
 var TwoSum = function(input, target) {
   let index = 0
@@ -35,7 +39,27 @@ var TwoSum = function(input, target) {
     }
   }
     
-</code></pre>
+</code></pre><br>
+
+<h2>ChatGPT answer</h2>
+
+<pre><code>
+  function twoSum(nums, target) {
+  const seen = new Map(); // store number -> index
+
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+
+    if (seen.has(complement)) {
+      return [seen.get(complement), i];
+    }
+
+    seen.set(nums[i], i);
+  }
+}
+</code></pre><br><br>
+
+<h2>Tester</h2><br>
 
 <p>Enter list of comma seperated values</p><br>
 <input id="numInput" type="text" value="1, 5, 2, 6, 8"><br>
