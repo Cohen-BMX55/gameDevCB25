@@ -1,13 +1,184 @@
+<!DOCTYPE html>
 <html>
 <head>
+  <title>t2a20-manipulation-cohen.html</title>
   <style>
-    h2 {
-      align: center;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    input[type="text"] {
+      width: 350px;
+      margin-bottom: 5px;
+      padding: 4px;
+    }
+    input[type="button"] {
+      margin: 3px 0;
+      display: block;
+      padding: 5px 8px;
+    }
+    #controls {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    h3 {
+      margin-top: 25px;
+      color: darkblue;
+    }
+    span {
+      display: inline-block;
+      min-height: 20px;
+      padding: 6px;
+      background-color: #f4f4f4;
+      border: 1px solid #ccc;
+      margin-top: 5px;
     }
   </style>
 </head>
 <body>
-  <h1 align=center>t2a20-manipulation-cohen.html</h1>
-  <h2 
+  <h1>t2a20-manipulation-cohen.html</h1>
+  <h2>String, Array, and Object Manipulation Methods</h2><br>
+
+  <div id="controls">
+    <input id="myNum01" type="text" value="this is a string"><br>
+    <input type="button" value="🔄 Reset Output" onclick="{
+      document.getElementById('myNum01').value = ''
+      document.getElementById('mySpan01').innerHTML = '...'
+    }">
+    <input type="button" value="💡 Show Example Data" onclick="{
+      document.getElementById('myNum01').value = 'JavaScript array object practice'
+      document.getElementById('mySpan01').innerHTML = 'Example data loaded.'
+    }">
+  </div>
+
+  <span id="mySpan01">...</span><br><br>
+
+  <!-- STRING METHODS -->
+  <h3>String Methods</h3>
+
+  <input type="button" value=".toUpperCase()" onclick="{
+    let myIn = document.getElementById('myNum01').value
+    document.getElementById('mySpan01').innerHTML = myIn.toUpperCase()
+  }">
+
+  <input type="button" value=".toLowerCase()" onclick="{
+    let myIn = document.getElementById('myNum01').value
+    document.getElementById('mySpan01').innerHTML = myIn.toLowerCase()
+  }">
+
+  <input type="button" value=".split() makes an array" onclick="{
+    let myIn = document.getElementById('myNum01').value
+    let myArray = myIn.split(' ')
+    document.getElementById('mySpan01').innerHTML = myArray
+  }">
+
+  <input type="button" value=".replace()" onclick="{
+    let myIn = document.getElementById('myNum01').value
+    let newStr = myIn.replace('string', 'sentence')
+    document.getElementById('mySpan01').innerHTML = newStr
+  }">
+
+  <input type="button" value=".includes()" onclick="{
+    let myIn = document.getElementById('myNum01').value
+    let hasWord = myIn.includes('string')
+    document.getElementById('mySpan01').innerHTML = hasWord
+  }">
+
+  <input type="button" value=".substring()" onclick="{
+    let myIn = document.getElementById('myNum01').value
+    document.getElementById('mySpan01').innerHTML = myIn.substring(0, 4)
+  }">
+
+  <input type="button" value=".trim()" onclick="{
+    let myIn = '   ' + document.getElementById('myNum01').value + '   '
+    document.getElementById('mySpan01').innerHTML = '[' + myIn.trim() + ']'
+  }">
+
+
+  <!-- ARRAY METHODS -->
+  <h3>Array Methods</h3>
+
+  <input type="button" value=".reverse()" onclick="{
+    let myIn = document.getElementById('myNum01').value
+    let myArray = myIn.split(' ')
+    myArray.reverse()
+    document.getElementById('mySpan01').innerHTML = myArray
+  }">
+
+  <input type="button" value=".join()" onclick="{
+    let myIn = document.getElementById('myNum01').value
+    let myArray = myIn.split(' ')
+    let myJoined = myArray.join('-')
+    document.getElementById('mySpan01').innerHTML = myJoined
+  }">
+
+  <input type="button" value=".push()" onclick="{
+    let myArray = document.getElementById('myNum01').value.split(' ')
+    myArray.push('newWord')
+    document.getElementById('mySpan01').innerHTML = myArray
+  }">
+
+  <input type="button" value=".pop()" onclick="{
+    let myArray = document.getElementById('myNum01').value.split(' ')
+    myArray.pop()
+    document.getElementById('mySpan01').innerHTML = myArray
+  }">
+
+  <input type="button" value=".sort()" onclick="{
+    let myArray = document.getElementById('myNum01').value.split(' ')
+    myArray.sort()
+    document.getElementById('mySpan01').innerHTML = myArray
+  }">
+
+  <input type="button" value=".map()" onclick="{
+    let myArray = document.getElementById('myNum01').value.split(' ')
+    let mapped = myArray.map(x => x + x)
+    document.getElementById('mySpan01').innerHTML = mapped
+  }">
+
+
+  <!-- OBJECT METHODS -->
+  <h3>Object Methods</h3>
+
+  <input type="button" value="Object.keys()" onclick="{
+    let myObject = { first: 10, second: 'hello', third: true }
+    let keyArray = Object.keys(myObject)
+    document.getElementById('mySpan01').innerHTML = keyArray
+  }">
+
+  <input type="button" value="Object.values()" onclick="{
+    let myObject = { first: 10, second: 'hello', third: true }
+    let valueArray = Object.values(myObject)
+    document.getElementById('mySpan01').innerHTML = valueArray
+  }">
+
+  <input type="button" value="Object.entries()" onclick="{
+    let myObject = { first: 10, second: 'hello', third: true }
+    let entries = Object.entries(myObject)
+    document.getElementById('mySpan01').innerHTML = entries
+  }">
+
+  <input type="button" value="Object.hasOwn()" onclick="{
+    let myObject = { first: 10, second: 'hello', third: true }
+    let result = Object.hasOwn(myObject, 'second')
+    document.getElementById('mySpan01').innerHTML = result
+  }">
+
+  <input type="button" value="Object.assign()" onclick="{
+    let myObject = { a: 1, b: 2 }
+    let newObj = Object.assign({}, myObject, { c: 3 })
+    document.getElementById('mySpan01').innerHTML = JSON.stringify(newObj)
+  }">
+
+  <input type="button" value="Object.freeze()" onclick="{
+    let myObject = { a: 1, b: 2 }
+    Object.freeze(myObject)
+    try { myObject.a = 99 } catch(e) {}
+    document.getElementById('mySpan01').innerHTML = JSON.stringify(myObject)
+  }">
+
 </body>
 </html>
