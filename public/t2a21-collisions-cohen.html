@@ -2,6 +2,7 @@
 <head>
   <style>
     .square {
+      position: relative;
       width: 100px; /* Or any desired equal value */
       height: 100px; /* Must be equal to width */
       background-color: blue; /* Or any desired color */
@@ -9,6 +10,7 @@
     }
   </style>
   <script>
+    let mySquare01 = document.getElementById('mySquare01')
     function myHitOther(my1,my2){
      left1   = parseInt(document.getElementById(my1).style.left)
      right1  = left1 + parseInt(document.getElementById(my1).style.width)
@@ -25,19 +27,34 @@
        return true
        }
     }
-  document.addE
+  document.addEventListener('keydown', (e) => {
+    e.preventDefault()
+    switch (e.key) {
+      case "ArrowLeft":
+      mySquare01.style.left += 10;
+      break;
+    case "ArrowUp":
+      mySquare01.style.top += 10;
+      break;
+    case "ArrowRight":
+      mySquare01.style.left -= 10;
+      break;
+    case "ArrowDown":
+      mySquare01.style.left -= 10;
+      break;
+    }
+  })
 
 
 function myCheckHit(){
    if ( myHitOther('myImg01','myImg02') ){
        alert('you lose')  
        document.getElementById('myImg01').style.left = '20px'
-       location = 't2a13-keydown.html'  // go to your next level
-   }
+   }}
   </script>
 </head>
   <body>
-    <h1 align=center>t2a21-collisions-cohen.html</h1><br>
+    <h1 align=center > t2a21-collisions-cohen.html</h1><br>
 
     <div class="square" id="mySquare01"></div><br>
     <div class="square" id="mySquare02"></div><br>
