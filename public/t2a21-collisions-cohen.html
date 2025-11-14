@@ -1,100 +1,72 @@
+<!DOCTYPE html>
 <html>
 <head>
   <style>
     .square {
-      position: relative;
-      width: 100px; /* Or any desired equal value */
-      height: 100px; /* Must be equal to width */
-      background-color: blue; /* Or any desired color */
-      border: 1px solid black; /* Optional: adds a border */
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border: 2px solid black;
     }
-    #mySquare01 {
-      background-color: red;
+
+    #player {
+      background: red;
       left: 50px;
       top: 50px;
     }
 
-    #mySquare02 {
-      background-color: green;
+    #enemy {
+      background: green;
       left: 300px;
       top: 50px;
     }
   </style>
-
-
 </head>
-  <body>
-    <h1 align=center > t2a21-collisions-cohen.html</h1><br>
+<body>
 
-    <div class="square" id="mySquare01"></div><br>
-    <div class="square" id="mySquare02"></div><br>
+<h1 style="text-align:center;">Collision Demo</h1>
 
-    <script>
-      window.onload = function() {
+<div id="player" class="square"></div>
+<div id="enemy" class="square"></div>
 
-        const sq1 = document.getElementById("mySquare01");
-        const sq2 = document.getElementById("mySquare02");
+<script>
+  const player = document.getElementById("player");
+  const enemy = document.getElementById("enemy");
 
-        function myHitOther(id1, id2) {
-          const el1 = document.getElementById(id1);
-          const el2 = document.getElementById(id2);
+  // Collision detection using getBoundingClientRect (very reliable)
+  function collides(a, b) {
+    const r1 = a.getBoundingClientRect();
+    const r2 = b.getBoundingClientRect();
 
-          const left1 = parseInt(el1.style.left);
-          const top1 = parseInt(el1.style.top);
-          const w1 = parseInt(getComputedStyle(el1).width);
-          const h1 = parseInt(getComputedStyle(el1).height);
+    return !(
+      r1.right < r2.left ||
+      r1.left > r2.right ||
+      r1.bottom < r2.top ||
+      r1.top > r2.bottom
+    );
+  }
 
-          const left2 = parseInt(el2.style.left);
-          const top2 = parseInt(el2.style.top);
-          const w2 = parseInt(getComputedStyle(el2).width);
-          const h2 = parseInt(getComputedStyle(el2).height);
+  // Movement
+  document.addEventListener("keydown", (e) => {
+    const step = 10;
 
-          const right1 = left1 + w1;
-          const bottom1 = top1 + h1;
-          const right2 = left2 + w2;
-          const bottom2 = top2 + h2;
+    let left = parseInt(player.style.left);
+    let top = parseInt(player.style.top);
 
-          return (
-            right1 >= left2 &&
-            bottom1 >= top2 &&
-            left1 <= right2 &&
-            top1 <= bottom2
-          );
-        }
+    if (e.key === "ArrowLeft")  player.style.left = (left - step) + "px";
+    if (e.key === "ArrowRight") player.style.left = (left + step) + "px";
+    if (e.key === "ArrowUp")    player.style.top  = (top - step) + "px";
+    if (e.key === "ArrowDown")  player.style.top  = (top + step) + "px";
 
-        document.addEventListener("keydown", (e) => {
-          e.preventDefault();
+    // Check collision
+    if (collides(player, enemy)) {
+      alert("Collision!");
+      // Reset position
+      player.style.left = "50px";
+      player.style.top = "50px";
+    }
+  });
+</script>
 
-          let left = parseInt(sq1.style.left);
-          let top = parseInt(sq1.style.top);
-
-          switch (e.key) {
-            case "ArrowLeft":
-              sq1.style.left = left - 10 + "px";
-              break;
-            case "ArrowUp":
-              sq1.style.top = top - 10 + "px";
-              break;
-            case "ArrowRight":
-              sq1.style.left = left + 10 + "px";
-              break;
-            case "ArrowDown":
-              sq1.style.top = top + 10 + "px";
-              break;
-          }
-
-          if (myHitOther("mySquare01", "mySquare02")) {
-            alert("Collision!");
-          }
-        });
-
-      };
-      </script>
-
-      
-    
-  </body>
-
-
-
+</body>
 </html>
