@@ -8,6 +8,17 @@
       background-color: blue; /* Or any desired color */
       border: 1px solid black; /* Optional: adds a border */
     }
+    #mySquare01 {
+      background-color: red;
+      left: 50px;
+      top: 50px;
+    }
+
+    #mySquare02 {
+      background-color: green;
+      left: 300px;
+      top: 50px;
+    }
   </style>
   <script>
     let mySquare01 = document.getElementById('mySquare01')
@@ -27,30 +38,37 @@
        return true
        }
     }
-  document.addEventListener('keydown', (e) => {
-    e.preventDefault()
-    switch (e.key) {
-      case "ArrowLeft":
-      mySquare01.style.left += 10;
-      break;
-    case "ArrowUp":
-      mySquare01.style.top += 10;
-      break;
-    case "ArrowRight":
-      mySquare01.style.left -= 10;
-      break;
-    case "ArrowDown":
-      mySquare01.style.left -= 10;
-      break;
+
+    function myCheckHit(){
+      if ( myHitOther("mySquare01", "mySquare02") ){
+        alert('you lose')  
+        document.getElementById('myImg01').style.left = '20px'
+      }}
+
+
+     document.addEventListener('keydown', (e) => {
+       e.preventDefault()
+      switch (e.key) {
+         case "ArrowLeft":
+           mySquare01.style.left += 10;
+           break;
+        case "ArrowUp":
+          mySquare01.style.top += 10;
+          break;
+        case "ArrowRight":
+          mySquare01.style.left -= 10;
+          break;
+        case "ArrowDown":
+          mySquare01.style.left -= 10;
+          break;
+    }
+    if (myHitOther("mySquare01", "mySquare02")) {
+          alert("Collision!");
     }
   })
 
 
-function myCheckHit(){
-   if ( myHitOther('myImg01','myImg02') ){
-       alert('you lose')  
-       document.getElementById('myImg01').style.left = '20px'
-   }}
+
   </script>
 </head>
   <body>
