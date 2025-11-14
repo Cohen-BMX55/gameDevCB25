@@ -20,67 +20,7 @@
       top: 50px;
     }
   </style>
-<script>
-window.onload = function() {
 
-  const sq1 = document.getElementById("mySquare01");
-  const sq2 = document.getElementById("mySquare02");
-
-  function myHitOther(id1, id2) {
-    const el1 = document.getElementById(id1);
-    const el2 = document.getElementById(id2);
-
-    const left1 = parseInt(el1.style.left);
-    const top1 = parseInt(el1.style.top);
-    const w1 = parseInt(getComputedStyle(el1).width);
-    const h1 = parseInt(getComputedStyle(el1).height);
-
-    const left2 = parseInt(el2.style.left);
-    const top2 = parseInt(el2.style.top);
-    const w2 = parseInt(getComputedStyle(el2).width);
-    const h2 = parseInt(getComputedStyle(el2).height);
-
-    const right1 = left1 + w1;
-    const bottom1 = top1 + h1;
-    const right2 = left2 + w2;
-    const bottom2 = top2 + h2;
-
-    return (
-      right1 >= left2 &&
-      bottom1 >= top2 &&
-      left1 <= right2 &&
-      top1 <= bottom2
-    );
-  }
-
-  document.addEventListener("keydown", (e) => {
-    e.preventDefault();
-
-    let left = parseInt(sq1.style.left);
-    let top = parseInt(sq1.style.top);
-
-    switch (e.key) {
-      case "ArrowLeft":
-        sq1.style.left = left - 10 + "px";
-        break;
-      case "ArrowUp":
-        sq1.style.top = top - 10 + "px";
-        break;
-      case "ArrowRight":
-        sq1.style.left = left + 10 + "px";
-        break;
-      case "ArrowDown":
-        sq1.style.top = top + 10 + "px";
-        break;
-    }
-
-    if (myHitOther("mySquare01", "mySquare02")) {
-      alert("Collision!");
-    }
-  });
-
-};
-</script>
 
 </head>
   <body>
@@ -88,6 +28,68 @@ window.onload = function() {
 
     <div class="square" id="mySquare01"></div><br>
     <div class="square" id="mySquare02"></div><br>
+
+    <script>
+      window.onload = function() {
+
+        const sq1 = document.getElementById("mySquare01");
+        const sq2 = document.getElementById("mySquare02");
+
+        function myHitOther(id1, id2) {
+          const el1 = document.getElementById(id1);
+          const el2 = document.getElementById(id2);
+
+          const left1 = parseInt(el1.style.left);
+          const top1 = parseInt(el1.style.top);
+          const w1 = parseInt(getComputedStyle(el1).width);
+          const h1 = parseInt(getComputedStyle(el1).height);
+
+          const left2 = parseInt(el2.style.left);
+          const top2 = parseInt(el2.style.top);
+          const w2 = parseInt(getComputedStyle(el2).width);
+          const h2 = parseInt(getComputedStyle(el2).height);
+
+          const right1 = left1 + w1;
+          const bottom1 = top1 + h1;
+          const right2 = left2 + w2;
+          const bottom2 = top2 + h2;
+
+          return (
+            right1 >= left2 &&
+            bottom1 >= top2 &&
+            left1 <= right2 &&
+            top1 <= bottom2
+          );
+        }
+
+        document.addEventListener("keydown", (e) => {
+          e.preventDefault();
+
+          let left = parseInt(sq1.style.left);
+          let top = parseInt(sq1.style.top);
+
+          switch (e.key) {
+            case "ArrowLeft":
+              sq1.style.left = left - 10 + "px";
+              break;
+            case "ArrowUp":
+              sq1.style.top = top - 10 + "px";
+              break;
+            case "ArrowRight":
+              sq1.style.left = left + 10 + "px";
+              break;
+            case "ArrowDown":
+              sq1.style.top = top + 10 + "px";
+              break;
+          }
+
+          if (myHitOther("mySquare01", "mySquare02")) {
+            alert("Collision!");
+          }
+        });
+
+      };
+      </script>
 
       
     
