@@ -20,56 +20,68 @@
       top: 50px;
     }
   </style>
-  <script>
-    let mySquare01 = document.getElementById('mySquare01')
-    function myHitOther(my1,my2){
-     left1   = parseInt(document.getElementById(my1).style.left)
-     right1  = left1 + parseInt(document.getElementById(my1).style.width)
-     top1    = parseInt(document.getElementById(my1).style.top)   
-     bottom1 = top1   + parseInt(document.getElementById(my1).style.height)
-     left2   = parseInt(document.getElementById(my2).style.left)
-     right2  = left2 + parseInt(document.getElementById(my2).style.width)
-     top2    = parseInt(document.getElementById(my2).style.top)   
-     bottom2 = top2   + parseInt(document.getElementById(my2).style.height)
-     if ((right1  >=  left2  ) &&      	   
-       (bottom1 >=  top2   ) &&
-       (left1   <=  right2 ) &&
-       (top1    <=  bottom2) ){
-       return true
-       }
+<script>
+window.onload = function() {
+
+  const sq1 = document.getElementById("mySquare01");
+  const sq2 = document.getElementById("mySquare02");
+
+  function myHitOther(id1, id2) {
+    const el1 = document.getElementById(id1);
+    const el2 = document.getElementById(id2);
+
+    const left1 = parseInt(el1.style.left);
+    const top1 = parseInt(el1.style.top);
+    const w1 = parseInt(getComputedStyle(el1).width);
+    const h1 = parseInt(getComputedStyle(el1).height);
+
+    const left2 = parseInt(el2.style.left);
+    const top2 = parseInt(el2.style.top);
+    const w2 = parseInt(getComputedStyle(el2).width);
+    const h2 = parseInt(getComputedStyle(el2).height);
+
+    const right1 = left1 + w1;
+    const bottom1 = top1 + h1;
+    const right2 = left2 + w2;
+    const bottom2 = top2 + h2;
+
+    return (
+      right1 >= left2 &&
+      bottom1 >= top2 &&
+      left1 <= right2 &&
+      top1 <= bottom2
+    );
+  }
+
+  document.addEventListener("keydown", (e) => {
+    e.preventDefault();
+
+    let left = parseInt(sq1.style.left);
+    let top = parseInt(sq1.style.top);
+
+    switch (e.key) {
+      case "ArrowLeft":
+        sq1.style.left = left - 10 + "px";
+        break;
+      case "ArrowUp":
+        sq1.style.top = top - 10 + "px";
+        break;
+      case "ArrowRight":
+        sq1.style.left = left + 10 + "px";
+        break;
+      case "ArrowDown":
+        sq1.style.top = top + 10 + "px";
+        break;
     }
 
-    function myCheckHit(){
-      if ( myHitOther("mySquare01", "mySquare02") ){
-        alert('you lose')  
-        document.getElementById('myImg01').style.left = '20px'
-      }}
-
-
-     document.addEventListener('keydown', (e) => {
-       e.preventDefault()
-      switch (e.key) {
-         case "ArrowLeft":
-           mySquare01.style.left += 10;
-           break;
-        case "ArrowUp":
-          mySquare01.style.top += 10;
-          break;
-        case "ArrowRight":
-          mySquare01.style.left -= 10;
-          break;
-        case "ArrowDown":
-          mySquare01.style.left -= 10;
-          break;
-    }
     if (myHitOther("mySquare01", "mySquare02")) {
-          alert("Collision!");
+      alert("Collision!");
     }
-  })
+  });
 
+};
+</script>
 
-
-  </script>
 </head>
   <body>
     <h1 align=center > t2a21-collisions-cohen.html</h1><br>
