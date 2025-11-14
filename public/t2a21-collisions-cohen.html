@@ -22,7 +22,9 @@
     }
   </style>
 </head>
-<body>
+
+<!-- tabindex makes body focusable -->
+<body tabindex="0">
 
 <h1 style="text-align:center;">Collision Demo</h1>
 
@@ -33,7 +35,10 @@
   const player = document.getElementById("player");
   const enemy = document.getElementById("enemy");
 
-  // Collision detection using getBoundingClientRect (very reliable)
+  // Give focus so keydown events work
+  document.body.focus();
+
+  // Reliable collision detection
   function collides(a, b) {
     const r1 = a.getBoundingClientRect();
     const r2 = b.getBoundingClientRect();
@@ -46,7 +51,6 @@
     );
   }
 
-  // Movement
   document.addEventListener("keydown", (e) => {
     const step = 10;
 
@@ -58,10 +62,8 @@
     if (e.key === "ArrowUp")    player.style.top  = (top - step) + "px";
     if (e.key === "ArrowDown")  player.style.top  = (top + step) + "px";
 
-    // Check collision
     if (collides(player, enemy)) {
       alert("Collision!");
-      // Reset position
       player.style.left = "50px";
       player.style.top = "50px";
     }
