@@ -15,10 +15,21 @@
         display: block;
         background: white;
     }
+    #header {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        color: black;
+        font-size: 32px;
+        font-family: Arial, sans-serif;
+        pointer-events: none; /* prevents interference with game input */
+    }
 </style>
+<title>t2a21-collisions-cohen.html</title>
 </head>
 <body>
 
+<div id="header">t2a21-collisions-cohen.html (use WASD)</div>
 <canvas id="game"></canvas>
 
 <script>
