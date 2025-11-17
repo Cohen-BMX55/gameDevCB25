@@ -2,59 +2,107 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Box Collision Demo</title>
+<title>Full Screen Collision Demo</title>
 <style>
-    body { background:#222; display:flex; justify-content:center; padding-top:30px; }
-    canvas { background:#fff; border:2px solid #000; }
+    html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+        background: #222;
+    }
+    canvas {
+        display: block;
+        background: white;
+    }
 </style>
 </head>
 <body>
 
-<canvas id="game" width="600" height="400"></canvas>
+<canvas id="game"></canvas>
 
 <script>
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-// Player boxes
-const box1 = { x: 100, y: 150, size: 50, color: "blue", vx:0, vy:0 };  // WASD
-const box2 = { x: 400, y: 150, size: 50, color: "red", vx:0, vy:0 };   // Arrow keys
+// Resize canvas to full window
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.onresize = resize;
+resize();
 
-const speed = 3;
+const box1 = { // blue random box
+    x: 200,
+    y: 200,
+    size: 50,
+    color: "blue",
+    vx: 3,
+    vy: 2
+};
+
+const box2 = { // red player WASD box
+    x: 600,
+    y: 300,
+    size: 50,
+    color: "red",
+    vx: 0,
+    vy: 0
+};
+
 const keys = {};
-
-// Key listeners
 document.addEventListener("keydown", e => keys[e.key] = true);
 document.addEventListener("keyup", e => keys[e.key] = false);
 
-// Collision check
+// collision check
 function isColliding(a, b) {
-    return (
-        a.x < b.x + b.size &&
-        a.x + a.size > b.x &&
-        a.y < b.y + b.size &&
-        a.y + a.size > b.y
-    );
+    return a.x < b.x + b.size &&
+           a.x + a.size > b.x &&
+           a.y < b.y + b.size &&
+           a.y + a.size > b.y;
+}
+
+function clampBox(box) {
+    if (box.x < 0) box.x = 0;
+    if (box.y < 0) box.y = 0;
+    if (box.x + box.size > canvas.width) box.x = canvas.width - box.size;
+    if (box.y + box.size > canvas.height) box.y = canvas.height - box.size;
 }
 
 function update() {
-    // WASD controls for box1
-    if (keys["w"]) box1.y -= speed;
-    if (keys["s"]) box1.y += speed;
-    if (keys["a"]) box1.x -= speed;
-    if (keys["d"]) box1.x += speed;
+    // --- move red box (WASD)
+    const speed = 5;
+    if (keys["w"]) box2.y -= speed;
+    if (keys["s"]) box2.y += speed;
+    if (keys["a"]) box2.x -= speed;
+    if (keys["d"]) box2.x += speed;
 
-    // Arrow keys for box2
-    if (keys["ArrowUp"]) box2.y -= speed;
-    if (keys["ArrowDown"]) box2.y += speed;
-    if (keys["ArrowLeft"]) box2.x -= speed;
-    if (keys["ArrowRight"]) box2.x += speed;
+    // Prevent red box from exiting screen
+    clampBox(box2);
 
-    // Drawing
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // --- move blue box (random bouncing)
+    box1.x += box1.vx;
+    box1.y += box1.vy;
 
-    // Detect collision
-    let colliding = isColliding(box1, box2);
+    // Bounce off walls
+    if (box1.x <= 0 || box1.x + box1.size >= canvas.width) box1.vx *= -1;
+    if (box1.y <= 0 || box1.y + box1.size >= canvas.height) box1.vy *= -1;
+
+    // Random tiny wiggle so path isn't straight
+    box1.vx += (Math.random() - 0.5) * 0.2;
+    box1.vy += (Math.random() - 0.5) * 0.2;
+
+    // Clamp speed so it doesn't get too fast
+    const maxSpeed = 6;
+    box1.vx = Math.max(-maxSpeed, Math.min(maxSpeed, box1.vx));
+    box1.vy = Math.max(-maxSpeed, Math.min(maxSpeed, box1.vy));
+
+    // collision
+    const colliding = isColliding(box1, box2);
+
+    // draw
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = colliding ? "lime" : box1.color;
     ctx.fillRect(box1.x, box1.y, box1.size, box1.size);
