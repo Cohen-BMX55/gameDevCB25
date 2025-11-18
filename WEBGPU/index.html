@@ -13,6 +13,9 @@
   <!-- Include Three.js from CDN -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
   <script>
+    import { FontLoader } from 'https://unpkg.com/three@0.161.0/examples/jsm/loaders/FontLoader.js';
+    import { TextGeometry } from 'https://unpkg.com/three@0.161.0/examples/jsm/geometries/TextGeometry.js';
+
     // Scene setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x202020);
@@ -56,6 +59,38 @@
     floor.position.y = -1;
     floor.receiveShadow = true;
     scene.add(floor);
+
+    const loader = new FontLoader();
+
+    loader.load(
+      'fonts/helvetiker_regular.typeface.json',
+      function (font) {
+        const geometry = new TextGeometry('Hello Three.js', {
+          font: font,
+          size: 1,
+          height: 0.3,
+          curveSegments: 12,
+          bevelEnabled: true,
+          bevelThickness: 0.03,
+          bevelSize: 0.02,
+          bevelOffset: 0,
+          bevelSegments: 5
+        });
+
+        const material = new THREE.MeshStandardMaterial({
+          color: 0x00aaff,
+          metalness: 0.6,
+          roughness: 0.2
+        });
+
+        const textMesh = new THREE.Mesh(geometry, material);
+        textMesh.castShadow = true;
+        scene.add(textMesh);
+
+        animateText(textMesh);
+      }
+    );
+
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
