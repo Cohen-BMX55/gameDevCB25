@@ -8,14 +8,23 @@
     body { margin: 0; overflow: hidden; }
     canvas { display: block; }
   </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+        "three/examples/": "https://unpkg.com/three@0.161.0/examples/"
+      }
+    }
+  </script>
 </head>
 <body>
 
 <script type="module">
 
-import * as THREE from 'https://unpkg.com/three@0.161.0/build/three.module.js';
-import { FontLoader } from 'https://unpkg.com/three@0.161.0/examples/jsm/loaders/FontLoader.js';
-import { TextGeometry } from 'https://unpkg.com/three@0.161.0/examples/jsm/geometries/TextGeometry.js';
+import * as THREE from 'three';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 // Scene
 const scene = new THREE.Scene();
