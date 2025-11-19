@@ -19,10 +19,17 @@
       document.getElementById('myDiv01').innerHTML = `<pre>${myJson}</pre>`;
       if (data.image){
         myDiv01.innerHTML += `<img src="${data.image}"" alt="Random Image" style="max-width: 100%; height: auto;">`;
+        myDiv02.innerHTML = `...`;
       }
       else if (data.setup){
-        myDiv01.innerHTML = `${data.setup}`
-        myDiv02.innerHTML = `${data.punchline}`
+        myDiv01.innerHTML = `<pre>${myJson}</pre>`;
+        myDiv01.innerHTML += `${data.setup}`;
+        myDiv02.innerHTML = `${data.punchline}`;
+      }
+      else if (data.fact) {
+        myDiv01.innerHTML = `<pre>${myJson}</pre>`;
+        myDiv01.innerHTML += `${data.fact}`;
+        myDiv02.innerHTML = `...`
       }
       
       
