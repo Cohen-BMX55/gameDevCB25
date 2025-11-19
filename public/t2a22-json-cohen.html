@@ -9,14 +9,23 @@
 
   <script>
     async function fetchData(url){
+      const myDiv01 = document.getElementById('myDiv01');
+      const myDiv02 = document.getElementById('myDiv02');
       const response = await fetch(url);
       const data = await response.json();
       console.log(data);
 
       const myJson = JSON.stringify(data, null, 2);
-      document.getElementById('myDiv01').innerHTML = '<pre>${myJson}</pre>';
-
-      document.getElementById('myDiv01').innerHTML += '<img src="${data.image}" alt="Random Image" style="max-width: 100%; height: auto;">'
+      document.getElementById('myDiv01').innerHTML = `<pre>${myJson}</pre>`;
+      if (data.image){
+        myDiv01.innerHTML += `<img src="${data.image}"" alt="Random Image" style="max-width: 100%; height: auto;">`;
+      }
+      else if (data.setup){
+        myDiv01.innerHTML = `${data.setup}`
+        myDiv02.innerHTML = `${data.punchline}
+      }
+      
+      
 
     }
 
@@ -31,5 +40,6 @@
   </select><br><br>
 
   <div id="myDiv01">...</div>
+  <div id="myDiv02">...</div>
 </body>
 </html>
