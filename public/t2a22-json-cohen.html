@@ -36,7 +36,7 @@
         myDiv01.innerHTML += `<img src="${data.links.patch.small}"" alt="Random Image" style="max-width: 100%; height: auto;">`;
         const videoID = data.links.youtube_id;
         const embedUrl = `https://www.youtube.com/embed/${videoID}`;
-        myDiv02 = `
+        myDiv02.innerHTML = `
           <iframe width="560" height="315"
             src="${embedUrl}"
             title="YouTube video player"
