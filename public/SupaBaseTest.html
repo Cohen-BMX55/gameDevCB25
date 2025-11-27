@@ -18,7 +18,8 @@
   <br>
 
   <input id="messageInput" placeholder="Type message..." style="width: 80%;">
-  <button onclick="sendMessage()">Send</button>
+  <button onclick="sendMessage()">Send</button><br>
+  <button onclick="clearChat()">Clear Chat</button>
 
   <script>
     const SUPABASE_URL = "https://oscyxwajtkcmwkuieaof.supabase.co";
@@ -54,6 +55,22 @@
         payload => addMessageToPage(payload.new.text)
       )
       .subscribe();
+
+    async function clearChat() {
+      if (!confirm("Are you sure you want to delete all messages?")) return;
+    
+      const { data, error } = await client
+        .from("messages")
+        .delete()
+        .neq("id", 0); // deletes all rows
+    
+      if (error) {
+        alert("Error clearing chat: " + error.message);
+      } else {
+        messagesDiv.innerHTML = "";
+        alert("Chat cleared!");
+      }
+    }
 
     async function sendMessage() {
       const text = document.getElementById("messageInput").value;
