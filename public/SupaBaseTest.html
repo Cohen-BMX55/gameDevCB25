@@ -21,23 +21,21 @@
   <button onclick="sendMessage()">Send</button>
 
   <script>
-    // Replace these with your own
     const SUPABASE_URL = "https://oscyxwajtkcmwkuieaof.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zY3l4d2FqdGtjbXdrdWllYW9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxODA2NTAsImV4cCI6MjA3OTc1NjY1MH0.Jhqg-yyPkr6j32lYuTs8A47SQW9TGhhH1EZcisUX_ME";
 
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // ✅ Corrected: use "client" instead of "supabase"
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const messagesDiv = document.getElementById("messages");
 
-    // Load existing messages
     async function loadMessages() {
-      const { data } = await supabase
+      const { data } = await client
         .from("messages")
         .select("*")
         .order("created_at", { ascending: true });
 
       messagesDiv.innerHTML = "";
-
       data.forEach(msg => addMessageToPage(msg.text));
     }
 
@@ -49,26 +47,26 @@
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
-    // Listen for realtime new messages
-    supabase.channel("public:messages")
+    // ✅ Use client for realtime as well
+    client.channel("public:messages")
       .on("postgres_changes", 
         { event: "INSERT", schema: "public", table: "messages" },
         payload => addMessageToPage(payload.new.text)
       )
       .subscribe();
 
-    // Send new message
     async function sendMessage() {
       const text = document.getElementById("messageInput").value;
       if (!text.trim()) return;
 
-      await supabase.from("messages").insert([{ text }]);
+      // insert using correct client
+      await client.from("messages").insert([{ text }]);
 
       document.getElementById("messageInput").value = "";
     }
 
-    // Initial load
     loadMessages();
   </script>
 </body>
 </html>
+
