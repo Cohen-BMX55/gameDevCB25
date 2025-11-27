@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Example Webpage</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+  <h1>Supabase Demo</h1>
+
+  <!-- Authentication -->
+  <h2>Login</h2>
+  <input id="email" placeholder="Email" />
+  <input id="password" type="password" placeholder="Password" />
+  <button onclick="signIn()">Sign In</button>
+  <button onclick="signUp()">Sign Up</button>
+
+  <hr>
+
+  <!-- Insert message -->
+  <h2>Add Message</h2>
+  <input id="message" placeholder="Type a message" />
+  <button onclick="addMessage()">Submit</button>
+
+  <hr>
+
+  <!-- Display messages -->
+  <h2>Messages</h2>
+  <button onclick="loadMessages()">Load Messages</button>
+  <ul id="messages"></ul>
+
+  <script>
+    // ⬇️ replace with your Supabase project values
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
+
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Sign up new user
+    async function signUp() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      let { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) alert(error.message);
+      else alert("Signup successful! Check your email.");
+    }
+
+    // Sign in existing user
+    async function signIn() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      let { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) alert(error.message);
+      else alert("Logged in!");
+    }
+
+    // Insert message into "messages" table
+    async function addMessage() {
+      const message = document.getElementById("message").value;
+
+      let { data, error } = await supabase.from("messages").insert([
+        { text: message }
+      ]);
+
+      if (error) alert(error.message);
+      else alert("Message added!");
+    }
+
+    // Load all messages
+    async function loadMessages() {
+      let { data, error } = await supabase.from("messages").select("*");
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      const list = document.getElementById("messages");
+      list.innerHTML = "";
+
+      data.forEach(msg => {
+        let li = document.createElement("li");
+        li.textContent = msg.text;
+        list.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
