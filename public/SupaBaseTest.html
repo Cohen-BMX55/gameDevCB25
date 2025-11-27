@@ -1,89 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Supabase Chatroom</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    body { font-family: Arial; max-width: 600px; margin: auto; padding: 20px; }
-    #messages { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
-    .msg { padding: 4px 0; border-bottom: 1px solid #eee; }
-  </style>
+  <title>magic word</title>
 </head>
 <body>
-  <h1>Supabase Chatroom</h1>
+<h1>magic word</h1>
+<form id="magicForm">
+  <input type="text" name="word" value="fred">
+  <button type="submit">Submit</button>
+</form>
+<p id="result"></p>
 
-  <div id="messages"></div>
-
-  <br>
-
-  <input id="messageInput" placeholder="Type message..." style="width: 80%;">
-  <button onclick="sendMessage()">Send</button><br>
-  <button onclick="clearChat()">Clear Chat</button>
-
-  <script>
-    const SUPABASE_URL = "https://oscyxwajtkcmwkuieaof.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zY3l4d2FqdGtjbXdrdWllYW9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxODA2NTAsImV4cCI6MjA3OTc1NjY1MH0.Jhqg-yyPkr6j32lYuTs8A47SQW9TGhhH1EZcisUX_ME";
-
-    // ✅ Corrected: use "client" instead of "supabase"
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const messagesDiv = document.getElementById("messages");
-
-    async function loadMessages() {
-      const { data } = await client
-        .from("messages")
-        .select("*")
-        .order("created_at", { ascending: true });
-
-      messagesDiv.innerHTML = "";
-      data.forEach(msg => addMessageToPage(msg.text));
-    }
-
-    function addMessageToPage(text) {
-      const div = document.createElement("div");
-      div.classList.add("msg");
-      div.textContent = text;
-      messagesDiv.appendChild(div);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
-
-    // ✅ Use client for realtime as well
-    client.channel("public:messages")
-      .on("postgres_changes", 
-        { event: "INSERT", schema: "public", table: "messages" },
-        payload => addMessageToPage(payload.new.text)
-      )
-      .subscribe();
-
-    async function clearChat() {
-      if (!confirm("Are you sure you want to delete all messages?")) return;
-    
-      const { data, error } = await client
-        .from("messages")
-        .delete()
-        .neq("id", 0); // deletes all rows
-    
-      if (error) {
-        alert("Error clearing chat: " + error.message);
-      } else {
-        messagesDiv.innerHTML = "";
-        alert("Chat cleared!");
-      }
-    }
-
-    async function sendMessage() {
-      const text = document.getElementById("messageInput").value;
-      if (!text.trim()) return;
-
-      // insert using correct client
-      await client.from("messages").insert([{ text }]);
-
-      document.getElementById("messageInput").value = "";
-    }
-
-    loadMessages();
-  </script>
+<script>
+document.getElementById("magicForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const form = new FormData(e.target);
+  const res = await fetch("https://oscyxwajtkcmwkuieaof.supabase.co/functions/v1/magic", {
+    method: "POST",
+    body: form
+  });
+  const text = await res.text();
+  document.getElementById("result").innerHTML = text;
+});
+</script>
 </body>
 </html>
 
