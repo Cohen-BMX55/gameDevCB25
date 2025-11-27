@@ -1,101 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Supabase Example Webpage</title>
+  <title>Supabase Chatroom</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: auto; padding: 20px; }
+    #messages { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
+    .msg { padding: 4px 0; border-bottom: 1px solid #eee; }
+  </style>
 </head>
-
 <body>
-  <h1>Supabase Demo</h1>
+  <h1>Supabase Chatroom</h1>
 
-  <!-- Authentication -->
-  <h2>Login</h2>
-  <input id="email" placeholder="Email" />
-  <input id="password" type="password" placeholder="Password" />
-  <button onclick="signIn()">Sign In</button>
-  <button onclick="signUp()">Sign Up</button>
+  <div id="messages"></div>
 
-  <hr>
+  <br>
 
-  <!-- Insert message -->
-  <h2>Add Message</h2>
-  <input id="message" placeholder="Type a message" />
-  <button onclick="addMessage()">Submit</button>
-
-  <hr>
-
-  <!-- Display messages -->
-  <h2>Messages</h2>
-  <button onclick="loadMessages()">Load Messages</button>
-  <ul id="messages"></ul>
+  <input id="messageInput" placeholder="Type message..." style="width: 80%;">
+  <button onclick="sendMessage()">Send</button>
 
   <script>
-    // ⬇️ replace with your Supabase project values
-    const SUPABASE_URL = "https://oscyxwajtkcmwkuieaof.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zY3l4d2FqdGtjbXdrdWllYW9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxODA2NTAsImV4cCI6MjA3OTc1NjY1MH0.Jhqg-yyPkr6j32lYuTs8A47SQW9TGhhH1EZcisUX_ME";
+    // Replace these with your own
+    const SUPABASE_URL = "YOUR_URL";
+    const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
 
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Sign up new user
-    async function signUp() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    const messagesDiv = document.getElementById("messages");
 
-      let { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) alert(error.message);
-      else alert("Signup successful! Check your email.");
-    }
-
-    // Sign in existing user
-    async function signIn() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      let { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) alert(error.message);
-      else alert("Logged in!");
-    }
-
-    // Insert message into "messages" table
-    async function addMessage() {
-      const message = document.getElementById("message").value;
-
-      let { data, error } = await supabase.from("messages").insert([
-        { text: message }
-      ]);
-
-      if (error) alert(error.message);
-      else alert("Message added!");
-    }
-
-    // Load all messages
+    // Load existing messages
     async function loadMessages() {
-      let { data, error } = await supabase.from("messages").select("*");
+      const { data } = await supabase
+        .from("messages")
+        .select("*")
+        .order("created_at", { ascending: true });
 
-      if (error) {
-        alert(error.message);
-        return;
-      }
+      messagesDiv.innerHTML = "";
 
-      const list = document.getElementById("messages");
-      list.innerHTML = "";
-
-      data.forEach(msg => {
-        let li = document.createElement("li");
-        li.textContent = msg.text;
-        list.appendChild(li);
-      });
+      data.forEach(msg => addMessageToPage(msg.text));
     }
+
+    function addMessageToPage(text) {
+      const div = document.createElement("div");
+      div.classList.add("msg");
+      div.textContent = text;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Listen for realtime new messages
+    supabase.channel("public:messages")
+      .on("postgres_changes", 
+        { event: "INSERT", schema: "public", table: "messages" },
+        payload => addMessageToPage(payload.new.text)
+      )
+      .subscribe();
+
+    // Send new message
+    async function sendMessage() {
+      const text = document.getElementById("messageInput").value;
+      if (!text.trim()) return;
+
+      await supabase.from("messages").insert([{ text }]);
+
+      document.getElementById("messageInput").value = "";
+    }
+
+    // Initial load
+    loadMessages();
   </script>
 </body>
 </html>
