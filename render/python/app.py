@@ -1,47 +1,34 @@
-from flask import Flask, request
+import os
+import requests
+from flask import Flask, render_template, request, jsonify
 
-#  RENDER Settings start command needs      gunicorn app:app
+app = Flask(__name__)
 
-# The Flask application object must be available at the top level
-app = Flask(__name__) 
-MAGIC_WORD = 'fred'
+HF_API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
+HF_API_KEY = os.getenv("HF_API_KEY")
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/")
 def index():
-    # Default message when first loading the page (GET request)
-    result = "<span style='color:red'> Try the magic word 'fred'</span>"
-    
-    # Logic for handling form submission (POST request)
-    if request.method == 'POST':
-        # Get the input text from the form data
-        my_input = request.form.get('myText01')
-        
-        if my_input == MAGIC_WORD:
-            result = "<b style='color:green'> Cool! </b>"
-        else:
-            result = "<span style='color:red'> Try the magic word 'fred'</span>"
+    return render_template("index.html")
 
-    # HTML template with the dynamic result
-    html_content = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Browser Title</title>
-    </head>
-    <body>
-        <h3 align=center>Render-python-submit</h3>
-        <form action="/" method="post">
-            <label for="myText01">Enter Text:</label>
-            <input type="text" id="myText01" name="myText01">
-            <input type="submit" value="Submit">
-        </form>
-        {result}
-    </body>
-    </html>
-    """
-    return html_content
+@app.route("/generate", methods=["POST"])
+def generate():
+    prompt = request.json.get("prompt")
+    headers = {"Authorization": f"Bearer {HF_API_KEY}"}
 
-# --- REMOVE THIS BLOCK FOR PRODUCTION DEPLOYMENT ---
-# if __name__ == '__main__':
-#     app.run(debug=True)
-# ----------------------------------------------------
+    payload = {"inputs": prompt}
+
+    response = requests.post(HF_API_URL, headers=headers, json=payload)
+
+    if response.status_code != 200:
+        return jsonify({"error": "Generation failed", "details": response.text}), 500
+
+    # HuggingFace returns the image bytes directly
+    image_bytes = response.content
+    image_base64 = image_bytes.encode("base64").decode()
+
+    return jsonify({"image": image_base64})
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
