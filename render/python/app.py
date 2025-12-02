@@ -1,12 +1,18 @@
 import os
 import requests
 import base64
+import pillow
 from huggingface_hub import InferenceClient
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
 HF_API_KEY = os.getenv("HF_API_KEY")
+
+client = InferenceClient(
+    provider="auto",
+    api_key=os.environ["HF_API_KEY"],
+    )
 
 
 @app.route("/")
@@ -17,19 +23,16 @@ def index():
 def generate():
     prompt = request.json.get("prompt")
 
-    client = InferenceClient(
-    provider="auto",
-    api_key=os.environ["HF_API_KEY"],
+    image = client.text_to_image(
+    "Astronaut riding a horse",
+    model="black-forest-labs/FLUX.1-Krea-dev",
     )
 
-    response = client.post(
-    prompt,
-    model="black-forest-labs/FLUX.1-schnell",
-    )
+    buffer = BytesIO()
+    image.save(buffer, format="PNG")
+    png_bytes = buffer.getvalue()
 
-    image = response.content
-
-    image_b64 = base64.b64encode(image).decode("utf-8")
+    image_b64 = base64.b64encode(png_bytes).decode("utf-8")
     
     return jsonify({"image": image_b64})
 
