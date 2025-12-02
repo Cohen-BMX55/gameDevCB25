@@ -22,10 +22,12 @@ def generate():
     api_key=os.environ["HF_API_KEY"],
     )
 
-    image = client.text_to_image(
+    response = client.post(
     prompt,
     model="black-forest-labs/FLUX.1-schnell",
     )
+
+    image = response.content
 
     image_b64 = base64.b64encode(image).decode("utf-8")
     
