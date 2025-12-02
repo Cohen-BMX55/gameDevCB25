@@ -1,9 +1,9 @@
 import os
-import requests
 import base64
-import pillow
+from io import BytesIO
+from flask import Flask, request, jsonify
 from huggingface_hub import InferenceClient
-from flask import Flask, render_template, request, jsonify
+from PIL import Image
 
 app = Flask(__name__)
 
