@@ -1,7 +1,7 @@
 import os
 import base64
 from io import BytesIO
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from huggingface_hub import InferenceClient
 from PIL import Image
 
