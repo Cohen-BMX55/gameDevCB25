@@ -24,8 +24,8 @@ def generate():
     prompt = request.json.get("prompt")
 
     image = client.text_to_image(
-    "Astronaut riding a horse",
-    model="black-forest-labs/FLUX.1-Krea-dev",
+        prompt,
+        model="ByteDance/SDXL-Lightning",
     )
 
     buffer = BytesIO()
