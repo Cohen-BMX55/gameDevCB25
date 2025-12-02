@@ -1,11 +1,13 @@
 import os
 import requests
+import base64
+from huggingface_hub import InferenceClient
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-HF_API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
 HF_API_KEY = os.getenv("HF_API_KEY")
+
 
 @app.route("/")
 def index():
@@ -14,20 +16,21 @@ def index():
 @app.route("/generate", methods=["POST"])
 def generate():
     prompt = request.json.get("prompt")
-    headers = {"Authorization": f"Bearer {HF_API_KEY}"}
 
-    payload = {"inputs": prompt}
+    client = InferenceClient(
+    provider="auto",
+    api_key=os.environ["HF_API_KEY"],
+    )
 
-    response = requests.post(HF_API_URL, headers=headers, json=payload)
+    image = client.text_to_image(
+    prompt,
+    model="black-forest-labs/FLUX.1-schnell",
+    )
 
-    if response.status_code != 200:
-        return jsonify({"error": "Generation failed", "details": response.text}), 500
+    image_b64 = base64.b64encode(image).decode("utf-8")
+    
+    return jsonify({"image": image_b64})
 
-    # HuggingFace returns the image bytes directly
-    image_bytes = response.content
-    image_base64 = image_bytes.encode("base64").decode()
-
-    return jsonify({"image": image_base64})
 
 
 if __name__ == "__main__":
