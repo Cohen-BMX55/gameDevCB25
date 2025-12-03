@@ -10,7 +10,6 @@ app = Flask(__name__)
 HF_API_KEY = os.getenv("HF_API_KEY")
 
 client = InferenceClient(
-    provider="hf-inference",
     api_key=os.environ["HF_API_KEY"],
     )
 
