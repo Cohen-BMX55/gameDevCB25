@@ -10,7 +10,7 @@ app = Flask(__name__)
 HF_API_KEY = os.getenv("HF_API_KEY")
 
 client = InferenceClient(
-    provider="hf-inference",
+    provider="replicate",
     api_key=os.environ["HF_API_KEY"],
     )
 
@@ -25,7 +25,7 @@ def generate():
 
     image = client.text_to_image(
         prompt,
-        model="ByteDance/SDXL-Lightning",
+        model="black-forest-labs/FLUX.1-Krea-dev",
     )
 
     buffer = BytesIO()
