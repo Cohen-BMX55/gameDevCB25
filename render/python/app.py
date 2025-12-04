@@ -1,14 +1,16 @@
 from flask import Flask, request, jsonify, render_template
 import os
 import asyncio
-from horde_sdk.ai_horde_api.ai_horde_clients import AIHordeAPISimpleClient
-from horde_sdk.ai_horde_api.apimodels.generate import ImageGenerateAsyncRequest, GenerationInputStable
 from flask_cors import CORS
 
-app = Flask(__name__)
-CORS(app)  # allow cross-origin requests
+# Horde SDK v0.18.0 imports
+from horde_sdk import AsyncStableHordeClient
+from horde_sdk.models import StableHordeGenerationRequest
 
-API_KEY = os.environ.get("AI_HORDE_KEY", "0000000000")  # Use environment variable on Render
+app = Flask(__name__)
+CORS(app)
+
+API_KEY = os.environ.get("AI_HORDE_KEY", "0000000000")  # use env var on Render
 
 @app.route("/")
 def index():
@@ -22,31 +24,33 @@ def generate_image():
     if not prompt:
         return jsonify({"error": "No prompt provided"}), 400
 
-    # Use asyncio to run async Horde client in Flask
     async def run_horde(prompt):
-        client = AIHordeAPISimpleClient(api_key=API_KEY)
-        gen_request = ImageGenerateAsyncRequest(
+        client = AsyncStableHordeClient(api_key=API_KEY)
+        # Use StableHordeGenerationRequest instead of old ImageGenerateAsyncRequest
+        gen_request = StableHordeGenerationRequest(
             prompt=prompt,
-            params=GenerationInputStable(),
-            nsfw=False,
-            censor_nsfw=False
+            # width, height, steps, sampler, etc. can be customized
+            steps=25,
+            width=512,
+            height=512,
+            nsfw=False
         )
-        # Submit job
-        try:
-            status_response, job_id = await client.image_generate_request(gen_request, timeout=300)
-        except Exception as e:
-            return {"error": f"Failed to submit generation: {e}"}
 
-        # Poll until generation is ready
+        # Submit job
+        job_response = await client.generate_async(gen_request)
+        job_id = job_response.id
+
+        # Poll for result
         while True:
-            check = await client.get_generate_status(job_id)
-            if check.generations:
+            status = await client.get_status(job_id)
+            if status.generations and len(status.generations) > 0:
                 break
             await asyncio.sleep(1)
 
-        gen = check.generations[0]
+        gen = status.generations[0]
         img_b64 = gen.img
         data_uri = f"data:image/png;base64,{img_b64}"
+
         return {
             "prompt": prompt,
             "image_base64": img_b64,
@@ -58,6 +62,7 @@ def generate_image():
         return jsonify(result), 500
 
     return jsonify(result)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
