@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import Vibrant from "node-vibrant";
+import { Vibrant } from "node-vibrant";
 import path from "path";
 import fs from "fs";
 
