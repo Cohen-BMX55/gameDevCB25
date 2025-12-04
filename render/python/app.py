@@ -2,7 +2,7 @@
 import os
 import asyncio
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
 from horde_sdk.ai_horde_api.ai_horde_clients import AIHordeAPISimpleClient
