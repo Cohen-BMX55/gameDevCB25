@@ -1,13 +1,14 @@
 {
-  "name": "t2a06-node-codesandbox",
+  "name": "color-extractor",
   "version": "1.0.0",
-  "description": "Simple Express server for T2A06",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.19.2",
-    "body-parser": "^1.20.2"
+    "multer": "^1.4.5",
+    "node-vibrant": "^3.2.1"
   }
 }

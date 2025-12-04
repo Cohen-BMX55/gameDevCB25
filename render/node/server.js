@@ -2,11 +2,16 @@ import express from "express";
 import multer from "multer";
 import Vibrant from "node-vibrant";
 import path from "path";
+import fs from "fs";
+
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
 
 const app = express();
 const upload = multer({ dest: "uploads/" });
 
-app.use(express.static("."));
+app.use(express.static("public"));
 
 app.post("/upload", upload.single("image"), async (req, res) => {
   try {
@@ -24,4 +29,9 @@ app.post("/upload", upload.single("image"), async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
