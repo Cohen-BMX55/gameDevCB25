@@ -1,3 +1,4 @@
 Flask==3.1.0
 flask-cors==3.0.10
 horde_sdk==0.18.0
+gunicorn
