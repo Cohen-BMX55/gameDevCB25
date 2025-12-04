@@ -16,7 +16,12 @@ CORS(app)
 
 API_KEY = os.environ.get("AI_HORDE_KEY", "0000000000")
 
-@app.route("/generate-image", methods=["POST"])
+@app.route("/")
+def index():
+    # Flask will look inside templates/ folder automatically
+    return render_template("index.html")
+
+@app.route("/generate", methods=["POST"])
 def generate_image():
     data = request.get_json()
     prompt = data.get("prompt", "").strip()
