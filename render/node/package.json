@@ -9,6 +9,6 @@
   "dependencies": {
     "express": "^4.19.2",
     "multer": "^2.0.1",
-    "node-vibrant": "^3.2.1"
+    "node-vibrant": "^4.0.1"
   }
 }
