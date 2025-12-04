@@ -1,66 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Color Extractor</title>
+  <meta charset="UTF-8">
+  <title>Magic 8-Ball 🎱</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px;
+      background: #282c34;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 50px;
     }
-    #palette {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
+    h1 {
+      color: #61dafb;
     }
-    .color-box {
-      width: 80px;
-      height: 80px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+    input, button {
+      padding: 10px;
+      font-size: 1rem;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background-color: #61dafb;
+      color: #282c34;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #21a1f1;
+    }
+    #answer-box {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      min-height: 50px;
     }
   </style>
 </head>
 <body>
-  <h1>🎨 Extract Colors From an Image</h1>
+  <h1>Magic 8-Ball 🎱</h1>
+  <p>Ask any yes/no question and click the button to see your answer!</p>
 
-  <input type="file" id="fileInput" accept="image/*" />
-  <button id="uploadBtn">Upload</button>
+  <input type="text" id="question-input" placeholder="Type your question here" size="40">
+  <br>
+  <button onclick="askMagic8Ball()">Ask the 8-Ball</button>
 
-  <div id="palette"></div>
+  <div id="answer-box"></div>
 
   <script>
-    const uploadBtn = document.getElementById("uploadBtn");
-    const fileInput = document.getElementById("fileInput");
-    const paletteDiv = document.getElementById("palette");
+    async function askMagic8Ball() {
+      const question = document.getElementById("question-input").value.trim();
+      if (!question) {
+        alert("Please enter a question!");
+        return;
+      }
 
-    uploadBtn.onclick = async () => {
-      const file = fileInput.files[0];
-      if (!file) return alert("Choose a file first!");
-
-      const formData = new FormData();
-      formData.append("image", file);
-
-      const response = await fetch("/upload", {
+      const res = await fetch("/api/ask", {
         method: "POST",
-        body: formData
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
       });
 
-      const colors = await response.json();
-      paletteDiv.innerHTML = "";
-
-      colors.forEach(c => {
-        const div = document.createElement("div");
-        div.className = "color-box";
-        div.style.background = c;
-        div.title = c;
-        paletteDiv.appendChild(div);
-      });
-    };
+      const data = await res.json();
+      if (data.error) {
+        document.getElementById("answer-box").textContent = data.error;
+      } else {
+        document.getElementById("answer-box").textContent = `🎱 ${data.answer}`;
+      }
+    }
   </script>
 </body>
 </html>

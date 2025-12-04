@@ -1,37 +1,42 @@
-import express from "express";
-import multer from "multer";
-import { Vibrant } from "node-vibrant";
-import path from "path";
-import fs from "fs";
-
-if (!fs.existsSync("uploads")) {
-  fs.mkdirSync("uploads");
-}
+import express from 'express';
+import cors from 'cors';
 
 const app = express();
-const upload = multer({ dest: "uploads/" });
-
-app.use(express.static("public"));
-
-app.post("/upload", upload.single("image"), async (req, res) => {
-  try {
-    const filePath = path.resolve(req.file.path);
-    const palette = await Vibrant.from(filePath).getPalette();
-
-    const colors = Object.values(palette)
-      .filter(Boolean)
-      .map(sw => sw.getHex());
-
-    res.json(colors);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to extract colors" });
-  }
-});
+app.use(cors());
+app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
+// Classic Magic 8-Ball responses
+const answers = [
+  "It is certain.",
+  "Without a doubt.",
+  "You may rely on it.",
+  "Yes, definitely.",
+  "Most likely.",
+  "Ask again later.",
+  "Cannot predict now.",
+  "Don’t count on it.",
+  "My sources say no.",
+  "Very doubtful."
+];
+
+// API endpoint to answer questions
+app.post("/api/ask", (req, res) => {
+  const { question } = req.body;
+
+  if (!question || question.trim() === "") {
+    return res.status(400).json({ error: "Please ask a question!" });
+  }
+
+  const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
+  res.json({ question, answer: randomAnswer });
+});
+
+// Serve frontend
+app.use(express.static("public"));
+
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Magic 8-Ball server running on port ${PORT}`);
 });
 
