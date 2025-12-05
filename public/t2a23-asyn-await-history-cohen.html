@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX, Promises, and Async/Await Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h2 { margin-top: 40px; }
+        pre { background: #f2f2f2; padding: 10px; border-radius: 6px; }
+        button { margin-bottom: 10px; padding: 8px 14px; }
+    </style>
+</head>
+<body>
+    <h1>AJAX / Promises / Async-Await Demo</h1>
+
+    <!-- XHR -->
+    <h2>1. Legacy AJAX (XHR)</h2>
+    <button onclick="loadWithXHR()">Fetch with XHR</button>
+    <pre id="xhrOutput">Click the button above.</pre>
+
+    <!-- Promises -->
+    <h2>2. Fetch API with Promises (.then)</h2>
+    <button onclick="loadWithPromises()">Fetch with Promises</button>
+    <pre id="promiseOutput">Click the button above.</pre>
+
+    <!-- Async/Await -->
+    <h2>3. Fetch API with Async/Await</h2>
+    <button onclick="loadWithAsync()">Fetch with Async/Await</button>
+    <pre id="asyncOutput">Click the button above.</pre>
+
+<script>
+// -----------------------------------------------
+// 1. Legacy AJAX (XMLHttpRequest)
+// -----------------------------------------------
+function loadWithXHR() {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1");
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            document.getElementById("xhrOutput").textContent = xhr.responseText;
+        } else {
+            document.getElementById("xhrOutput").textContent = "Error: " + xhr.status;
+        }
+    };
+    xhr.onerror = function() {
+        document.getElementById("xhrOutput").textContent = "Network error!";
+    };
+    xhr.send();
+}
+
+// -----------------------------------------------
+// 2. Fetch + Promises (.then)
+// -----------------------------------------------
+function loadWithPromises() {
+    fetch("https://jsonplaceholder.typicode.com/posts/1")
+        .then(res => {
+            if (!res.ok) throw new Error(res.status);
+            return res.json();
+        })
+        .then(data => {
+            document.getElementById("promiseOutput").textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+            document.getElementById("promiseOutput").textContent = "Error: " + err;
+        });
+}
+
+// -----------------------------------------------
+// 3. Fetch + Async/Await
+// -----------------------------------------------
+async function loadWithAsync() {
+    try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/posts/1");
+        if (!res.ok) throw new Error(res.status);
+        const data = await res.json();
+        document.getElementById("asyncOutput").textContent = JSON.stringify(data, null, 2);
+    } catch (err) {
+        document.getElementById("asyncOutput").textContent = "Error: " + err;
+    }
+}
+</script>
+</body>
+</html>
