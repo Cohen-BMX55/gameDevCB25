@@ -22,35 +22,43 @@ def index():
     return render_template("index.html")
 
 @app.route("/generate", methods=["POST"])
-def generate_image():
+async def generate_image():
     data = request.get_json()
     prompt = data.get("prompt", "").strip()
+
     if not prompt:
         return jsonify({"error": "No prompt provided"}), 400
 
-    async def do_gen(prompt_text):
-        client = AIHordeAPISimpleClient()
-        # Build request
-        req = ImageGenerateAsyncRequest(
-            apikey=API_KEY,
-            prompt=prompt_text,
-            params=ImageGenerationInputPayload(width=512, height=512, steps=25, n=1),
-            nsfw=False,
-            censor_nsfw=False,
-        )
-        # Send request & wait
-        status_resp, job_id = await client.image_generate_request(req, timeout=300)
-        # status_resp.generations holds images once done
-        generation = status_resp.generations[0]
-        img_b64 = generation.img
-        return img_b64
+    client = AIHordeAPISimpleClient()
 
-    try:
-        img_b64 = asyncio.run(do_gen(prompt))
-    except Exception as e:
-        return jsonify({"error": "Generation failed", "details": str(e)}), 500
+    req = ImageGenerateAsyncRequest(
+        apikey=API_KEY,
+        prompt=prompt,
+        model="stable_diffusion",
+        params=ImageGenerationInputPayload(
+            width=512,
+            height=512,
+            steps=25,
+            n=1
+        ),
+        nsfw=False,
+        censor_nsfw=False,
+    )
 
+    # Submit job
+    submit_resp = await client.image_generate_request(req)
+    job_id = submit_resp.id
+
+    # Poll for completion
+    while True:
+        status = await client.image_generate_status(job_id)
+        if status.done:
+            break
+        await asyncio.sleep(1)
+
+    img_b64 = status.generations[0].img
     data_uri = f"data:image/png;base64,{img_b64}"
+
     return jsonify({"image_base64": img_b64, "image_data_uri": data_uri})
 
 if __name__ == "__main__":
