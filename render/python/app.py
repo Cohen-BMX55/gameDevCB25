@@ -22,7 +22,7 @@ def index():
     return render_template("index.html")
 
 @app.route("/generate", methods=["POST"])
-async def generate_image():
+def generate_image():
     data = request.get_json()
     prompt = data.get("prompt", "").strip()
 
