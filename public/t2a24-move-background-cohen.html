@@ -60,7 +60,7 @@
     <script>
         const viewer = pannellum.viewer('panorama', {
             type: 'equirectangular',
-            panorama: 'img/mcImage.jpg',   // <-- replace with your image
+            panorama: 'img/360pan1.jpg',   // <-- replace with your image
             autoLoad: true,
             showZoomCtrl: true,
             showFullscreenCtrl: true,
@@ -83,7 +83,7 @@
                 // Start rotation
                 autoRotateInterval = setInterval(() => {
                     const currentYaw = viewer.getYaw();
-                    viewer.setYaw(currentYaw - 0.2); // adjust speed here
+                    viewer.setYaw(currentYaw - 5); // adjust speed here
                 }, 30); // runs every 30ms
                 rotateBtn.textContent = "Stop Auto-Rotate";
             }
