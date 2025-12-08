@@ -28,10 +28,11 @@
     <div id="viewer"></div>
 
     <!-- PhotoSphereViewer JS -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/dist/index.js"></script>
 
     <script>
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
+        import { Viewer } from 'https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/dist/index.module.js';
+        
         const viewer = new PhotoSphereViewer.Viewer({
             container: document.getElementById('viewer'),
             panorama: 'img/mcImage.jpg',  // ← Replace with your 360° image
