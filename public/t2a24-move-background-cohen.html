@@ -48,6 +48,30 @@
         #rotateBtn:hover {
             background: rgba(255,255,255,1);
         }
+        #buttonContainer {
+        position: absolute;
+        top: 60px; /* below the header */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px; /* space between buttons */
+        z-index: 10;
+    }
+
+    /* Buttons styling */
+    #buttonContainer button {
+        padding: 8px 16px;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background: rgba(255,255,255,0.8);
+        transition: background 0.2s;
+    }
+
+    #buttonContainer button:hover {
+        background: rgba(255,255,255,1);
+    }
     </style>
 </head>
 
