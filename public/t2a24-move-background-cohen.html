@@ -1,73 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Minecraft-style Background Demo</title>
-  <style>
-    body {
-      background-image: url('img/mcImage.jpg');
-      background-repeat: repeat;
-      background-size: 100% auto;
-      background-position: 0px 0px;
-      margin: 0;
-      padding: 0;
-    }
-    .controls {
-      padding: 20px;
-      text-align: center;
-    }
-    img#myImage01 {
-      position: relative;
-      width: 100px;
-      height: 80px;
-      top: 0;
-      left: 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360° Panorama Viewer</title>
+
+    <!-- PhotoSphereViewer CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/photosphere-viewer/dist/photosphere-viewer.css">
+
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #viewer {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
-<body id="myBody">
 
-  <h1 style="text-align:center;">Minecraft-Style Background + Image Move</h1>
+<body>
+    <div id="viewer"></div>
 
-  <div class="controls">
-    <button id="btnMoveLeft">Move Background Left</button>
-    <button id="btnAutoLeft">Auto Background Left</button>
-    <button id="btnStop">Stop Background Move</button>
-    <button id="btnImageRight">Move Image Right</button>
-  </div>
+    <!-- PhotoSphereViewer JS -->
+    <script src="https://unpkg.com/uevent"></script>
+    <script src="https://unpkg.com/three"></script>
+    <script src="https://unpkg.com/photosphere-viewer"></script>
 
-  <img id="myImage01" src="img/mcImage.jpg" alt="Moving Image">
-
-  <script>
-    let bgX = 0;
-    let autoScroll = null;
-
-    function moveBackgroundLeft() {
-      bgX -= 5;
-      document.getElementById("myBody").style.backgroundPosition = bgX + "px 0px";
-    }
-
-    function moveImageRight() {
-      const img = document.getElementById("myImage01");
-      const curLeft = parseInt(img.style.left) || 0;
-      img.style.left = (curLeft + 10) + "px";
-    }
-
-    document.getElementById("btnMoveLeft")
-      .addEventListener("click", moveBackgroundLeft);
-
-    document.getElementById("btnAutoLeft")
-      .addEventListener("click", () => {
-        clearInterval(autoScroll);
-        autoScroll = setInterval(moveBackgroundLeft, 80);
-      });
-
-    document.getElementById("btnStop")
-      .addEventListener("click", () => clearInterval(autoScroll));
-
-    document.getElementById("btnImageRight")
-      .addEventListener("click", moveImageRight);
-  </script>
-
+    <script>
+        const viewer = new PhotoSphereViewer.Viewer({
+            container: document.getElementById('viewer'),
+            panorama: 'img/mcImage.jpg',  // ← Replace with your 360° image
+            navbar: [
+                'zoom', 'fullscreen'
+            ],
+            defaultZoomLvl: 0
+        });
+    </script>
 </body>
 </html>
