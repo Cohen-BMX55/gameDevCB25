@@ -1,30 +1,73 @@
-<body id="myBody" style="background-repeat:repeat; background-size: 80%" background="img/background1.jpg">
-<h1 align=center>t2a24-move-background-fred.html</h1>
-  
-<script>
-   let myGlobalX = 0
-   let myClock
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Minecraft-style Background Demo</title>
+  <style>
+    body {
+      background-image: url('minecraft_bg.jpg');
+      background-repeat: repeat;
+      background-size: cover;
+      background-position: 0px 0px;
+      margin: 0;
+      padding: 0;
+    }
+    .controls {
+      padding: 20px;
+      text-align: center;
+    }
+    img#myImage01 {
+      position: relative;
+      width: 100px;
+      height: 80px;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body id="myBody">
 
-<input id="myButton01" type=button value="background move left" onclick="{
-  myTemp = '100px 0px'
-  myGlobalX -= 5
-  myTemp =  myGlobalX + 'px 0px'
-  document.getElementById('myBody').style.backgroundPosition =myTemp
+  <h1 style="text-align:center;">Minecraft-Style Background + Image Move</h1>
 
-}">
+  <div class="controls">
+    <button id="btnMoveLeft">Move Background Left</button>
+    <button id="btnAutoLeft">Auto Background Left</button>
+    <button id="btnStop">Stop Background Move</button>
+    <button id="btnImageRight">Move Image Right</button>
+  </div>
 
-<input type=button value="Auto Background Left" onclick="{
-  clearInterval(myClock)
-  myClock = setInterval(function(){
-     document.getElementById('myButton01').click() 
-  }, 100)
-    
-}">
+  <img id="myImage01" src="img/mcImage.jpg" alt="Moving Image">
 
-<input type=button value="Image Right" onclick="{
-  document.getElementById('myImage01').style.left = parseInt(document.getElementById('myImage01').style.left) + 10 + 'px'
-}"><br><br>
+  <script>
+    let bgX = 0;
+    let autoScroll = null;
 
+    function moveBackgroundLeft() {
+      bgX -= 5;
+      document.getElementById("myBody").style.backgroundPosition = bgX + "px 0px";
+    }
 
-<img id="myImage01" style="position:relative; width:100px; height:80px; top:0px; left:0px;" src="myImage01.jpg">
+    function moveImageRight() {
+      const img = document.getElementById("myImage01");
+      const curLeft = parseInt(img.style.left) || 0;
+      img.style.left = (curLeft + 10) + "px";
+    }
+
+    document.getElementById("btnMoveLeft")
+      .addEventListener("click", moveBackgroundLeft);
+
+    document.getElementById("btnAutoLeft")
+      .addEventListener("click", () => {
+        clearInterval(autoScroll);
+        autoScroll = setInterval(moveBackgroundLeft, 80);
+      });
+
+    document.getElementById("btnStop")
+      .addEventListener("click", () => clearInterval(autoScroll));
+
+    document.getElementById("btnImageRight")
+      .addEventListener("click", moveImageRight);
+  </script>
+
+</body>
+</html>
