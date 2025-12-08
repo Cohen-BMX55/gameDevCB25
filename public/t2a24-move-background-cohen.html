@@ -20,13 +20,10 @@
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            color: white;
             font-size: 24px;
             background: white;
             padding: 8px 16px;
-            border-radius: 8px;
-            border-color: black;
-            border-width: 3px;
+            border: black 1px;
             z-index: 10;
         }
 
@@ -57,7 +54,21 @@
 <body>
     <div id="header">t2a24-move-background-cohen.html</div>
     <div id="panorama"></div>
-    <button id="rotateBtn">Start Auto-Rotate</button>
+    <button id="rotateBtn" onclick="{
+    if (autoRotateInterval) {
+                // Stop rotation
+                clearInterval(autoRotateInterval);
+                autoRotateInterval = null;
+                rotateBtn.textContent = "Stop";
+            } else {
+                // Start rotation
+                autoRotateInterval = setInterval(() => {
+                    const currentYaw = viewer.getYaw();
+                    viewer.setYaw(currentYaw - 50); // adjust speed here
+                }, 30); // runs every 30ms
+                rotateBtn.textContent = "Stop Auto-Rotate";
+            }
+          }">Auto Background Left</button>
 
     <script>
         const viewer = pannellum.viewer('panorama', {
@@ -73,23 +84,7 @@
         });
 
         let autoRotateInterval = null;
-        const rotateBtn = document.getElementById('rotateBtn');
 
-        rotateBtn.addEventListener('click', () => {
-            if (autoRotateInterval) {
-                // Stop rotation
-                clearInterval(autoRotateInterval);
-                autoRotateInterval = null;
-                rotateBtn.textContent = "Start Auto-Rotate";
-            } else {
-                // Start rotation
-                autoRotateInterval = setInterval(() => {
-                    const currentYaw = viewer.getYaw();
-                    viewer.setYaw(currentYaw - 50); // adjust speed here
-                }, 30); // runs every 30ms
-                rotateBtn.textContent = "Stop Auto-Rotate";
-            }
-        });
     </script>
 </body>
 </html>
