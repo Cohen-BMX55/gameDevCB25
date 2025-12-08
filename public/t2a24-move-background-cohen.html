@@ -15,20 +15,52 @@
             overflow: hidden;
             background: #000;
         }
+        #header {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 24px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 16px;
+            border-radius: 8px;
+            z-index: 10;
+        }
+
         #panorama {
             width: 100%;
             height: 100%;
+        }
+        #rotateBtn {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            padding: 8px 16px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.8);
+        }
+
+        #rotateBtn:hover {
+            background: rgba(255,255,255,1);
         }
     </style>
 </head>
 
 <body>
+    <div id="header">t2a24-move-background-cohen.html</div>
     <div id="panorama"></div>
+    <button id="rotateBtn">Start Auto-Rotate</button>
 
     <script>
-        pannellum.viewer('panorama', {
+        const viewer = pannellum.viewer('panorama', {
             type: 'equirectangular',
-            panorama: 'img/mcImage.jpg',   // <-- put your 360 image here
+            panorama: 'panorama.jpg',   // <-- replace with your image
             autoLoad: true,
             showZoomCtrl: true,
             showFullscreenCtrl: true,
@@ -36,6 +68,25 @@
             hfov: 100,
             minHfov: 40,
             maxHfov: 120
+        });
+
+        let autoRotateInterval = null;
+        const rotateBtn = document.getElementById('rotateBtn');
+
+        rotateBtn.addEventListener('click', () => {
+            if (autoRotateInterval) {
+                // Stop rotation
+                clearInterval(autoRotateInterval);
+                autoRotateInterval = null;
+                rotateBtn.textContent = "Start Auto-Rotate";
+            } else {
+                // Start rotation
+                autoRotateInterval = setInterval(() => {
+                    const currentYaw = viewer.getYaw();
+                    viewer.setYaw(currentYaw - 0.2); // adjust speed here
+                }, 30); // runs every 30ms
+                rotateBtn.textContent = "Stop Auto-Rotate";
+            }
         });
     </script>
 </body>
