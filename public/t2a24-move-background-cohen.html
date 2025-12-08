@@ -54,19 +54,7 @@
 <body>
     <div id="header">t2a24-move-background-cohen.html</div>
     <div id="panorama"></div>
-    <button id="rotateBtn" onclick="
-    if (window.autoRotateInterval) {
-        clearInterval(window.autoRotateInterval);
-        window.autoRotateInterval = null;
-        this.textContent = 'Auto Background Left';
-    } else {
-        window.autoRotateInterval = setInterval(() => {
-            const currentYaw = window.viewer.getYaw();
-            window.viewer.setYaw(currentYaw - 50); // adjust speed here
-        }, 30);
-        this.textContent = 'Stop Auto-Rotate';
-    }
-"> Auto Background Left</button>
+    <button id="rotateBtn">Background Auto Left</button>
 
     <script>
         const viewer = pannellum.viewer('panorama', {
@@ -82,7 +70,23 @@
         });
 
         let autoRotateInterval = null;
+        const rotateBtn = document.getElementById('rotateBtn');
 
+        rotateBtn.addEventListener('click', () => {
+            if (autoRotateInterval) {
+                // Stop rotation
+                clearInterval(autoRotateInterval);
+                autoRotateInterval = null;
+                rotateBtn.textContent = "Start Auto-Rotate";
+            } else {
+                // Start rotation
+                autoRotateInterval = setInterval(() => {
+                    const currentYaw = viewer.getYaw();
+                    viewer.setYaw(currentYaw - 50); // adjust speed here
+                }, 30); // runs every 30ms
+                rotateBtn.textContent = "Stop Auto-Rotate";
+            }
+        });
     </script>
 </body>
 </html>
