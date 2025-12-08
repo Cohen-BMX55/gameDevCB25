@@ -22,9 +22,11 @@
             transform: translateX(-50%);
             color: white;
             font-size: 24px;
-            background: rgba(0, 0, 0, 0.5);
+            background: white;
             padding: 8px 16px;
             border-radius: 8px;
+            border-color: black;
+            border-width: 3px;
             z-index: 10;
         }
 
@@ -83,7 +85,7 @@
                 // Start rotation
                 autoRotateInterval = setInterval(() => {
                     const currentYaw = viewer.getYaw();
-                    viewer.setYaw(currentYaw - 5); // adjust speed here
+                    viewer.setYaw(currentYaw - 50); // adjust speed here
                 }, 30); // runs every 30ms
                 rotateBtn.textContent = "Stop Auto-Rotate";
             }
