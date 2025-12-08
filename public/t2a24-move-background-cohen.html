@@ -55,11 +55,12 @@
     <div id="header">t2a24-move-background-cohen.html</div>
     <div id="panorama"></div>
     <button id="rotateBtn">Background Auto Left</button>
+    <button id="stepLeftBtn">Move Left Once</button>
 
     <script>
         const viewer = pannellum.viewer('panorama', {
             type: 'equirectangular',
-            panorama: 'img/360pan1.jpg',   // <-- replace with your image
+            panorama: 'img/360pan2.jpg',   // <-- replace with your image
             autoLoad: true,
             showZoomCtrl: true,
             showFullscreenCtrl: true,
@@ -86,6 +87,15 @@
                 }, 30); // runs every 30ms
                 rotateBtn.textContent = "Stop Auto-Rotate";
             }
+        });
+
+        const stepLeftBtn = document.getElementById('stepLeftBtn');
+
+        stepLeftBtn.addEventListener('click', () => {
+            // Get current yaw
+            const currentYaw = viewer.getYaw();
+            // Move left by 5 degrees (adjust as needed)
+            viewer.setYaw(currentYaw - 5);
         });
     </script>
 </body>
