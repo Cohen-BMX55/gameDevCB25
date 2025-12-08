@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>360° Panorama Viewer</title>
+    <meta charset="UTF-8" />
+    <title>Minecraft 360 Panorama Viewer</title>
 
-    <!-- PhotoSphereViewer CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/photosphere-viewer/dist/photosphere-viewer.css">
+    <!-- Pannellum Library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
 
     <style>
-        body {
+        html, body {
             margin: 0;
+            height: 100%;
+            overflow: hidden;
             background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
-        #viewer {
+        #panorama {
             width: 100%;
             height: 100%;
         }
@@ -25,21 +23,19 @@
 </head>
 
 <body>
-    <div id="viewer"></div>
-
-    <!-- PhotoSphereViewer JS -->
+    <div id="panorama"></div>
 
     <script>
-        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
-        import { Viewer } from 'https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/dist/index.module.js';
-        
-        const viewer = new PhotoSphereViewer.Viewer({
-            container: document.getElementById('viewer'),
-            panorama: 'img/mcImage.jpg',  // ← Replace with your 360° image
-            navbar: [
-                'zoom', 'fullscreen'
-            ],
-            defaultZoomLvl: 0
+        pannellum.viewer('panorama', {
+            type: 'equirectangular',
+            panorama: 'img/mcImage.jpg',   // <-- put your 360 image here
+            autoLoad: true,
+            showZoomCtrl: true,
+            showFullscreenCtrl: true,
+            compass: false,
+            hfov: 100,
+            minHfov: 40,
+            maxHfov: 120
         });
     </script>
 </body>
