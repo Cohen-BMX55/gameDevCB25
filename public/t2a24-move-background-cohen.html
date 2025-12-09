@@ -47,9 +47,7 @@
         padding: 8px 16px;
         font-size: 16px;
         border: none;
-        border-radius: 6px;
         cursor: pointer;
-        background: rgba(255,255,255,0.8);
         transition: background 0.2s;
     }
 
@@ -94,8 +92,7 @@
             } else {
                 // Start rotation
                 autoRotateInterval = setInterval(() => {
-                    const currentYaw = viewer.getYaw();
-                    viewer.setYaw(currentYaw - 50); // adjust speed here
+                    viewer.setYaw(viewer.getYaw() - 50); // adjust speed here
                 }, 30); // runs every 30ms
                 rotateBtn.textContent = "Stop Left Auto";
             }
@@ -105,9 +102,8 @@
 
         stepLeftBtn.addEventListener('click', () => {
             // Get current yaw
-            const currentYaw = viewer.getYaw();
             // Move left by 5 degrees (adjust as needed)
-            viewer.setYaw(currentYaw - 5);
+            viewer.setYaw(viewer.getYaw() - 5);
         });
     </script>
 </body>
