@@ -1,10 +1,149 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>t2a28-spy-cohen.html</title>
+    <style>
+        body {
+            background-color: aqua;
+        }
+        h1 {
+            display: flex;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            text-align: center;
+        }
+        textarea, input, select, button {
+            width: 50%;
+            align-self: center;
+            padding: 10px;
+
+        }
+    </style>
 </head>
 <body>
-    <h1 align=center>t2a28-spy-cohen.html</h1>
-    <textarea value=""></textarea>
+
+    <h1>t2a28-spy-cohen.html</h1>
+
+    <form id="encryptForm">
+        <label for="encryptBox">Data to be Encrypted</label>
+        <textarea id="encryptBox">Encrypt me please!!</textarea>
+
+        <label for="methodSelect">Encryption Method</label>
+        <select id="methodSelect">
+            <option value="shift">Shift Cipher (no key)</option>
+            <option value="vigenere">Shift Cipher with Key (Vigenère style)</option>
+        </select>
+
+        <label for="keyBox">Key (optional, used for Vigenère method)</label>
+        <input type="text" id="keyBox" placeholder="Enter a key">
+
+        <button type="button" id="encryptBtn">Encrypt</button>
+
+        <label for="cipherText">Encrypted Output</label>
+        <textarea id="cipherText" readonly></textarea>
+    </form>
+
+    <form id="decryptForm">
+        <label for="decryptBox">Data to be Decrypted</label>
+        <textarea id="decryptBox"></textarea>
+
+        <label for="methodSelectDec">Decryption Method</label>
+        <select id="methodSelectDec">
+            <option value="shift">Shift Cipher (no key)</option>
+            <option value="vigenere">Shift Cipher with Key (Vigenère style)</option>
+        </select>
+
+        <label for="keyBoxDec">Key (required for Vigenère method)</label>
+        <input type="text" id="keyBoxDec" placeholder="Enter the key">
+
+        <button type="button" id="decryptBtn">Decrypt</button>
+
+        <label for="plainText">Decrypted Output</label>
+        <textarea id="plainText" readonly></textarea>
+    </form>
+
+    <script>
+        const alphabet = "abcdefghijklmnopqrstuvwxyz ";
+        const n = alphabet.length;
+
+        // Shift cipher (forward)
+        function shiftTextForward(text) {
+            return [...text.toLowerCase()].map(char => {
+                const i = alphabet.indexOf(char);
+                if (i === -1) return char;
+                return alphabet[(i + 1) % n];
+            }).join("");
+        }
+
+        // Shift cipher (backward)
+        function shiftTextBackward(text) {
+            return [...text.toLowerCase()].map(char => {
+                const i = alphabet.indexOf(char);
+                if (i === -1) return char;
+                return alphabet[(i - 1 + n) % n];
+            }).join("");
+        }
+
+        // Vigenère-style encryption with key
+        function vigenereEncrypt(text, key) {
+            text = text.toLowerCase();
+            key = key.toLowerCase().replace(/[^a-z]/g, '');
+            if (!key) return text; // if no key, return original
+
+            return [...text].map((char, idx) => {
+                const i = alphabet.indexOf(char);
+                if (i === -1) return char;
+                const keyChar = key[idx % key.length];
+                const keyShift = alphabet.indexOf(keyChar);
+                return alphabet[(i + keyShift) % n];
+            }).join("");
+        }
+
+        // Vigenère-style decryption with key
+        function vigenereDecrypt(text, key) {
+            text = text.toLowerCase();
+            key = key.toLowerCase().replace(/[^a-z]/g, '');
+            if (!key) return text;
+
+            return [...text].map((char, idx) => {
+                const i = alphabet.indexOf(char);
+                if (i === -1) return char;
+                const keyChar = key[idx % key.length];
+                const keyShift = alphabet.indexOf(keyChar);
+                return alphabet[(i - keyShift + n) % n];
+            }).join("");
+        }
+
+        // Encryption button
+        document.getElementById('encryptBtn').addEventListener('click', () => {
+            const text = document.getElementById('encryptBox').value;
+            const method = document.getElementById('methodSelect').value;
+            const key = document.getElementById('keyBox').value;
+
+            let output;
+            if (method === 'shift') output = shiftTextForward(text);
+            else if (method === 'vigenere') output = vigenereEncrypt(text, key);
+
+            document.getElementById('cipherText').value = output;
+        });
+
+        // Decryption button
+        document.getElementById('decryptBtn').addEventListener('click', () => {
+            const text = document.getElementById('decryptBox').value;
+            const method = document.getElementById('methodSelectDec').value;
+            const key = document.getElementById('keyBoxDec').value;
+
+            let output;
+            if (method === 'shift') output = shiftTextBackward(text);
+            else if (method === 'vigenere') output = vigenereDecrypt(text, key);
+
+            document.getElementById('plainText').value = output;
+        });
+    </script>
+
 </body>
 </html>
