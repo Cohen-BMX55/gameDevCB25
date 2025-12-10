@@ -207,7 +207,7 @@
         }
 
         // Encryption button
-        document.getElementById('encryptBtn').addEventListener('click', () => {
+        document.getElementById('encryptBtn').addEventListener('click', async () => {
             const text = document.getElementById('encryptBox').value;
             const method = document.getElementById('methodSelect').value;
             const key = document.getElementById('keyBox').value;
@@ -215,7 +215,7 @@
             let output;
             if (method === 'shift') output = shiftTextForward(text);
             else if (method === 'vigenere') output = vigenereEncrypt(text, key);
-            else if (method === 'aes') output = encrypt(key, text);
+            else if (method === 'aes') output = await encrypt(key, text);
 
             document.getElementById('cipherText').value = output;
         });
