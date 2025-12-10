@@ -221,7 +221,7 @@
         });
 
         // Decryption button
-        document.getElementById('decryptBtn').addEventListener('click', () => {
+        document.getElementById('decryptBtn').addEventListener('click', async () => {
             const text = document.getElementById('decryptBox').value;
             const method = document.getElementById('methodSelectDec').value;
             const key = document.getElementById('keyBoxDec').value;
@@ -229,7 +229,7 @@
             let output;
             if (method === 'shift') output = shiftTextBackward(text);
             else if (method === 'vigenere') output = vigenereDecrypt(text, key);
-            else if (method === 'aes') output = decrypt(key, text);
+            else if (method === 'aes') output = await decrypt(key, text);
 
             document.getElementById('plainText').value = output;
         });
