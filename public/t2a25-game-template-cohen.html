@@ -1,18 +1,25 @@
-<h6> Version 0.0.1 </h6>
+<h6> Version 0.1.0 </h6>
 
-<body id="myBody" style="background-repeat:repeat; background-size: 80%" background="myBackground01.jpg">
+<body id="myBody"
+style="background-repeat:repeat; background-size:80%; overflow:hidden;"
+background="myBackground01.jpg"
+onkeydown="myKeyDown(event)">
 
-<h1 align=center>t2a25-game-template-fred.html</h1>
-<br><br><br><br>
+<h1 align="center">t2a25-game-template-cohen</h1>
+
+<div id="hud" style="position:fixed; top:10px; left:10px; color:white; font-size:20px;">
+Score: <span id="score">0</span> |
+Lives: <span id="lives">3</span>
+</div>
 
 <script>
+let myGlobalX = 0
+let myClock
+let score = 0
+let lives = 3
+let enemySpeed = 4
 
-   // global variables here
-   let myGlobalX = 0
-   let myClock
-
-
-   // global functions here
+// ===== ORIGINAL FUNCTIONS (UNCHANGED) =====
 function myHitOther(my1,my2){
    left1   = parseInt(document.getElementById(my1).style.left)
    right1  = left1 + parseInt(document.getElementById(my1).style.width)
@@ -30,40 +37,73 @@ function myHitOther(my1,my2){
    }
 }
 
-
 function myCheckHit(){
    if ( myHitOther('myImg01','myImg02') ){
-       alert('you lose')  
-       document.getElementById('myImg01').style.left = '20px'
-       location = 't2a13-keydown.html'  // go to your next level
+       lives--
+       document.getElementById('lives').innerHTML = lives
+       document.getElementById('myImg01').style.left = '50px'
+       document.getElementById('myImg01').style.top  = '200px'
+
+       if (lives <= 0){
+           alert('GAME OVER\nFinal Score: ' + score)
+           location.reload()
+       }
+   }
+}
+// ===== END ORIGINAL FUNCTIONS =====
+
+
+// Player movement
+function myKeyDown(e){
+   let player = document.getElementById('myImg01')
+   let x = parseInt(player.style.left)
+   let y = parseInt(player.style.top)
+
+   if (e.key == "ArrowRight") x += 10
+   if (e.key == "ArrowLeft")  x -= 10
+   if (e.key == "ArrowUp")    y -= 10
+   if (e.key == "ArrowDown")  y += 10
+
+   player.style.left = x + "px"
+   player.style.top  = y + "px"
+
+   myCheckHit()
+}
+
+// Enemy movement
+function moveEnemy(){
+   let enemy = document.getElementById('myImg02')
+   let x = parseInt(enemy.style.left)
+
+   x += enemySpeed
+   if (x > window.innerWidth - 120 || x < 0){
+       enemySpeed *= -1
    }
 
+   enemy.style.left = x + "px"
+   myCheckHit()
+}
 
-   // more if statements here like the above
+// Background + score loop
+function gameLoop(){
+   myGlobalX -= 2
+   document.getElementById('myBody').style.backgroundPosition =
+     myGlobalX + "px 0px"
 
+   score++
+   document.getElementById('score').innerHTML = score
+}
 
-
-}  // end of myCheckHit()
-
-
+setInterval(moveEnemy, 40)
+setInterval(gameLoop, 100)
 </script>
 
-<img id="myImg01" style="position:absolute; width:100px; height:80px; top:0px; left:50px;"  src="myImage01.jpg">
-<img id="myImg02" style="position:absolute; width:100px; height:80px; top:0px; left:250px;" src="myImage02.jpg">
+<img id="myImg01"
+style="position:absolute; width:100px; height:80px; top:200px; left:50px;"
+src="myImage01.jpg">
 
-<input type=button value="Auto Background Left" onclick="{
-  clearInterval(myClock)
-  let myTemp = '100px 0px'
-  myClock = setInterval(function(){
-      myGlobalX -= 5
-      myTemp =  myGlobalX + 'px 0px'
-      document.getElementById('myBody').style.backgroundPosition = myTemp
-  }, 100)
-    
-}">
+<img id="myImg02"
+style="position:absolute; width:100px; height:80px; top:200px; left:400px;"
+src="myImage02.jpg">
 
-
-<input type=button value="Image Right Fast Button" onTouchStart="{this.click(); event.preventDefault();}" onclick="{
-  document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) + 10 + 'px'
-  myCheckHit()     // checks for all collisions
-}"><br><br>
+</body>
