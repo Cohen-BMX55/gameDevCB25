@@ -19,7 +19,6 @@ let score = 0
 let lives = 3
 let enemySpeed = 4
 
-// ===== ORIGINAL FUNCTIONS (UNCHANGED) =====
 function myHitOther(my1,my2){
    left1   = parseInt(document.getElementById(my1).style.left)
    right1  = left1 + parseInt(document.getElementById(my1).style.width)
@@ -50,10 +49,8 @@ function myCheckHit(){
        }
    }
 }
-// ===== END ORIGINAL FUNCTIONS =====
 
 
-// Player movement
 function myKeyDown(e){
    let player = document.getElementById('myImg01')
    let x = parseInt(player.style.left)
@@ -70,7 +67,7 @@ function myKeyDown(e){
    myCheckHit()
 }
 
-// Enemy movement
+
 function moveEnemy(){
    let enemy = document.getElementById('myImg02')
    let x = parseInt(enemy.style.left)
@@ -84,7 +81,7 @@ function moveEnemy(){
    myCheckHit()
 }
 
-// Background + score loop
+
 function gameLoop(){
    myGlobalX -= 2
    document.getElementById('myBody').style.backgroundPosition =
