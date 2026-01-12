@@ -19,6 +19,7 @@ let myClock
 let score = 0
 let lives = 3
 let enemySpeed = 4
+let gameOver = false
 
 function myHitOther(my1,my2){
    left1   = parseInt(document.getElementById(my1).style.left)
@@ -38,15 +39,18 @@ function myHitOther(my1,my2){
 }
 
 function myCheckHit(){
-   if ( myHitOther('myImg01','myImg02') ){
-       lives--
-       document.getElementById('lives').innerHTML = lives
-       document.getElementById('myImg01').style.left = '50px'
-       document.getElementById('myImg01').style.top  = '200px'
+  if (gameOver) return
 
-       if (lives <= 0){
-           alert('GAME OVER\nFinal Score: ' + score)
-           location.reload()
+  if ( myHitOther('myImg01','myImg02') ){
+      lives--
+      document.getElementById('lives').innerHTML = lives
+      document.getElementById('myImg01').style.left = '50px'
+      document.getElementById('myImg01').style.top  = '200px'
+
+      if (lives <= 0){
+        gameOver = true
+        alert('GAME OVER\nFinal Score: ' + score)
+        location.reload()
        }
    }
 }
